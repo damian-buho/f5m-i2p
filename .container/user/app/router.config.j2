@@ -1,0 +1,17 @@
+{#
+SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+
+SPDX-License-Identifier: MIT
+#}
+
+# Managed by j2 - do not edit at runtime
+i2cp.tcp.bindAllInterfaces=true
+i2np.ipv4.firewalled={{ ENV.F5M_I2P_IPV4_FIREWALLED }}
+i2np.ntcp.ipv6={{ ENV.F5M_I2P_IPV6 }}
+i2np.udp.ipv6={{ ENV.F5M_I2P_IPV6 }}
+i2np.upnp.enable={{ ENV.F5M_I2P_UPNP }}
+# A containerized router is always behind NAT with no published SSU/UDP port, so
+# the reachability probe never completes and the router stalls in "Network:
+# Testing" — refusing to build tunnels. Hidden mode skips the probe and operates
+# via SSU introducers + outbound NTCP2 only, which is all an eepsite mirror needs.
+router.hiddenMode={{ ENV.F5M_I2P_HIDDEN_MODE }}

@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+---
+name: ${M6E_COMPOSE_PROJECT_NAME}
+services:
+  f5m-i2p:
+    container_name: ${M6E_CONTAINER_INSTANCE}
+    image: ${M6E_IMAGE_FULLNAME}
+    # Preset: xlarge (4.0c, 8g) — interactive dev shell. Bounded so it can't starve the shared host.
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 8g
+    environment:
+      - LANG
+      - TZ
+      - B19_VERBOSITY=debug
+      - F5M_I2P_EEPSITE_ENABLED=true
+      - F5M_I2P_EEPSITE_TARGET_HOST=traefik
+      - F5M_I2P_EEPSITE_TARGET_PORT=80
+    labels:
+      com.docker.compose.watch: "true"
+    networks:
+      - dev-network
+      - traefik-network
+    secrets:
+      - persona-eepsite-key
+    volumes:
+      # Persist the eepsite identity + router netDb. The key lives at
+      # /app/data/eepsite/eepPriv.dat (the image default now resolves correctly);
+      # /app/bin/eepsite was the installer’s stock skeleton and persisted nothing.
+      - i2p-data:/app/data
+      - /etc/localtime:/etc/localtime:ro
+    tmpfs:
+      - /tmp:size=64m
+networks:
+  dev-network:
+    name: ${M6E_NETWORK}
+    external: true
+  traefik-network:
+    name: traefik-network
+    external: true
+secrets:
+  persona-eepsite-key:
+    file: ${M6E_SECRETS_DIR:-.secrets}/f5m/i2p/persona-eepsite-key
+volumes:
+  i2p-data: null

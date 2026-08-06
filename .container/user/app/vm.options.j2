@@ -1,0 +1,18 @@
+{#
+SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+
+SPDX-License-Identifier: MIT
+#}
+
+-DinstallSilent=true
+-XX:+DoEscapeAnalysis
+-XX:+EliminateLocks
+-XX:+ExplicitGCInvokesConcurrent
+-XX:+OptimizeStringConcat
+-XX:+ParallelRefProcEnabled
+-XX:+UnlockExperimentalVMOptions
+-XX:+UseCompressedOops
+-XX:+UseStringDeduplication
+-XX:+UseZGC
+-Xms{{ ENV.B19_JAVA_XMS }}
+-Xmx{{ ENV.B19_JAVA_XMX }}

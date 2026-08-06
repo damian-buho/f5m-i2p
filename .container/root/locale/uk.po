@@ -1,0 +1,77 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+# Copyright (C) 2026 b19
+#
+# SPDX-License-Identifier: MIT
+msgid ""
+msgstr ""
+"Project-Id-Version: f5m-i2p\n"
+"Report-Msgid-Bugs-To: i18n@b19.dev\n"
+"POT-Creation-Date: 2026-05-05 00:00-0300\n"
+"PO-Revision-Date: 2026-02-18 00:00+0000\n"
+"Last-Translator: b19 team\n"
+"Language-Team: Ukrainian\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:14
+msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
+msgstr "Перевірку консолі I2P пропущено (F5M_I2P_CONSOLE_PORT не налаштовано)"
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:20
+msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
+msgstr "Консоль I2P не відповідає (F5M_I2P_CONSOLE_PORT: %s)"
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:24
+msgid "I2P console is accessible (F5M_I2P_CONSOLE_PORT: %s)"
+msgstr "Консоль I2P доступна (F5M_I2P_CONSOLE_PORT: %s)"
+
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:9
+msgid "I2P console not responding (port: %s)"
+msgstr "Консоль I2P не відповідає (порт: %s)"
+
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:13
+msgid "I2P router is healthy (port: %s)"
+msgstr "Маршрутизатор I2P працює справно (порт: %s)"
+
+#: .container/user/build.d/user/post/500-install-i2p.sh:7
+msgid "Preparing response file"
+msgstr "Підготовка файлу відповіді"
+
+#: .container/user/build.d/user/post/500-install-i2p.sh:10
+msgid "Install"
+msgstr "Встановити"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:7
+msgid "Creating eepsite directory"
+msgstr "Створення директорії eepsite"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:13
+#, fuzzy
+msgid "Existing eepsite identity found at %s"
+msgstr "Знайдено існуючу ідентифікацію eepsite"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:15
+#, fuzzy
+msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
+msgstr "Немає ідентифікації eepsite, I2P згенерує при першому запуску тунелю"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:18
+msgid "Loading eepsite identity from secret %s"
+msgstr "Завантаження ідентифікації eepsite з секрету %s"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:30
+msgid "Eepsite destination: %s"
+msgstr "Призначення eepsite: %s"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:32
+msgid "Eepsite .b32.i2p address will be available after tunnel startup"
+msgstr "Адреса .b32.i2p буде доступна після запуску тунелю"
+
+#: .container/user/entrypoint.d/3000-start.sh:5
+#, fuzzy
+msgid "No command provided, will run %s"
+msgstr "Команда не виконана, буде запущено"

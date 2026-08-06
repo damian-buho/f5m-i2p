@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+set -eo pipefail
+
+# Derive the .b32.i2p address of an eepsite identity file (eepPriv.dat).
+# What we are trying to do: print the stable public address that corresponds to
+# the private key, so an operator can publish it. The eepPriv.dat is I2P's
+# binary PrivateKeyFile format, so the authoritative derivation is I2P's own
+# PrivateKeyFile tool (handles every cert/sigtype/enc layout); python is a
+# best-effort fallback for the common Ed25519 case.
+
+KEY_FILE="${1:-}"
+
+if [ -z "${KEY_FILE}" ] || [ ! -f "${KEY_FILE}" ]
+then
+  echo "Usage: extract-b32-address <eepPriv.dat>" >&2
+  exit 1
+fi
+
+# Primary: I2P's PrivateKeyFile prints "B32 : <addr>.b32.i2p" for an existing
+# key (it does NOT regenerate when the file already exists). Parse just the addr.
+if command -v java >/dev/null 2>&1 && [ -d "${B19_HOME}/lib" ]
+then
+  ADDR=$(java -cp "${B19_HOME}/lib/i2p.jar:${B19_HOME}/lib/router.jar" \
+    net.i2p.data.PrivateKeyFile "${KEY_FILE}" 2>/dev/null \
+    | awk '/^[[:space:]]*B32/ {print $NF}' \
+    | head -1)
+  if [ -n "${ADDR}" ]
+  then
+    echo "${ADDR}"
+    exit 0
+  fi
+fi
+
+# Fallback: python. The Destination is a base64 blob; the .b32 is the
+# base32-encoded SHA-256 of the Destination (the 516-byte public part). This
+# covers the standard Ed25519 layout when java is unavailable.
+if command -v python3 >/dev/null 2>&1
+then
+  ADDR=$(python3 - "${KEY_FILE}" 2>/dev/null <<'PY'
+import base64, hashlib, sys
+with open(sys.argv[1], "rb") as f:
+    data = f.read()
+# eepPriv.dat binary layout: 384-byte Destination (base64-decoded in the text
+# form, raw here) — the public keys/cert. The .b32 is sha256 of the Destination.
+# Many eepPriv.dat files start directly with the raw Destination bytes.
+dest = data[:516]
+try:
+    h = hashlib.sha256(dest)
+    b32 = base64.b32encode(h.digest()).decode().lower().replace("=", "")
+    print(b32 + ".b32.i2p")
+    sys.exit(0)
+except Exception:
+    sys.exit(1)
+PY
+)
+  if [ -n "${ADDR}" ]
+  then
+    echo "${ADDR}"
+    exit 0
+  fi
+fi
+
+echo "ERROR: cannot extract .b32.i2p (java PrivateKeyFile and python both failed)" >&2
+exit 1

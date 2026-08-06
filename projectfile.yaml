@@ -1,0 +1,61 @@
+---
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+$schema: https://projectfile.org/schema/v1.json
+identity:
+  created: "2026-05-19"
+  name: i2p
+  summary: F5M custom distribution of I2P anonymous network router
+  title: F5M / I2P (unofficial b19-style image)
+includes:
+  - .makefile/b19/ci.yaml
+  - .makefile/b19/images/java.yaml
+  - .makefile/library/languages/java.yaml
+  - .projectfile/vulnerabilities.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
+  - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
+kind: SoftwareSourceCode
+links:
+  - label: F5M / I2P (unofficial b19-style image) on Codeberg
+    type: source-code
+    url: https://codeberg.org/f5m/i2p
+  - label: F5M / I2P (unofficial b19-style image) on GitHub
+    type: source-code
+    url: https://github.com/damian-buho/f5m-i2p
+  - label: F5M / I2P (unofficial b19-style image) on kiota.ch
+    type: source-code
+    url: https://kiota.ch/f5m/i2p
+  - label: Issues on Codeberg
+    type: bugs
+    url: https://codeberg.org/f5m/i2p/issues
+org:
+  projectfile:
+    build:
+      args:
+        # Python is copied in for extract-b32-address (eepsite .b32.i2p derivation).
+        # Mirrors b19/node's python copy; the registry is substituted at build time.
+        B19_PYTHON_BASE_IMAGE: ${B19_DOCKER_REGISTRY}/b19/python-${B19_PYTHON_SERIES}:${M6E_BASE_IMAGE_DEFAULT_VERSION}
+        B19_PYTHON_SERIES: "3.14"
+    ci:
+      secrets:
+        f5m.i2p.persona-eepsite-key:
+          docker:
+            image: self
+            run: generate-eepsite-key
+    conventions:
+      fragments:
+        parents:
+          - url: ssh://git@kiota.ch/b19/ubuntu.git
+    status: maintained
+repositories:
+  - issues: true
+    role: mirror
+    type: git
+    url: ssh://git@codeberg.org/f5m/i2p.git
+  - role: mirror
+    type: git
+    url: git@github.com:damian-buho/f5m-i2p.git
+  - role: origin
+    type: git
+    url: ssh://git@kiota.ch/f5m/i2p.git

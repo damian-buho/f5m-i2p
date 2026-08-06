@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+---
+name: ${M6E_COMPOSE_PROJECT_NAME}
+services:
+  f5m-i2p:
+    container_name: ${M6E_CONTAINER_INSTANCE}
+    image: ${M6E_IMAGE_FULLNAME}
+    # Preset: large (2.0c, 4g) — CI build/test container. Bounded so it can't starve the shared host.
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4g
+    networks:
+      - dev-network
+      - traefik-network
+    environment:
+      - LANG
+      - TZ
+networks:
+  dev-network:
+    name: ${M6E_COMPOSE_PROJECT_NAME}-network
+  traefik-network:
+    name: traefik-network

@@ -1,0 +1,42 @@
+{#
+SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+
+SPDX-License-Identifier: MIT
+#}
+
+# NOTE: This I2P config file must use UTF-8 encoding
+# Managed by envsubst - do not edit at runtime
+
+# Web console
+clientApp.0.args={{ ENV.F5M_I2P_CONSOLE_PORT }} 0.0.0.0 ./webapps/
+clientApp.0.main=net.i2p.router.web.RouterConsoleRunner
+clientApp.0.name=I2P Router Console
+clientApp.0.onBoot=true
+clientApp.0.startOnLoad=true
+
+# SAM bridge
+clientApp.1.main=net.i2p.sam.SAMBridge
+clientApp.1.name=SAM application bridge
+clientApp.1.args=sam.keys 0.0.0.0 7656 i2cp.tcp.host=0.0.0.0 i2cp.tcp.port=7654
+clientApp.1.startOnLoad={{ ENV.F5M_I2P_SAM_ENABLED }}
+
+# Tunnel controller (required - loads i2ptunnel.config)
+clientApp.2.main=net.i2p.i2ptunnel.TunnelControllerGroup
+clientApp.2.name=Application tunnels
+clientApp.2.args=i2ptunnel.config
+clientApp.2.delay=-1
+clientApp.2.startOnLoad=true
+
+# Jetty eepsite webserver
+clientApp.3.main=net.i2p.jetty.JettyStart
+clientApp.3.name=I2P webserver (eepsite)
+clientApp.3.args="eepsite/jetty.xml"
+clientApp.3.delay=30
+clientApp.3.startOnLoad={{ ENV.F5M_I2P_JETTY_ENABLED }}
+
+# Browser launcher
+clientApp.4.main=net.i2p.apps.systray.UrlLauncher
+clientApp.4.name=Open Router Console in web browser at startup
+clientApp.4.args=http://127.0.0.1:{{ ENV.F5M_I2P_CONSOLE_PORT }}/
+clientApp.4.delay=3
+clientApp.4.startOnLoad={{ ENV.F5M_I2P_BROWSER_LAUNCH_ENABLED }}

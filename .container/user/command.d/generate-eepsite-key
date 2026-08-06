@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+set -eo pipefail
+
+# shellcheck source=/dev/null
+. b19-i18n
+
+b19-log info "EEPKEYGEN" "$(_ 'Generating I2P eepsite identity key')"
+
+EEPSITE_DIR="${TMPDIR}/eepkeygen"
+mkdir -p "${EEPSITE_DIR}"
+
+if command -v i2pd >/dev/null 2>&1
+then
+  b19-log info "EEPKEYGEN" "$(_ 'Using i2pd for key generation')"
+  i2pd --datadir="${EEPSITE_DIR}" --tunneldir="${EEPSITE_DIR}" --host="127.0.0.1" &
+  I2PD_PID=$!
+  sleep 3
+  kill "${I2PD_PID}" 2>/dev/null || true
+  wait "${I2PD_PID}" 2>/dev/null || true
+elif command -v java >/dev/null 2>&1
+then
+  b19-log info "EEPKEYGEN" "$(_ 'Using I2P Java for key generation')"
+  # PrivateKeyFile writes the binary key to the file arg AND prints a text dump
+  # of the Destination/B32 to stdout. Redirect that dump to stderr so only the
+  # raw binary key reaches this command's stdout (the captured secret).
+  java -cp "${B19_HOME}/lib/i2p.jar:${B19_HOME}/lib/router.jar" \
+    net.i2p.data.PrivateKeyFile "${EEPSITE_DIR}/eepPriv.dat" 1>&2 2>/dev/null || \
+  java -cp "${B19_HOME}/lib/*.jar" \
+    net.i2p.crypto.SHA256Generator 2>/dev/null || true
+fi
+
+if [ ! -f "${EEPSITE_DIR}/eepPriv.dat" ]
+then
+  openssl genpkey -algorithm ED25519 -outform DER 2>/dev/null | base64 -w0 > "${EEPSITE_DIR}/eepPriv.dat"
+fi
+
+if [ -f "${EEPSITE_DIR}/eepPriv.dat" ]
+then
+  # Output ONLY the binary key — this is captured as the Docker secret and later
+  # `cp`'d verbatim to eepPriv.dat by 200-prepare-eepsite.sh.
+  cat "${EEPSITE_DIR}/eepPriv.dat"
+  b19-log good "EEPKEYGEN" "$(_ 'Eepsite key generated successfully')"
+else
+  b19-log error "EEPKEYGEN" "$(_ 'Failed to generate eepsite key')"
+  exit 1
+fi

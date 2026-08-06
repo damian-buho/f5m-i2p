@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+  set -o pipefail
+
+  cd "${TMPDIR}" || exit 1
+  jar --file "${B19_HOME}/lib/router.jar"  --extract META-INF/MANIFEST.MF
+  grep "Implementation-Version" META-INF/MANIFEST.MF | grep -oP "\d+.\d+.\d+"

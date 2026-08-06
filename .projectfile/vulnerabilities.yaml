@@ -1,0 +1,26 @@
+---
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+# project-local vulnerability suppressions. This image downloads / bundles
+# upstream tooling whose transitive dependency tree we cannot patch in place —
+# each id below is only remediated when the upstream tool releases a version
+# that bumps the affected dep. Fanned out to .trivyignore / .grype.yaml /
+# osv-scanner.toml by `pf-cli bridge` so trivy/grype/osv never disagree on
+# whether a known-unfixable vuln gates publish. Add new ids in id order.
+
+org:
+  projectfile:
+    vulnerabilities:
+      suppress:
+        - id: CVE-2026-10050
+          reason: unfixable upstream dependency; fixable only via upstream release
+        - id: CVE-2026-1605
+          reason: unfixable upstream dependency; fixable only via upstream release
+        - id: CVE-2026-2332
+          reason: unfixable upstream dependency; fixable only via upstream release
+        - id: GHSA-355h-qmc2-wpwf
+          reason: unfixable upstream dependency; fixable only via upstream release
+        - id: GHSA-xxh7-fcf3-rj7f
+          reason: unfixable upstream dependency; fixable only via upstream release
