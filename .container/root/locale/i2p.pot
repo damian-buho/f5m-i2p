@@ -4,69 +4,85 @@
 # SPDX-License-Identifier: MIT
 msgid ""
 msgstr ""
-"Project-Id-Version: i2p development\n"
-"Report-Msgid-Bugs-To: i18n@b19.dev\n"
-"POT-Creation-Date: 2026-05-05 00:00-0300\n"
+"Project-Id-Version: i2p 1.0.0-3-g99b7825\n"
+"Report-Msgid-Bugs-To: https://codeberg.org/f5m/i2p/issues\n"
+"POT-Creation-Date: 2026-08-07 22:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:14
-msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
-msgstr ""
-
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:20
-msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
-msgstr ""
-
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:24
-msgid "I2P console is accessible (F5M_I2P_CONSOLE_PORT: %s)"
-msgstr ""
-
-#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:9
-msgid "I2P console not responding (port: %s)"
-msgstr ""
-
-#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:13
-msgid "I2P router is healthy (port: %s)"
-msgstr ""
-
-#: .container/user/build.d/user/post/500-install-i2p.sh:7
+#: .container/user/build.d/user/post/500-install-i2p.sh:11
 msgid "Preparing response file"
 msgstr ""
 
-#: .container/user/build.d/user/post/500-install-i2p.sh:10
-msgid "Install"
-msgstr ""
-
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:7
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:11
 msgid "Creating eepsite directory"
 msgstr ""
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:13
-msgid "Existing eepsite identity found at %s"
-msgstr ""
-
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:15
-msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
-msgstr ""
-
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:18
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:20
 msgid "Loading eepsite identity from secret %s"
 msgstr ""
 
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:24
+msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
+msgstr ""
+
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:30
+msgid "Existing eepsite identity found at %s"
+msgstr ""
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:35
 msgid "Eepsite destination: %s"
 msgstr ""
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:32
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:37
 msgid "Eepsite .b32.i2p address will be available after tunnel startup"
 msgstr ""
 
-#: .container/user/entrypoint.d/3000-start.sh:5
+#: .container/user/entrypoint.d/5000-start.sh:13
 msgid "No command provided, will run %s"
+msgstr ""
+
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:14
+msgid "I2P console not responding (port: %s)"
+msgstr ""
+
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:18
+msgid "I2P router is healthy (port: %s)"
+msgstr ""
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:19
+msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
+msgstr ""
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:25
+msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
+msgstr ""
+
+#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:29
+msgid "I2P console is accessible (F5M_I2P_CONSOLE_PORT: %s)"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:12
+msgid "Generating I2P eepsite identity key"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:19
+msgid "Using i2pd for key generation"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:27
+msgid "Using I2P Java for key generation"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:47
+msgid "Eepsite key generated successfully"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:49
+msgid "Failed to generate eepsite key"
 msgstr ""
