@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+# Sibling to .gitignore for lint walkers. Translated feature-fragment sources
+# are excluded: English-tuned prose rules (terminology, common-misspellings)
+# false-positive on Spanish and Ukrainian. The assembled docs/<lang>/FEATURES.md
+# stays linted.
+docs/es/features.d/
+docs/uk/features.d/
