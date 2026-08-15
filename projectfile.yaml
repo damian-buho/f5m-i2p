@@ -6,8 +6,9 @@ $schema: https://projectfile.org/schema/v1.json
 identity:
   created: "2026-05-19"
   name: i2p
-  summary: F5M custom distribution of I2P anonymous network router
+  summary: Community-maintained distribution of I2P based on B19/Java
   title: F5M / I2P (unofficial b19-style image)
+  description: Community-maintained distribution of I2P built on B19/Java. This repository holds only the packaging — Dockerfile, build scripts, and configuration, all MIT-licensed; the upstream I2P is fetched at build time and retains its own licensing.
 includes:
   - .makefile/b19/ci.yaml
   - .makefile/b19/images/java.yaml
@@ -17,24 +18,53 @@ includes:
   - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
 kind: SoftwareSourceCode
 links:
-  - label: F5M / I2P (unofficial b19-style image) on Codeberg
+  - label:
+      en: F5M / I2P (unofficial b19-style image) on Codeberg
+      es: F5M / I2P (unofficial b19-style image) en Codeberg
+      uk: F5M / I2P (unofficial b19-style image) на Codeberg
+    tags:
+      - public
+      - badges
+      - badges-gitea
     type: source-code
     url: https://codeberg.org/f5m/i2p
-  - label: F5M / I2P (unofficial b19-style image) on GitHub
+  - label:
+      en: F5M / I2P (unofficial b19-style image) on GitHub
+      es: F5M / I2P (unofficial b19-style image) en GitHub
+      uk: F5M / I2P (unofficial b19-style image) на GitHub
+    tags:
+      - public
+      - badges
+      - badges-github
     type: source-code
     url: https://github.com/damian-buho/f5m-i2p
-  - label: F5M / I2P (unofficial b19-style image) on kiota.ch
+  - label:
+      en: F5M / I2P (unofficial b19-style image) on kiota.ch
+      es: F5M / I2P (unofficial b19-style image) en kiota.ch
+      uk: F5M / I2P (unofficial b19-style image) на kiota.ch
+    preferred: true
     type: source-code
     url: https://kiota.ch/f5m/i2p
-  - label: Issues on Codeberg
+  - label:
+      en: Issues on Codeberg
+      es: Incidencias en Codeberg
+      uk: Issues на Codeberg
+    tags:
+      - support
     type: bugs
     url: https://codeberg.org/f5m/i2p/issues
+  - label:
+      en: Issues on GitHub
+      es: Incidencias en GitHub
+      uk: Issues на GitHub
+    tags:
+      - support
+    type: bugs
+    url: https://github.com/damian-buho/f5m-i2p/issues
 org:
   projectfile:
     build:
       args:
-        # Python is copied in for extract-b32-address (eepsite .b32.i2p derivation).
-        # Mirrors b19/node's python copy; the registry is substituted at build time.
         B19_PYTHON_BASE_IMAGE: ${B19_DOCKER_REGISTRY}/b19/python-${B19_PYTHON_SERIES}:${M6E_BASE_IMAGE_DEFAULT_VERSION}
         B19_PYTHON_SERIES: "3.14"
     ci:
@@ -59,3 +89,13 @@ repositories:
   - role: origin
     type: git
     url: ssh://git@kiota.ch/f5m/i2p.git
+keywords:
+  - i2p
+  - anonymity
+  - network
+  - router
+  - censorship
+  - docker
+technologies:
+  - java
+  - jvm
