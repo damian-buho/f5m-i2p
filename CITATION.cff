@@ -10,7 +10,7 @@ cff-version: 1.2.0
 message: Please cite this software using the metadata from this file.
 type: software
 title: F5M / I2P (unofficial b19-style image)
-abstract: F5M custom distribution of I2P anonymous network router
+abstract: Community-maintained distribution of I2P based on B19/Java
 authors:
   - family-names: Búho
     given-names: Damián
@@ -25,3 +25,10 @@ contact:
     website: https://dbuho.me
 license: MIT
 repository-code: https://kiota.ch/f5m/i2p
+keywords:
+  - i2p
+  - anonymity
+  - network
+  - router
+  - censorship
+  - docker
