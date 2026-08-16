@@ -6,9 +6,15 @@ $schema: https://projectfile.org/schema/v1.json
 identity:
   created: "2026-05-19"
   name: i2p
-  summary: Community-maintained distribution of I2P based on B19/Java
+  summary:
+    en: Community-maintained distribution of I2P based on B19/Java
+    es: Distribución de I2P mantenida por la comunidad, basada en B19/Java
+    uk: Дистрибуція I2P з підтримкою спільноти на основі B19/Java
   title: F5M / I2P (unofficial b19-style image)
-  description: Community-maintained distribution of I2P built on B19/Java. This repository holds only the packaging — Dockerfile, build scripts, and configuration, all MIT-licensed; the upstream I2P is fetched at build time and retains its own licensing.
+  description:
+    en: Community-maintained distribution of I2P built on B19/Java. This repository holds only the packaging — Dockerfile, build scripts, and configuration, all MIT-licensed; the upstream I2P is fetched at build time and retains its own licensing.
+    es: Distribución de I2P mantenida por la comunidad, construida sobre B19/Java. Este repositorio contiene únicamente el empaquetado — Dockerfile, scripts de compilación y configuración, todo con licencia MIT; el código original de I2P se obtiene en tiempo de compilación y conserva su propia licencia.
+    uk: Дистрибуція I2P з підтримкою спільноти, зібрана на основі B19/Java. Цей репозиторій містить лише пакування — Dockerfile, скрипти збирання та конфігурацію, усе під ліцензією MIT; вихідний код I2P отримують під час збирання, і він зберігає власну ліцензію.
 includes:
   - .makefile/b19/ci.yaml
   - .makefile/b19/images/java.yaml
