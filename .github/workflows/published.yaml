@@ -22,6 +22,8 @@ name: published
       B19_FETCH_LOCAL_CACHE:
         type: string
         default: "Y"
+      B19_JAVA_BASE_IMAGE:
+        type: string
       B19_JAVA_DISTRO:
         type: string
         default: "oracle"
@@ -158,7 +160,7 @@ jobs:
       B19_COLOR: ${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
       B19_FETCH_DOCKER_CACHE: ${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
       B19_FETCH_LOCAL_CACHE: ${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-      B19_JAVA_BASE_IMAGE: ${{ vars.B19_DOCKER_REGISTRY }}/b19/java/${{ vars.B19_JAVA_DISTRO || 'oracle' }}-${{ vars.B19_JAVA_SERIES || '25' }}:${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
+      B19_JAVA_BASE_IMAGE: ${{ inputs.B19_JAVA_BASE_IMAGE || vars.B19_JAVA_BASE_IMAGE }}
       B19_JAVA_DISTRO: ${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
       B19_JAVA_SERIES: ${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
       B19_JAVA_VERSION: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
@@ -185,7 +187,7 @@ jobs:
             B19_COLOR=${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
             B19_FETCH_DOCKER_CACHE=${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
             B19_FETCH_LOCAL_CACHE=${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-            B19_JAVA_BASE_IMAGE=${{ vars.B19_DOCKER_REGISTRY }}/b19/java/${{ vars.B19_JAVA_DISTRO || 'oracle' }}-${{ vars.B19_JAVA_SERIES || '25' }}:${{ env.M6E_TAG }}
+            B19_JAVA_BASE_IMAGE=${{ inputs.B19_JAVA_BASE_IMAGE || vars.B19_JAVA_BASE_IMAGE }}
             B19_JAVA_DISTRO=${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
             B19_JAVA_SERIES=${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
             B19_JAVA_VERSION=${{ env.M6E_TAG }}
@@ -392,10 +394,15 @@ jobs:
     concurrency:
       group: publish-${{ github.repository }}-${{ toJSON(matrix) }}
       cancel-in-progress: false
+    strategy:
+      matrix:
+        M6E_PUBLISH_SINK: ["ghcr"]
     env:
       M6E_IMAGE_FULLNAME: f5m/i2p:${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}-${{ github.run_id }}
       M6E_COMPOSE_PROJECT_NAME: ci-f5m-i2p-${{ github.run_id }}-${{ github.run_attempt }}
       M6E_CONTAINER_INSTANCE: ci-f5m-i2p-${{ github.run_id }}-${{ github.run_attempt }}
+      DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
+      DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
     steps:
@@ -414,6 +421,9 @@ jobs:
           default-image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/misc-tools:${{ env.M6E_TAG }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
       - name: oci-push
+        # This cell's destination gate — on the STEP because a job `if:` may not read
+        # the matrix context, and a forge rejects the whole file when one does.
+        if: vars.CI_PUBLISH_SINKS == '' || contains(format(',{0},', vars.CI_PUBLISH_SINKS), format(',{0},', matrix.M6E_PUBLISH_SINK))
         uses: projectfile/ci-actions/oci-push@v1
         with:
           artifact-name: image-${{ github.run_id }}
@@ -423,8 +433,16 @@ jobs:
           # always threaded — empty => Docker Hub. NOT the per-namespace INPUT registries
           # (B19_DOCKER_REGISTRY & friends answer "where base images come FROM"); this
           # answers "where THIS project publishes TO". Set per forge (org var = default,
-          # repo var = project-wise override).
+          # repo var = project-wise override). Ignored when `refs` below is present.
           registry: ${{ vars.OUTPUT_REGISTRY }}
+          # Every destination this forge's route declares, each reference composed by
+          # the sink that declared it — so one archive lands under whatever path grammar
+          # each registry wants. Credentials key on the SINK name.
+          refs: |
+            ghcr ghcr.io/damian-buho/f5m/i2p:latest
+          # This CELL's destination, off the publish axis: the job runs one cell per
+          # place the archive goes, so a registry refusing a push fails only its own.
+          sink: ${{ matrix.M6E_PUBLISH_SINK }}
       # Reap the run-scoped image tag AND the live stack's network. Both are unique per
       # run (the tag carries M6E_RUN_SCOPE, the network the run-scoped project name), so
       # without this the runner's docker store gains one image per run forever AND a

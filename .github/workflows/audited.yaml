@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')
     env:
-      M6E_IMAGE_PUBLISHED: ${{ vars.OUTPUT_REGISTRY }}/f5m/i2p:latest
+      M6E_IMAGE_PUBLISHED: ghcr.io/damian-buho/f5m/i2p:latest
     steps:
       - uses: actions/checkout@v7
         with:
@@ -45,7 +45,7 @@ jobs:
           version: ${{ env.M6E_TAG }}
           run: auto-grype image
           env: |-
-            M6E_IMAGE_PUBLISHED=${{ vars.OUTPUT_REGISTRY }}/f5m/i2p:latest
+            M6E_IMAGE_PUBLISHED=ghcr.io/damian-buho/f5m/i2p:latest
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:ro
       - name: restore trivy-db
         uses: actions/cache/restore@v4
@@ -61,7 +61,7 @@ jobs:
           version: ${{ env.M6E_TAG }}
           run: auto-trivy image
           env: |-
-            M6E_IMAGE_PUBLISHED=${{ vars.OUTPUT_REGISTRY }}/f5m/i2p:latest
+            M6E_IMAGE_PUBLISHED=ghcr.io/damian-buho/f5m/i2p:latest
             TRIVY_CACHE_BACKEND
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:ro
       - uses: actions/upload-artifact@v7
@@ -73,7 +73,12 @@ jobs:
           overwrite: true
   source-is-audited:
     runs-on: ubuntu-latest
+    needs: ["source-is-secure"]
     if: (github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')
+    steps:
+      - run: echo source-is-audited
+  source-is-secure:
+    runs-on: ubuntu-latest
     env:
       OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY: /app/.cache/osv
     steps:
@@ -129,7 +134,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
-          name: reports-source-is-audited-${{ github.run_id }}
+          name: reports-source-is-secure-${{ github.run_id }}
           path: reports/
           if-no-files-found: warn
           overwrite: true
