@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 pf-cli-managed: yes
 -->
 
-<!-- textlint-disable terminology -->
+<!-- textlint-disable terminology,common-misspellings -->
 [English](../../CODE_OF_CONDUCT.md) · [Español](../es/CODE_OF_CONDUCT.md)
 
 # Кодекс поведінки Contributor Covenant

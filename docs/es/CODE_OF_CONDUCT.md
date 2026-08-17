@@ -4,7 +4,7 @@ SPDX-License-Identifier: MIT
 pf-cli-managed: yes
 -->
 
-<!-- textlint-disable terminology -->
+<!-- textlint-disable terminology,common-misspellings -->
 [English](../../CODE_OF_CONDUCT.md) · [Українська](../uk/CODE_OF_CONDUCT.md)
 
 # Código de Conducta del Contributor Covenant
