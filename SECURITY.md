@@ -59,7 +59,7 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 ## Bug Bounty
 
-F5M / I2P (unofficial b19-style image) does not currently run a bug bounty programme. We still welcome
+F5M/I2P does not currently run a bug bounty programme. We still welcome
 responsibly disclosed reports — see the contact channel above.
 
 ## Acknowledged Vulnerabilities
@@ -74,5 +74,3 @@ depends on an upstream release, or the advisory does not apply to this project):
 | CVE-2026-2332 | unfixable upstream dependency; fixable only via upstream release |
 | GHSA-355h-qmc2-wpwf | unfixable upstream dependency; fixable only via upstream release |
 | GHSA-xxh7-fcf3-rj7f | unfixable upstream dependency; fixable only via upstream release |
-
-*Generated from projectfile ([learn how](https://projectfile.org/how-to/security))*

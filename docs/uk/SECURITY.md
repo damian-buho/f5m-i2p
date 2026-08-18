@@ -60,7 +60,7 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 ## Винагорода за вразливості
 
-F5M / I2P (unofficial b19-style image) наразі не має програми винагород за вразливості. Проте ми цінуємо
+F5M/I2P наразі не має програми винагород за вразливості. Проте ми цінуємо
 відповідальні повідомлення — див. канал контакту вище.
 
 ## Визнані вразливості
@@ -76,5 +76,4 @@ F5M / I2P (unofficial b19-style image) наразі не має програми
 | GHSA-355h-qmc2-wpwf | unfixable upstream dependency; fixable only via upstream release |
 | GHSA-xxh7-fcf3-rj7f | unfixable upstream dependency; fixable only via upstream release |
 
-*Згенеровано з projectfile ([дізнатися як](https://projectfile.org/how-to/security))*
 <!-- textlint-enable -->

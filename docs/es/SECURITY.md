@@ -60,7 +60,7 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 ## Programa de recompensas
 
-F5M / I2P (unofficial b19-style image) no ofrece actualmente un programa de recompensas. Aun así
+F5M/I2P no ofrece actualmente un programa de recompensas. Aun así
 agradecemos los informes divulgados de forma responsable — consulta el canal de
 contacto anterior.
 
@@ -78,5 +78,4 @@ aplica a este proyecto):
 | GHSA-355h-qmc2-wpwf | unfixable upstream dependency; fixable only via upstream release |
 | GHSA-xxh7-fcf3-rj7f | unfixable upstream dependency; fixable only via upstream release |
 
-*Generado desde projectfile ([saber cómo](https://projectfile.org/how-to/security))*
 <!-- textlint-enable -->
