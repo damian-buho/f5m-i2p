@@ -22,8 +22,6 @@ name: published
       B19_FETCH_LOCAL_CACHE:
         type: string
         default: "Y"
-      B19_JAVA_BASE_IMAGE:
-        type: string
       B19_JAVA_DISTRO:
         type: string
         default: "oracle"
@@ -90,7 +88,7 @@ jobs:
         with:
           declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
           dir: .secrets
-          default-image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/misc-tools:${{ env.M6E_TAG }}
+          default-image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
       - name: dc-pull
         run: M6E_COMPOSE_FILE=.compose/pipeline.yaml .makefile/container/scripts/compose-pull.sh
@@ -135,13 +133,13 @@ jobs:
       - name: markdownlint
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/js-tools
+          image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-markdownlint
       - name: textlint
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/js-tools
+          image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-textlint
   fetched:
@@ -160,7 +158,7 @@ jobs:
       B19_COLOR: ${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
       B19_FETCH_DOCKER_CACHE: ${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
       B19_FETCH_LOCAL_CACHE: ${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-      B19_JAVA_BASE_IMAGE: ${{ inputs.B19_JAVA_BASE_IMAGE || vars.B19_JAVA_BASE_IMAGE }}
+      B19_JAVA_BASE_IMAGE: ${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'oracle', vars.B19_JAVA_SERIES || '25', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
       B19_JAVA_DISTRO: ${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
       B19_JAVA_SERIES: ${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
       B19_JAVA_VERSION: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
@@ -187,7 +185,7 @@ jobs:
             B19_COLOR=${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
             B19_FETCH_DOCKER_CACHE=${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
             B19_FETCH_LOCAL_CACHE=${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-            B19_JAVA_BASE_IMAGE=${{ inputs.B19_JAVA_BASE_IMAGE || vars.B19_JAVA_BASE_IMAGE }}
+            B19_JAVA_BASE_IMAGE=${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'oracle', vars.B19_JAVA_SERIES || '25', env.M6E_TAG) }}
             B19_JAVA_DISTRO=${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
             B19_JAVA_SERIES=${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
             B19_JAVA_VERSION=${{ env.M6E_TAG }}
@@ -204,7 +202,7 @@ jobs:
             M6E_PROJECT=i2p
             SOURCE_DOCKER_REGISTRY=${{ inputs.SOURCE_DOCKER_REGISTRY || vars.SOURCE_DOCKER_REGISTRY }}
           mounts: fetch=/fetch
-          pf-cli-image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/cli:${{ env.M6E_TAG }}
+          pf-cli-image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
   image-is-ready:
     runs-on: ubuntu-latest
     needs: ["container-is-verified", "image-is-secure", "image-is-valid"]
@@ -232,7 +230,7 @@ jobs:
       - name: grype-scan-tar
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/go-tools
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype image
           env: |-
@@ -248,7 +246,7 @@ jobs:
       - name: trivy-scan-tar
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/go-tools
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-trivy image
           env: |-
@@ -279,100 +277,106 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
+      - name: pf-bridge-ai-policy-md-check
+        uses: projectfile/ci-actions/run-tool@v1
+        with:
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: pf-bridge ai-policy --check
       - name: pf-bridge-citation-cff-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge cff CITATION.cff --check
       - name: pf-bridge-claudeignore-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge ignore .claudeignore --check
       - name: pf-bridge-code-of-conduct-md-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge coc --check
       - name: pf-bridge-codeowners-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge codeowners --check
       - name: pf-bridge-contributing-md-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge contributing --check
       - name: pf-bridge-dockerignore-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge ignore .dockerignore --check
       - name: pf-bridge-fragments-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge fragments --check
       - name: pf-bridge-gitattributes-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge gitattributes --check
       - name: pf-bridge-gitignore-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge ignore .gitignore --check
       - name: pf-bridge-grype-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge vulnerabilities .grype.yaml --check
       - name: pf-bridge-license-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge license --check
       - name: pf-bridge-osv-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge vulnerabilities osv-scanner.toml --check
       - name: pf-bridge-readme-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge readme --check
       - name: pf-bridge-security-md-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge security --check
       - name: pf-bridge-support-md-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge support --check
       - name: pf-bridge-trivyignore-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/bridge
+          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-bridge vulnerabilities .trivyignore --check
   projectfile-is-valid:
@@ -384,7 +388,7 @@ jobs:
       - name: pf-validate
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.PF_DOCKER_REGISTRY }}/projectfile/cli
+          image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: pf-cli validate
   publish-image:
@@ -418,7 +422,7 @@ jobs:
         with:
           declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
           dir: .secrets
-          default-image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/misc-tools:${{ env.M6E_TAG }}
+          default-image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
       - name: oci-push
         # This cell's destination gate — on the STEP because a job `if:` may not read
@@ -479,13 +483,13 @@ jobs:
       - name: i18n-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/misc-tools
+          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-i18n check
       - name: reuse-lint
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/python-tools
+          image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: reuse lint
   source-is-ready:
@@ -511,7 +515,7 @@ jobs:
       - name: grype-scan-source
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/go-tools
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:ro
@@ -525,7 +529,7 @@ jobs:
       - name: osv-scanner-scan-source
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/go-tools
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-osv-scanner --offline-vulnerabilities
           env: |-
@@ -541,7 +545,7 @@ jobs:
       - name: trivy-scan-source
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/go-tools
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-trivy fs
           env: |-
@@ -567,7 +571,7 @@ jobs:
       - name: cffr-validate
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/r-tools
+          image: ${{ vars.D9T_R_TOOLS_IMAGE || format('{0}/d9t/r-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-cffr-validate
       - name: hadolint
@@ -580,24 +584,24 @@ jobs:
       - name: ignorelint-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/ignorelint
+          image: ${{ vars.D9T_IGNORELINT_IMAGE || format('{0}/d9t/ignorelint', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: ignorelint
       - name: jsonlint
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/js-tools
+          image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-jsonlint
       - name: shellcheck
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/misc-tools
+          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-shellcheck
       - name: yamllint
         uses: projectfile/ci-actions/run-tool@v1
         with:
-          image: ${{ vars.D9T_DOCKER_REGISTRY }}/d9t/python-tools
+          image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-yamllint
