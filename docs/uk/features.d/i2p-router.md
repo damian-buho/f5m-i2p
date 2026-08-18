@@ -4,6 +4,8 @@ SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
 SPDX-License-Identifier: MIT
 -->
 
+<!-- textlint-disable terminology,common-misspellings -->
+
 # Маршрутизатор анонімності I2P
 
 - Повний маршрутизатор I2P, встановлений тихим інсталятором із перевіркою хешу.
@@ -11,3 +13,5 @@ SPDX-License-Identifier: MIT
 - HTTP-проксі (порт 4444) для перегляду eepsite I2P; HTTPS-проксі наявний (типово вимкнено).
 - Виявлення IPv4 за брандмауером, IPv6 вимкнено і UPnP типово вимкнено для передбачуваного проходу NAT.
 - Пам’ять JVM типово обмежена купкою від 128m до 256m, налаштовується через середовище.
+
+<!-- textlint-enable -->

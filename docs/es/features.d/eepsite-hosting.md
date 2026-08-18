@@ -4,6 +4,8 @@ SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
 SPDX-License-Identifier: MIT
 -->
 
+<!-- textlint-disable terminology,common-misspellings -->
+
 # Alojamiento de eepsites con identidad persistente
 
 - La capacidad de proxy inverso publica un servicio local como eepsite de I2P (sitio oculto).
@@ -12,3 +14,5 @@ SPDX-License-Identifier: MIT
 - La dirección `.b32.i2p` se extrae y registra automáticamente al inicio.
 - Comando de generación de claves disponible mediante el tipo de secreto `docker-run`.
 - Cabecera Host suplantada configurable para el frente Traefik con HostRegexp.
+
+<!-- textlint-enable -->

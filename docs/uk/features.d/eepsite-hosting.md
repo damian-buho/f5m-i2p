@@ -4,6 +4,8 @@ SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
 SPDX-License-Identifier: MIT
 -->
 
+<!-- textlint-disable terminology,common-misspellings -->
+
 # Хостинг eepsite зі сталою ідентичністю
 
 - Можливість зворотного проксі публікує локальну службу як eepsite I2P (прихований сайт).
@@ -12,3 +14,5 @@ SPDX-License-Identifier: MIT
 - Адресу `.b32.i2p` автоматично витягується й записується в журнал під час запуску.
 - Команда генерації ключа доступна через тип секрету `docker-run`.
 - Підроблений заголовок Host можна налаштувати для фронтингу Traefik із HostRegexp.
+
+<!-- textlint-enable -->
