@@ -978,14 +978,6 @@ Assemble FEATURES.md/ROADMAP.md from docs/*.d fragments
 
 > Image: PF_BRIDGE_IMAGE
 
-### `pf-bridge-fragments-refresh`
-
-Re-read what the parent projects publish and update the inherited copies
-
-`pf-bridge fragments --refresh`
-
-> Image: PF_BRIDGE_IMAGE
-
 ### `pf-bridge-list`
 
 List available projectfile bridges
@@ -1065,6 +1057,80 @@ Validate the projectfile document
 `pf-cli validate`
 
 > Image: PF_CLI_IMAGE
+
+## Release
+
+### `svu-current`
+
+Show the version the latest Git tag carries
+
+`svu current --tag.prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `svu-major`
+
+Show the next major version
+
+`svu major --tag.prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `svu-minor`
+
+Show the next minor version
+
+`svu minor --tag.prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `svu-next`
+
+Show the next version the commits since the last tag imply
+
+`svu next --tag.prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `svu-patch`
+
+Show the next patch version
+
+`svu patch --tag.prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `svu-tag-major`
+
+Tag HEAD with the next major version
+
+`.makefile/core/scripts/svu-tag.sh major --prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: host runner
+
+### `svu-tag-minor`
+
+Tag HEAD with the next minor version
+
+`.makefile/core/scripts/svu-tag.sh minor --prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: host runner
+
+### `svu-tag-next`
+
+Tag HEAD with the next version the commit history implies
+
+`.makefile/core/scripts/svu-tag.sh next --prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: host runner
+
+### `svu-tag-patch`
+
+Tag HEAD with the next patch version
+
+`.makefile/core/scripts/svu-tag.sh patch --prefix=${org.projectfile.release.tag-prefix}`
+
+> Image: host runner
 
 ## Secrets
 
@@ -1245,10 +1311,6 @@ Re-scan the pinned dependencies and published artifacts for new vulnerabilities
 Report every pinned dependency that lags upstream
 
 > Goal — lowered to its own CI workflow.
-
-### `fragments-refreshed`
-
-Update the inherited copies from what the parent projects publish
 
 ### `pre-commit`
 
