@@ -402,9 +402,6 @@ jobs:
       matrix:
         M6E_PUBLISH_SINK: ["ghcr"]
     env:
-      M6E_IMAGE_FULLNAME: f5m/i2p:${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}-${{ github.run_id }}
-      M6E_COMPOSE_PROJECT_NAME: ci-f5m-i2p-${{ github.run_id }}-${{ github.run_attempt }}
-      M6E_CONTAINER_INSTANCE: ci-f5m-i2p-${{ github.run_id }}-${{ github.run_attempt }}
       DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
       DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
@@ -416,14 +413,6 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: image-${{ github.run_id }}
-      - run: docker load --input image-${{ github.run_id }}.tar
-      - name: secrets-provision
-        uses: projectfile/ci-actions/secrets-provision@v1
-        with:
-          declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
-          dir: .secrets
-          default-image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
-          image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
       - name: oci-push
         # This cell's destination gate — on the STEP because a job `if:` may not read
         # the matrix context, and a forge rejects the whole file when one does.
@@ -447,18 +436,6 @@ jobs:
           # This CELL's destination, off the publish axis: the job runs one cell per
           # place the archive goes, so a registry refusing a push fails only its own.
           sink: ${{ matrix.M6E_PUBLISH_SINK }}
-      # Reap the run-scoped image tag AND the live stack's network. Both are unique per
-      # run (the tag carries M6E_RUN_SCOPE, the network the run-scoped project name), so
-      # without this the runner's docker store gains one image per run forever AND a
-      # failed/timed-out `up` can orphan the network (compose reports the removal error
-      # WITHOUT failing). RmiImage and RmNetwork are always PAIRED (single assignment
-      # site), so one docker-cleanup step reaps both — the imperative reaps + their
-      # `inspect` guard live in the pinned action, not inline (Law 2).
-      - if: ${{ always() }}
-        uses: projectfile/ci-actions/docker-cleanup@v1
-        with:
-          image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
-          network: ci-f5m-i2p-${{ env.M6E_RUN_SCOPE }}-network
   published:
     runs-on: ubuntu-latest
     needs: ["publish-image", "ready-to-publish"]
