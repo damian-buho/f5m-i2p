@@ -838,6 +838,22 @@ Validate CITATION.cff against the cffr schema
 
 > Image: D9T_R_TOOLS_IMAGE
 
+### `pf-bridge-ai-policy-md-check`
+
+Verify AI_POLICY.md still matches the projectfile
+
+`pf-bridge ai-policy --check`
+
+> Image: PF_BRIDGE_IMAGE
+
+### `pf-bridge-ai-policy-md-generate`
+
+Generate AI_POLICY.md from the projectfile
+
+`pf-bridge ai-policy --force`
+
+> Image: PF_BRIDGE_IMAGE
+
 ### `pf-bridge-citation-cff-check`
 
 Verify CITATION.cff and the projectfile agree
