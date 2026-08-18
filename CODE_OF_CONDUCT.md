@@ -10,7 +10,7 @@ pf-cli-managed: yes
 
 ## Our Pledge
 
-We pledge to make participation in [F5M / I2P (unofficial b19-style image)](README.md) welcoming, safe, and
+We pledge to make participation in [F5M/I2P](README.md) welcoming, safe, and
 equitable for all. We are committed to fostering an environment that respects
 and promotes the dignity, rights, and contributions of all individuals,
 regardless of characteristics including race, ethnicity, caste, color, age,
@@ -69,7 +69,7 @@ consequences for any action they deem in violation of this Code of Conduct:
 
 This Code of Conduct applies within all community spaces — issues, pull
 requests, chat channels, mailing lists, in-person events — and also applies
-when an individual is officially representing [F5M / I2P (unofficial b19-style image)](README.md) in public
+when an individual is officially representing [F5M/I2P](README.md) in public
 spaces.
 
 ## Attribution
@@ -83,5 +83,3 @@ The Contributor Covenant is licensed under the
 
 [homepage]: https://www.contributor-covenant.org
 [CC-BY-SA]: https://creativecommons.org/licenses/by-sa/4.0/
-
-*Generated from projectfile ([learn how](https://projectfile.org/how-to/code-of-conduct))*
