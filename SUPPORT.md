@@ -42,5 +42,3 @@ This is a community-maintained project. Maintainers respond when they can — ty
 Paid support for F5M/I2P is available:
 
 - [Support from author](https://dbuho.me)
-
-*Generated from projectfile ([learn how](https://projectfile.org/how-to/support))*

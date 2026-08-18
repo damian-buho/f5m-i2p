@@ -44,5 +44,4 @@ pf-cli-managed: yes
 
 - [Підтримка від автора](https://dbuho.me)
 
-*Згенеровано з projectfile ([дізнатися як](https://projectfile.org/how-to/support))*
 <!-- textlint-enable -->
