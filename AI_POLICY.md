@@ -70,5 +70,3 @@ Allowed: Pull requests, Commit messages, Bug reports, Discussions, Code review, 
 ## Questions
 
 Questions about this policy? Contact <damian.buho@proton.me>.
-
-*Generated from projectfile ([learn how](https://projectfile.org/how-to/ai-policy))*

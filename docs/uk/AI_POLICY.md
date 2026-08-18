@@ -71,6 +71,4 @@ Assisted-by: <назва моделі або інструменту>
 ## Запитання
 
 Маєте запитання щодо цієї політики? Напишіть на <damian.buho@proton.me>.
-
-*Згенеровано з projectfile ([дізнатися як](https://projectfile.org/how-to/ai-policy))*
 <!-- textlint-enable -->

@@ -71,6 +71,4 @@ Permitida: Pull requests, Mensajes de commit, Informes de errores, Debates, Revi
 ## Preguntas
 
 ¿Tienes preguntas sobre esta política? Escribe a <damian.buho@proton.me>.
-
-*Generado desde projectfile ([saber cómo](https://projectfile.org/how-to/ai-policy))*
 <!-- textlint-enable -->
