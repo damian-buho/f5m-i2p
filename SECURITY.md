@@ -69,9 +69,6 @@ depends on an upstream release, or the advisory does not apply to this project):
 
 | ID | Reason |
 | --- | --- |
-| CVE-2025-47273 | vendored in pip wheel, blocked by upstream |
-| GHSA-5rjg-fvgr-3xxf | vendored in pip wheel, blocked by upstream |
-| GHSA-6v7p-g79w-8964 | vendored in pip wheel, blocked by upstream |
 | CVE-2026-10050 | unfixable upstream dependency; fixable only via upstream release |
 | CVE-2026-1605 | unfixable upstream dependency; fixable only via upstream release |
 | CVE-2026-2332 | unfixable upstream dependency; fixable only via upstream release |
