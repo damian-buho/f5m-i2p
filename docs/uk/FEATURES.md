@@ -34,188 +34,188 @@ SPDX-License-Identifier: MIT
 - Виявлення IPv4 за брандмауером, IPv6 вимкнено і UPnP типово вимкнено для передбачуваного проходу NAT.
 - Пам’ять JVM типово обмежена купкою від 128m до 256m, налаштовується через середовище.
 
-## Успадковано від B19/Ubuntu 1.0.0
+## Успадковано від B19/Ubuntu 1.4.0
 
-### Persistent APT cache across builds
+### Постійний APT-кеш між збираннями
 
-- APT package and index caches survive across builds via BuildKit cache mounts, keyed by Ubuntu series and architecture.
-- Repeated builds reuse downloaded packages instead of re-downloading.
-- Optional LAN APT cacher proxy auto-detection for environments with a caching proxy.
+- Кеші пакетів та індексів APT зберігаються між збираннями через кеш-монтування BuildKit із ключем за серією Ubuntu та архітектурою.
+- Повторні збирання використовують уже завантажені пакети замість нового завантаження.
+- Необов’язковий LAN-проксі кешування APT, вмикається змінною `M6E_APT_CACHE_HOST`.
 
-### Service process management with log routing (b19-exec)
+### Керування службовими процесами зі спрямуванням журналів (b19-exec)
 
-- Long-running processes (daemons, servers) have stdout and stderr automatically routed through the structured logger.
-- The service PID is tracked for signal forwarding -- Docker stop gracefully terminates the main process.
-- Log levels for stdout and stderr streams are independently configurable.
-- Exit code of the service is captured and available to downstream hooks.
+- Тривалі процеси (демони, сервери) мають stdout і stderr, автоматично спрямовані крізь структурований журналізатор.
+- PID служби відстежується для переспрямування сигналів — Docker stop плавно завершує головний процес.
+- Рівні журналування для потоків stdout і stderr налаштовуються незалежно один від одного.
+- Код виходу служби захоплюється й доступний подальшим хукам.
 
-### Cached artifact downloads with integrity verification (b19-fetch)
+### Кешовані завантаження артефактів із перевіркою цілісності (b19-fetch)
 
-- All external downloads go through a three-tier cache: local `.fetch/` directory, BuildKit persistent cache, then upstream via aria2c with up to 16 connections.
-- Optional SHA-512 verification at every tier; hash mismatch causes fallthrough to the next tier rather than failure.
-- Offgrid mode blocks all downloads entirely, failing fast with a clear error if a cache miss occurs.
-- Supports a near-cache proxy for LAN-only builds that route through a caching proxy.
+- Усі зовнішні завантаження проходять крізь трирівневий кеш: локальний каталог `.fetch/`, постійний кеш BuildKit, а потім upstream через aria2c із до 16 з’єднань.
+- Необов’язкова перевірка SHA-512 на кожному рівні; невідповідність хеша викликає перехід на наступний рівень, а не збій.
+- Режим offgrid повністю блокує всі завантаження та швидко падає з виразною помилкою при промаху кешу.
+- Підтримується near-cache-проксі для LAN-збирань, що йдуть через кешувальний проксі.
 
-### Timed command execution with failure reporting (b19-run)
+### Вимірюване виконання команд зі звітуванням про збої (b19-run)
 
-- Any command can be wrapped to get automatic elapsed-time measurement and success/failure reporting.
-- Success output is visible only at higher verbosity levels; failure output is always shown.
-- In debug mode, command output streams live instead of being buffered.
+- Будь-яку команду можна обгорнути, щоб отримати автоматичний вимір тривалості та звіт про успіх чи збій.
+- Успішний вивід видно лише на вищих рівнях детальності; вивід при збої показується завжди.
+- У режимі debug вивід команди транслюється наживо, а не буферизується.
 
-### Run-once initialization (bootstrap.d)
+### Одноразова ініціалізація (bootstrap.d)
 
-- One-time setup tasks (database migrations, admin user creation, directory init) run on first container start only.
-- Automatic idempotency: completed scripts are never re-run, even across container restarts.
-- Failed scripts are retried on next start; successful ones stay locked.
-- State can be reset by clearing a volume, triggering a full re-bootstrap.
-- Downstream images add their own init scripts by dropping them into a directory.
+- Одноразові завдання налаштування (міграції бази даних, створення адміністратора, ініціалізація каталогів) виконуються лише під час першого запуску контейнера.
+- Автоматична ідемпотентність: завершені скрипти ніколи не запускаються повторно, навіть між перезапусками контейнера.
+- Невдалі скрипти повторюються при наступному запуску; успішні лишаються заблокованими.
+- Стан можна скинути очищенням тому, що запускає повний повторний bootstrap.
+- Похідні образи додають власні init-скрипти, просто поклавши їх у каталог.
 
-### Modular build hooks (build.d)
+### Модульні хуки збирання (build.d)
 
-- All image build logic lives in numbered shell scripts instead of inline Dockerfile `RUN` commands.
-- Hooks are organized in `pre/on/post` phases and auto-discovered by the stage name passed to `build-stage`.
-- The reserved `always/{pre,post}` scope brackets every stage, whatever it is named, so cross-cutting setup is written once instead of per stage.
-- Inheritable hooks propagate to downstream images automatically via Docker layer overlay -- downstream gets parent’s build logic for free.
-- Non-inheritable hooks are cleaned up after execution to prevent leaking into later stages.
+- Уся логіка збирання образу живе в пронумерованих shell-скриптах, а не в inline-командах `RUN` Dockerfile.
+- Хуки організовано у фази `pre/on/post`, і вони автоматично виявляються за ім’ям етапу, переданим `build-stage`.
+- Зарезервована область `always/{pre,post}` обрамляє кожен етап, як би він не називався, тож наскрізне налаштування пишеться один раз, а не для кожного етапу.
+- Успадковувані хуки автоматично поширюються на похідні образи через накладання шарів Docker — похідні безкоштовно отримують логіку збирання батька.
+- Неуспадковувані хуки вичищаються після виконання, щоб не просочувалися в пізніші етапи.
 
-### Automatic CPU count detection (NUMPROCS)
+### Автоматичне визначення кількості CPU (NUMPROCS)
 
-- Available CPUs are detected automatically with Kubernetes downward API, cgroups v2, or `nproc` fallback.
-- The detected count is available as `NUMPROCS` throughout the build and runtime, used for parallel compilation, template rendering, and test execution.
-- Eliminates hardcoded job counts and ensures consistent parallelism across Docker, Kubernetes, and CI.
+- Доступні CPU визначаються автоматично через downward API Kubernetes, cgroups v2 або резервний `nproc`.
+- Виявлена кількість доступна як `NUMPROCS` протягом усього збирання та виконання й використовується для паралельної компіляції, рендерингу шаблонів і запуску тестів.
+- Усуває зашиті кількості завдань і гарантує однаковий паралелізм у Docker, Kubernetes і CI.
 
-### Declarative dependency management (b19-deps)
+### Декларативне керування залежностями (b19-deps)
 
-- External dependency metadata (URL, version, SHA-512 hash) stored as plain text files, completely separate from build scripts.
-- Supports architecture-specific downloads, multi-version series, and nested component paths.
-- Dependencies are auto-discovered at Makefile parse time -- add files to the right directory and the build picks them up without manual declarations.
-- `make fetch` pre-downloads everything for offline builds; version bumps trigger automatic re-fetch and hash updates.
+- Метадані зовнішніх залежностей (URL, версія, SHA-512-хеш) зберігаються як прості текстові файли, повністю окремо від скриптів збирання.
+- Підтримуються завантаження для конкретних архітектур, багатоверсійні серії та вкладені шляхи компонентів.
+- Залежності автоматично виявляються під час розбору Makefile — додайте файли в потрібний каталог, і збирання їх підбере без ручних оголошень.
+- `make fetch` завантажує все наперед для офлайн-збирань; підняття версії запускає автоматичний повторний fetch та оновлення хешів.
 
-### Pluggable startup system (entrypoint.d)
+### Підключована система запуску (entrypoint.d)
 
-- Every container startup runs through a sequence of numbered hooks: signal setup, secrets loading, CPU detection, port validation, template rendering, bootstrap, service start.
-- Ad-hoc commands (`docker run img command`) automatically bypass part of the startup chain and execute directly.
-- Individual hooks or the entire entrypoint can be skipped at runtime via environment variables, no image rebuild needed.
-- Downstream images override a single hook (slot 5000) to launch their service; everything else is inherited.
+- Кожен запуск контейнера проходить крізь послідовність пронумерованих хуків: налаштування сигналів, завантаження секретів, виявлення CPU, перевірка портів, рендеринг шаблонів, bootstrap, старт служби.
+- Окремі команди (`docker run img command`) автоматично оминають частину ланцюга запуску та виконуються безпосередньо.
+- Окремі хуки чи весь entrypoint можна пропустити під час виконання через змінні середовища, без перебудови образу.
+- Похідні образи перевизначають один-єдиний хук (слот 5000), щоб запустити свою службу; решта успадковується.
 
-### Feature toggles for all subsystems
+### Перемикачі функцій для всіх підсистем
 
-- Every major subsystem (entrypoint, healthchecks, bootstrap, tests, secrets, port validation, i18n, shell hooks) can be disabled at runtime via environment variables.
-- Individual entrypoint and bootstrap hooks can be skipped by name without disabling the whole subsystem.
-- No image rebuild required -- toggles are runtime-only.
+- Кожну велику підсистему (entrypoint, healthchecks, bootstrap, тести, секрети, перевірку портів, i18n, shell-хуки) можна вимкнути під час виконання через змінні середовища.
+- Окремі хуки entrypoint і bootstrap можна пропустити за ім’ям, не вимикаючи всю підсистему.
+- Перебудова образу не потрібна — перемикачі діють лише в рантаймі.
 
-### Built-in health monitoring (healthcheck.d)
+### Вбудований моніторинг стану (healthcheck.d)
 
-- Docker-native healthcheck declared in the base image and inherited by all downstream images with no extra configuration.
-- Seven default checks: disk space on home, cache, and temp directories; HTTPS connectivity, DNS resolution, ICMP ping; and filesystem writability.
-- Network checks are fault-tolerant -- success on any target counts as pass.
-- All network checks automatically skip in offgrid mode; all checks can be disabled at runtime.
-- Downstream images add service-specific checks (HTTP endpoints, database connections, process liveness) by dropping scripts into a directory.
+- Перевірка стану у власному для Docker стилі, оголошена в базовому образі та успадкована всіма похідними образами без додаткової конфігурації.
+- Сім типових перевірок стану: місце на диску для каталогів home, кешу і тимчасових; HTTPS-з’єднуваність, DNS-резолв, ICMP-ping; а також доступність файлової системи для запису.
+- Мережні перевірки толерантні до збоїв — успіх на будь-якій цілі зараховується як прохід.
+- Усі мережні перевірки автоматично пропускаються в режимі offgrid; усі перевірки можна вимкнути під час виконання.
+- Похідні образи додають перевірки для конкретної служби (HTTP-ендпоінти, з’єднання з базою даних, життєздатність процесу), поклавши скрипти в каталог.
 
-### Multilingual shell output (b19-i18n)
+### Багатомовний вивід shell (b19-i18n)
 
-- All user-facing log messages and script output are translatable via GNU gettext.
-- Ships with English, Spanish (`es_CL`), and Ukrainian (`uk_UA`) out of the box.
-- Downstream images inherit all parent translations automatically; only new or overridden strings need translating.
-- Translations are compiled at build time with no runtime overhead.
+- Усі повідомлення журналу та вивід скриптів, видимі користувачеві, перекладаються через GNU gettext.
+- З коробки поставляються англійська, іспанська (`es_CL`) та українська (`uk_UA`).
+- Похідні образи автоматично успадковують усі батьківські переклади; перекладати потрібно лише нові чи перевизначені рядки.
+- Переклади компілюються під час збирання без накладних витрат у рантаймі.
 
-### Image lineage tracking
+### Відстеження лініжу образу
 
-- Every image records its build metadata (namespace, project, version, base image) into a lineage file during build.
-- Downstream images chain lineage from their parent, producing a full base-to-current provenance chain.
-- At container startup, the full lineage chain is logged, making it easy to trace what a running container was built from.
+- Кожен образ записує свої метадані збирання (namespace, проєкт, версія, базовий образ) у файл лініжу під час збирання.
+- Похідні образи зчіплюють лініж зі свого батька, утворюючи повний ланцюг походження від бази до поточного.
+- Весь ланцюг лініжу записується в журнал під час запуску (на детальній verbosності, рівень debug) і його можна будь-коли прочитати з файла, тож легко простежити, з чого зібрано запущений контейнер.
 
-### Structured, level-filtered logging (b19-log)
+### Структуроване журналування з фільтром за рівнем (b19-log)
 
-- All container output goes through a leveled logger with four thresholds: error, warn, info, debug.
-- Messages below the configured verbosity are silently discarded, keeping production logs clean.
-- Colors auto-detect terminal support and respect `NO_COLOR=1`.
-- Pipable: command output can be routed through the logger to apply level filtering and tags.
+- Увесь вивід контейнера проходить крізь журналізатор із рівнями й чотирма порогами: error, warn, info, debug.
+- Повідомлення нижче налаштованої детальності мовчки відкидаються, тож робочі журнали лишаються чистими.
+- Кольори автоматично визначають підтримку терміналу й шанують `NO_COLOR=1`.
+- Придатне до конвеєра: вивід команди можна спрямувати крізь журналізатор, щоб застосувати фільтр рівнів і теґи.
 
-### Non-root container by default
+### Контейнер без прав root за замовчуванням
 
-- The container runs as a non-root user (`ubuntu`, UID/GID 1000) with all runtime files owned by that user.
-- A two-stage build separates root-level system installation from user-level runtime setup.
-- User identity is configurable at build time.
+- Контейнер працює від користувача без прав root (`ubuntu`, UID/GID 1000), і всі робочі файли належать цьому користувачеві.
+- Двоетапне збирання відокремлює системне встановлення від імені root від налаштування середовища виконання на рівні користувача.
+- Ідентичність користувача налаштовується під час збирання.
 
-### Air-gapped / offline build and runtime support
+### Підтримка ізольованих від інтернету (air-gapped/offline) збирання й виконання
 
-- A single environment variable (`B19_OFFGRID_MODE=Y`) cuts all internet access at build time and runtime.
-- Build-time: downloads are blocked, APT updates are skipped, SSH keyscans are skipped. All artifacts must come from cache tiers.
-- Runtime: network healthchecks automatically skip with a healthy result, so containers stay green on isolated networks.
-- APT package lists can be snapshotted and injected for fully offline image builds.
-- LAN services (caching proxies, registries) remain reachable -- offgrid blocks internet, not all networking.
+- Єдина змінна середовища (`B19_OFFGRID_MODE=Y`) відтинає весь доступ до інтернету під час збирання та виконання.
+- Під час збирання: завантаження блокуються, оновлення APT пропускаються, keyscan SSH пропускається. Усі артефакти мають надходити з рівнів кешу.
+- У рантаймі: мережні перевірки стану автоматично пропускаються зі здоровим результатом, тож контейнери лишаються зеленими в ізольованих мережах.
+- Списки пакетів APT можна зняти у знімок і вставити для повністю офлайн-збирань образу.
+- LAN-служби (кешувальні проксі, реєстри) лишаються досяжними — offgrid блокує інтернет, а не всю мережу.
 
-### Runtime overlay injection
+### Ін’єкція оверлеїв під час виконання
 
-- Configuration or data files can be injected at container startup by setting `B19_OVERLAY` to a directory name.
-- Overlay contents are recursively copied to the container root, overwriting existing files -- no image rebuild needed.
-- Skipped in immutable mode, preventing runtime modification of production-locked images.
+- Файли конфігурації чи даних можна вставити під час запуску контейнера, задавши в `B19_OVERLAY` ім’я каталогу.
+- Вміст оверлея рекурсивно копіюється в корінь контейнера, перезаписуючи наявні файли — перебудова образу не потрібна.
+- Пропускається в незмінному режимі, що запобігає модифікації під час виконання образів, заблокованих для продакшну.
 
-### Reproducible base image (pinned by digest)
+### Відтворюваний базовий образ (зафіксований за digest)
 
-- The Ubuntu base image is pinned by SHA-256 digest, not by tag, ensuring deterministic builds.
-- Supports multiple Ubuntu series (resolute, noble, optional: jammy, questing) selectable at build time.
-- APT mirrors are configurable per architecture for LAN mirrors or air-gapped environments.
+- Базовий образ Ubuntu зафіксований за SHA-256-digest, а не за тегом, що гарантує детерміновані збирання.
+- Підтримуються кілька серій Ubuntu (resolute, noble, jammy) на вибір під час збирання.
+- Дзеркала APT налаштовуються окремо за архітектурою для LAN-дзеркал або ізольованих середовищ.
 
-### Port validation
+### Перевірка портів
 
-- All `*PORT*` environment variables are validated at startup against the WHATWG blocklist of forbidden ports and privileged ports (\<1024).
-- Catches misconfigurations like `PORT=0` or `PORT=22` early, before the service fails silently.
-- Can be disabled at runtime without rebuilding the image.
+- Усі змінні середовища `*PORT*` перевіряються під час запуску за списком заборонених портів WHATWG і за привілейованими портами (\<1024).
+- Завчасно ловить хибні налаштування на кшталт `HTTP_PORT=22`, перш ніж служба непомітно впаде.
+- Можна вимкнути під час виконання без перебудови образу.
 
-### Unified lifecycle runner family
+### Уніфіковане сімейство ранерів життєвого циклу
 
-- Eight numbered-hook runners cover the full container lifecycle: startup, healthchecks, tests, bootstrap, build hooks, benchmarks, reports, and shell sessions.
-- All runners share the same pattern: drop a numbered script into a directory, it is auto-discovered and executed.
-- Scripts from different image layers merge seamlessly -- upstream and downstream hooks coexist without conflict.
-- Each runner has tailored failure semantics: abort on error (entrypoint, bootstrap), continue and count failures (healthchecks, tests), always succeed (reports).
+- Вісім ранерів із пронумерованими хуками покривають повний життєвий цикл контейнера: запуск, healthchecks, тести, bootstrap, хуки збирання, бенчмарки, звіти та shell-сеанси.
+- Усі ранери поділяють той самий патерн: покладіть пронумерований скрипт у каталог — він автоматично виявиться й виконається.
+- Скрипти з різних шарів образу зливаються — upstream- і downstream-хуки співіснують без конфліктів.
+- Кожен ранер має власну семантику збоїв: перервати при помилці (entrypoint, bootstrap), продовжити й порахувати збої (healthchecks, тести), завжди завершуватися успішно (звіти).
 
-### Docker secrets auto-loading (secrets)
+### Автозавантаження Docker-секретів (secrets)
 
-- Docker secrets files are automatically discovered and converted to environment variables at startup.
-- Dot-notation filenames map to uppercase env vars (`b19.npm.registry_host` becomes `B19_NPM_REGISTRY_HOST`).
-- Required secrets can be declared by name; the container refuses to start if any are missing.
-- Existing environment variables take precedence over secret-derived values.
-- Secrets are also available in interactive shell sessions and healthchecks.
-- Non-UTF-8/binary secrets (keys, DER blobs, gzipped tarballs) are **not** exported as env vars: Bash truncates them at the first NUL and the stray bytes panic any tool that reads the environment as UTF-8 (e.g. `minijinja --env`, used to template configs). They remain on disk at `/run/secrets/<name>` for file-based reads — which is the only correct way to consume a binary secret anyway.
+- Файли Docker-секретів автоматично виявляються та перетворюються на змінні середовища під час запуску.
+- Імена файлів у точковій нотації відповідають змінним середовища у верхньому регістрі (`b19.npm.registry_host` стає `B19_NPM_REGISTRY_HOST`).
+- Обов’язкові секрети можна оголосити за ім’ям; контейнер відмовляється стартувати, якщо бракує хоч одного.
+- Наявні змінні середовища мають пріоритет над значеннями, похідними від секретів.
+- Секрети також доступні в інтерактивних shell-сеансах і healthchecks.
+- Не-UTF-8/бінарні секрети (ключі, DER-блоби, gzip-тарболи) **не** експортуються як змінні середовища: Bash обрізає їх на першому NUL, а випадкові байти ламають будь-який інструмент, що читає середовище як UTF-8 (наприклад, `minijinja --env`, яким шаблонізують конфіги). Вони лишаються на диску в `/run/secrets/<name>` для читання як файлів — що й так єдиний правильний спосіб споживати бінарний секрет.
 
-### Interactive shell hooks (shell.d)
+### Хуки інтерактивної shell (shell.d)
 
-- `docker exec bash` sessions automatically load Docker secrets and any custom hooks added by downstream images.
-- Hooks merge via Docker layer overlay, so inherited and project-specific shell setup coexist.
+- Сеанси `docker exec bash` автоматично завантажують Docker-секрети та будь-які власні хуки, додані похідними образами.
+- Хуки зливаються через накладання шарів Docker, тож успадковане та проєктне налаштування shell співіснують.
 
-### Graceful signal handling
+### Плавна обробка сигналів
 
-- PID 1 is `tini -g`, which reaps zombie processes and forwards signals to the full process group.
-- A configurable set of Unix signals (TERM, INT, HUP, USR1, USR2, etc.) is trapped and forwarded to the main service process.
-- `docker stop` cleanly terminates the service without orphan processes or signal loss.
+- PID 1 — це `tini -g`, який прибирає процеси-зомбі та переспрямовує сигнали всій групі процесів.
+- Налаштовуваний набір Unix-сигналів (TERM, INT, HUP, USR1, USR2 тощо) перехоплюється та переспрямовується головному процесу служби.
+- `docker stop` чисто завершує службу без осиротілих процесів і втрачених сигналів.
 
-### Jinja2 configuration templates (minijinja-cli)
+### Шаблони конфігурації Jinja2 (minijinja-cli)
 
-- Jinja2-compatible template rendering at both build time and container startup.
-- Drop a `.j2` file anywhere in the app directory; it is discovered at build time and rendered at every startup with all environment variables available.
-- Runtime rendering is parallel and automatic -- downstream images get it with zero configuration.
-- Immutable mode (`B19_IMMUTABLE=Y`) locks the filesystem to build-time state, skipping all runtime rendering.
+- Рендеринг шаблонів, сумісний із Jinja2, і під час збирання, і під час запуску контейнера.
+- Покладіть файл `.j2` будь-де в каталозі застосунку — його виявлено під час збирання й відрендерено при кожному запуску з усіма доступними змінними середовища.
+- Рендеринг під час виконання паралельний і автоматичний — похідні образи отримують його без жодної конфігурації.
+- Незмінний режим (`B19_IMMUTABLE=Y`) заморожує файлову систему до стану на момент збирання, пропускаючи весь рантайм-рендеринг.
 
-### Built-in test framework (test.d)
+### Вбудований тестовий фреймворк (test.d)
 
-- Tests run inside the running container via `make test` or `docker exec`.
-- Automatically waits for healthchecks to pass before executing.
-- No test framework dependency -- tests are plain shell scripts with exit codes.
-- Supports Jinja2 templates in tests, useful for asserting build-time values at runtime.
-- Continues on failure and reports the total count; never hides partial results.
+- Тести виконуються всередині запущеного контейнера через `make test` чи `docker exec`.
+- Автоматично чекає проходження healthchecks перед виконанням.
+- Без залежності від тестового фреймворку — тести це звичайні shell-скрипти з кодами виходу.
+- Підтримуються шаблони Jinja2 у тестах, що зручно для перевірки під час виконання значень, зафіксованих під час збирання.
+- Продовжує після збоїв і звітує загальну кількість; ніколи не ховає часткові результати.
 
-### Pre-installed utility tools
+### Попередньо встановлені службові інструменти
 
-- `mold` as default linker for faster linking (opt-out available).
-- `fd` for fast file finding, `minijinja-cli` for template rendering.
-- `aria2c` for multi-connection downloads, `tini` as PID 1 for zombie reaping.
-- Parallel compression tools: `pbzip2`, `pigz`, `pixz`.
-- gettext tools for i18n compilation, `cURL` for network operations.
+- `mold` як типовий лінкер (можна вимкнути).
+- `fd` для пошуку файлів, `minijinja-cli` для рендерингу шаблонів.
+- `aria2c` для багатоз’єднаних завантажень, `tini` як PID 1 для прибирання зомбі.
+- Інструменти паралельного стиснення: `pbzip2`, `pigz`, `pixz`.
+- Інструменти gettext для компіляції i18n, `cURL` для мережевих операцій.
 
-### XDG Base Directory paths
+### Шляхи XDG Base Directory
 
-- Standard XDG paths (`XDG_CACHE_HOME`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_STATE_HOME`) are set under the app home directory.
-- All paths are writable by the non-root user without privilege escalation.
+- Стандартні XDG-шляхи (`XDG_CACHE_HOME`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_STATE_HOME`) задаються в домашньому каталозі застосунку.
+- Усі шляхи доступні користувачеві без прав root для запису, без підвищення привілеїв.
 <!-- textlint-enable -->

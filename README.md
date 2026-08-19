@@ -1,16 +1,18 @@
 <!--
 SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
 SPDX-License-Identifier: MIT
+pf-cli-managed: yes
 -->
 
-<!-- pf-cli-managed: yes -->
-# F5M / I2P (unofficial b19-style image)
+[Español](docs/es/README.md) · [Українська](docs/uk/README.md)
 
-F5M custom distribution of I2P anonymous network router
+# F5M/I2P
 
-[![License](https://img.shields.io/badge/license-MIT-4c1?style=flat-square)](LICENSE) [![PRs welcome](https://img.shields.io/badge/PRs-welcome-4c1?style=flat-square)](CONTRIBUTING.md) [![REUSE compliance](https://api.reuse.software/badge/codeberg.org/f5m/i2p)](https://api.reuse.software/info/codeberg.org/f5m/i2p)
+Community-maintained distribution of I2P based on B19/Java
 
-![Project status](https://img.shields.io/badge/status-maintained-1d63ed?style=flat-square) [![Last commit](https://img.shields.io/gitea/last-commit/f5m/i2p?gitea_url=https://codeberg.org&style=flat-square)](https://codeberg.org/f5m/i2p)
+[![Stand with Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://damian-buho.github.io/support-ukraine/) [![License](https://img.shields.io/static/v1?label=license&message=MIT&color=4c1&style=flat-square)](LICENSE) ![Commit style](https://img.shields.io/static/v1?label=commits&message=conventional&color=blue&style=flat-square) ![Workflow](https://img.shields.io/static/v1?label=workflow&message=git-flow&color=blue&style=flat-square) ![Versioning](https://img.shields.io/static/v1?label=versioning&message=semantic&color=blue&style=flat-square) [![PRs welcome](https://img.shields.io/static/v1?label=PRs&message=welcome&color=4c1&style=flat-square)](CONTRIBUTING.md) [![Citation](https://img.shields.io/static/v1?label=citation&message=cff&color=blue&style=flat-square)](CITATION.cff) [![REUSE compliance](https://api.reuse.software/badge/codeberg.org/f5m/i2p)](https://api.reuse.software/info/codeberg.org/f5m/i2p)
+
+![Project status](https://img.shields.io/static/v1?label=status&message=maintained&color=1d63ed&style=flat-square) [![Last commit](https://img.shields.io/gitea/last-commit/f5m/i2p?gitea_url=https://codeberg.org&style=flat-square)](https://codeberg.org/f5m/i2p)
 
 [![Build status on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/published.yaml/badge.svg)](https://kiota.ch/f5m/i2p/actions)
 
@@ -19,6 +21,9 @@ F5M custom distribution of I2P anonymous network router
 - Jinja2-rendered I2P configuration
 - Eepsite hosting with persistent identity
 - I2P anonymity router
+
+### Inherited from B19/Ubuntu 1.4.0
+
 - Persistent APT cache across builds
 - Service process management with log routing (b19-exec)
 - Cached artifact downloads with integrity verification (b19-fetch)
@@ -47,30 +52,65 @@ F5M custom distribution of I2P anonymous network router
 - Pre-installed utility tools
 - XDG Base Directory paths
 
-See [Features](FEATURES.md) for the full list.
+See [FEATURES.md](FEATURES.md) for the full list.
 
 ## What this provides
 
-- **Container image** `kiota.ch/f5m/i2p:latest`
+- **Container image** `ghcr.io/damian-buho/f5m/i2p:latest`
+- **Container image** `docker.io/damianbuho/f5m-i2p:latest`
 
 ## Installation
 
 Pull the published container image:
 
+### Pull from GHCR
+
+```sh
+docker pull ghcr.io/damian-buho/f5m/i2p:latest
+```
+
+### Pull from DockerHub
+
+```sh
+docker pull docker.io/damianbuho/f5m-i2p:latest
+```
+
+Stable releases also publish `X.Y.Z`, `X.Y` and `X` tags — pull the precision you want to pin.
+
+If the registries above are unreachable, pull from the origin instead:
+
+### Pull from Kiota
+
 ```sh
 docker pull kiota.ch/f5m/i2p:latest
 ```
 
+## Usage
+
+Bring the stack up locally:
+
+```sh
+make dc-up
+make dc-logs
+make dc-down
+```
+
 ## Building
 
-- [Makefile reference](docs/MAKEFILE.md)
+Run `make` with no arguments for the default target; run `make help` to list every target.
+
+For the local dev loop, `make dev-container` brings up the dev-container.
 
 Pipeline entry points:
 
 - `make analyze` — Run the heavy analysis sweep (mutation testing, benchmarks)
 - `make audited` — Re-scan the pinned dependencies and published artifacts for new vulnerabilities
 - `make check-outdated` — Report every pinned dependency that lags upstream
-- `make published` — Build, test, scan and publish the release artifacts
+- `make ready-to-publish` — Run the pseudo-CI pipeline locally — build, test and scan, without publishing
+
+## Roadmap
+
+See the [ROADMAP.md](ROADMAP.md) for what is planned next.
 
 ## Policies
 
@@ -78,15 +118,11 @@ Pipeline entry points:
 - [Security policy](SECURITY.md)
 - [Getting support](SUPPORT.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
+- [AI and LLM Policy](AI_POLICY.md)
 
 ## Links
 
-### Project
-
-- [F5M / I2P (unofficial b19-style image) on Codeberg](https://codeberg.org/f5m/i2p)
-- [F5M / I2P (unofficial b19-style image) on GitHub](https://github.com/damian-buho/f5m-i2p)
-- [F5M / I2P (unofficial b19-style image) on kiota.ch](https://kiota.ch/f5m/i2p)
-- [Issues on Codeberg](https://codeberg.org/f5m/i2p/issues)
+- [Projectfile Specification](https://projectfile.org)
 
 ## License
 

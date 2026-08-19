@@ -8,7 +8,7 @@ pf-cli-managed: yes
 
 [English](../../README.md) · [Español](../es/README.md)
 
-# F5M / I2P (unofficial b19-style image)
+# F5M/I2P
 
 Дистрибуція I2P з підтримкою спільноти на основі B19/Java
 
@@ -23,33 +23,36 @@ pf-cli-managed: yes
 - Конфігурація I2P, відтворена з Jinja2
 - Хостинг eepsite зі сталою ідентичністю
 - Маршрутизатор анонімності I2P
-- Persistent APT cache across builds
-- Service process management with log routing (b19-exec)
-- Cached artifact downloads with integrity verification (b19-fetch)
-- Timed command execution with failure reporting (b19-run)
-- Run-once initialization (bootstrap.d)
-- Modular build hooks (build.d)
-- Automatic CPU count detection (NUMPROCS)
-- Declarative dependency management (b19-deps)
-- Pluggable startup system (entrypoint.d)
-- Feature toggles for all subsystems
-- Built-in health monitoring (healthcheck.d)
-- Multilingual shell output (b19-i18n)
-- Image lineage tracking
-- Structured, level-filtered logging (b19-log)
-- Non-root container by default
-- Air-gapped / offline build and runtime support
-- Runtime overlay injection
-- Reproducible base image (pinned by digest)
-- Port validation
-- Unified lifecycle runner family
-- Docker secrets auto-loading (secrets)
-- Interactive shell hooks (shell.d)
-- Graceful signal handling
-- Jinja2 configuration templates (minijinja-cli)
-- Built-in test framework (test.d)
-- Pre-installed utility tools
-- XDG Base Directory paths
+
+### Успадковано від B19/Ubuntu 1.4.0
+
+- Постійний APT-кеш між збираннями
+- Керування службовими процесами зі спрямуванням журналів (b19-exec)
+- Кешовані завантаження артефактів із перевіркою цілісності (b19-fetch)
+- Вимірюване виконання команд зі звітуванням про збої (b19-run)
+- Одноразова ініціалізація (bootstrap.d)
+- Модульні хуки збирання (build.d)
+- Автоматичне визначення кількості CPU (NUMPROCS)
+- Декларативне керування залежностями (b19-deps)
+- Підключована система запуску (entrypoint.d)
+- Перемикачі функцій для всіх підсистем
+- Вбудований моніторинг стану (healthcheck.d)
+- Багатомовний вивід shell (b19-i18n)
+- Відстеження лініжу образу
+- Структуроване журналування з фільтром за рівнем (b19-log)
+- Контейнер без прав root за замовчуванням
+- Підтримка ізольованих від інтернету (air-gapped/offline) збирання й виконання
+- Ін’єкція оверлеїв під час виконання
+- Відтворюваний базовий образ (зафіксований за digest)
+- Перевірка портів
+- Уніфіковане сімейство ранерів життєвого циклу
+- Автозавантаження Docker-секретів (secrets)
+- Хуки інтерактивної shell (shell.d)
+- Плавна обробка сигналів
+- Шаблони конфігурації Jinja2 (minijinja-cli)
+- Вбудований тестовий фреймворк (test.d)
+- Попередньо встановлені службові інструменти
+- Шляхи XDG Base Directory
 
 Див. [FEATURES.md](FEATURES.md), щоб переглянути повний перелік.
 
@@ -62,12 +65,23 @@ pf-cli-managed: yes
 
 Завантажте опублікований образ контейнера:
 
+### Завантажити з GHCR
+
 ```sh
 docker pull ghcr.io/damian-buho/f5m/i2p:latest
+```
+
+### Завантажити з DockerHub
+
+```sh
 docker pull docker.io/damianbuho/f5m-i2p:latest
 ```
 
+Стабільні випуски також публікують теґи `X.Y.Z`, `X.Y` і `X` — завантажте той рівень точності, який хочете зафіксувати.
+
 Якщо наведені вище реєстри недоступні, завантажте з джерела:
+
+### Завантажити з Kiota
 
 ```sh
 docker pull kiota.ch/f5m/i2p:latest
@@ -85,7 +99,9 @@ make dc-down
 
 ## Збирання
 
-- [Довідник із Makefile](../MAKEFILE.md)
+Виконайте `make` без аргументів для типової цілі; виконайте `make help`, щоб переглянути всі цілі.
+
+Для локального циклу розробки `make dev-container` піднімає dev-container.
 
 Точки входу конвеєра:
 
@@ -93,10 +109,6 @@ make dc-down
 - `make audited` — Re-scan the pinned dependencies and published artifacts for new vulnerabilities
 - `make check-outdated` — Report every pinned dependency that lags upstream
 - `make ready-to-publish` — Run the pseudo-CI pipeline locally — build, test and scan, without publishing
-
-Виконайте `make` без аргументів для типової цілі; виконайте `make help`, щоб переглянути всі цілі.
-
-Для локального циклу розробки `make dev-container` піднімає dev-container.
 
 ## Дорожня карта
 
@@ -108,25 +120,14 @@ make dc-down
 - [Політика безпеки](SECURITY.md)
 - [Як отримати підтримку](SUPPORT.md)
 - [Кодекс поведінки](CODE_OF_CONDUCT.md)
+- [Політика щодо ШІ та LLM](AI_POLICY.md)
 
 ## Посилання
 
-### Проєкт
-
 - [Специфікація Projectfile](https://projectfile.org)
-- [F5M / I2P (unofficial b19-style image) на Codeberg](https://codeberg.org/f5m/i2p)
-- [F5M / I2P (unofficial b19-style image) на GitHub](https://github.com/damian-buho/f5m-i2p)
-- [F5M / I2P (unofficial b19-style image) на kiota.ch](https://kiota.ch/f5m/i2p)
-- [Issues на Codeberg](https://codeberg.org/f5m/i2p/issues)
-- [Issues на GitHub](https://github.com/damian-buho/f5m-i2p/issues)
-
-### Інше
-
-- [Від автора](https://dbuho.me)
 
 ## Ліцензія
 
 Цей проєкт ліцензовано на умовах MIT — див. файл [LICENSE](LICENSE) для подробиць.
 
-*Згенеровано з projectfile ([дізнатися як](https://projectfile.org/how-to/readme))*
 <!-- textlint-enable -->

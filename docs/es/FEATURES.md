@@ -34,188 +34,188 @@ SPDX-License-Identifier: MIT
 - Detección de IPv4 tras cortafuegos, IPv6 desactivado y UPnP desactivado por defecto para un recorrido de NAT predecible.
 - Memoria de la JVM limitada por defecto a un heap de 128m a 256m, configurable mediante el entorno.
 
-## Heredado de B19/Ubuntu 1.0.0
+## Heredado de B19/Ubuntu 1.4.0
 
-### Persistent APT cache across builds
+### Caché APT persistente entre compilaciones
 
-- APT package and index caches survive across builds via BuildKit cache mounts, keyed by Ubuntu series and architecture.
-- Repeated builds reuse downloaded packages instead of re-downloading.
-- Optional LAN APT cacher proxy auto-detection for environments with a caching proxy.
+- Las cachés de paquetes e índices de APT sobreviven entre compilaciones mediante montajes de caché de BuildKit, con clave por serie de Ubuntu y arquitectura.
+- Las compilaciones repetidas reutilizan los paquetes descargados en lugar de volver a descargarlos.
+- Proxy opcional de caché APT en LAN, se activa con `M6E_APT_CACHE_HOST`.
 
-### Service process management with log routing (b19-exec)
+### Gestión de procesos de servicio con enrutado de logs (b19-exec)
 
-- Long-running processes (daemons, servers) have stdout and stderr automatically routed through the structured logger.
-- The service PID is tracked for signal forwarding -- Docker stop gracefully terminates the main process.
-- Log levels for stdout and stderr streams are independently configurable.
-- Exit code of the service is captured and available to downstream hooks.
+- Los procesos de larga duración (demonios, servidores) tienen stdout y stderr enrutados automáticamente a través del logger estructurado.
+- Se hace seguimiento del PID del servicio para el reenvío de señales: Docker stop termina de forma elegante el proceso principal.
+- Los niveles de log de los flujos stdout y stderr se configuran de forma independiente.
+- El código de salida del servicio se captura y queda disponible para los hooks posteriores.
 
-### Cached artifact downloads with integrity verification (b19-fetch)
+### Descargas de artefactos con caché y verificación de integridad (b19-fetch)
 
-- All external downloads go through a three-tier cache: local `.fetch/` directory, BuildKit persistent cache, then upstream via aria2c with up to 16 connections.
-- Optional SHA-512 verification at every tier; hash mismatch causes fallthrough to the next tier rather than failure.
-- Offgrid mode blocks all downloads entirely, failing fast with a clear error if a cache miss occurs.
-- Supports a near-cache proxy for LAN-only builds that route through a caching proxy.
+- Todas las descargas externas pasan por una caché de tres niveles: directorio local `.fetch/`, caché persistente de BuildKit y luego upstream vía aria2c con hasta 16 conexiones.
+- Verificación SHA-512 opcional en cada nivel; un hash que no coincide provoca caída al siguiente nivel en lugar de fallo.
+- El modo offgrid bloquea todas las descargas por completo, fallando rápido con un error claro si se produce un fallo de caché.
+- Admite un proxy de near-cache para compilaciones solo-LAN que pasan por un proxy de caché.
 
-### Timed command execution with failure reporting (b19-run)
+### Ejecución de comandos temporizada con informe de fallos (b19-run)
 
-- Any command can be wrapped to get automatic elapsed-time measurement and success/failure reporting.
-- Success output is visible only at higher verbosity levels; failure output is always shown.
-- In debug mode, command output streams live instead of being buffered.
+- Cualquier comando puede envolverse para obtener medición automática del tiempo transcurrido e informe de éxito o fallo.
+- La salida correcta solo es visible en niveles de verbosidad mayores; la salida de fallo siempre se muestra.
+- En modo debug, la salida del comando se transmite en vivo en lugar de almacenarse en búfer.
 
-### Run-once initialization (bootstrap.d)
+### Inicialización de una sola vez (bootstrap.d)
 
-- One-time setup tasks (database migrations, admin user creation, directory init) run on first container start only.
-- Automatic idempotency: completed scripts are never re-run, even across container restarts.
-- Failed scripts are retried on next start; successful ones stay locked.
-- State can be reset by clearing a volume, triggering a full re-bootstrap.
-- Downstream images add their own init scripts by dropping them into a directory.
+- Las tareas de configuración únicas (migraciones de base de datos, creación del usuario administrador, init de directorios) se ejecutan solo en el primer arranque del contenedor.
+- Idempotencia automática: los scripts completados no vuelven a ejecutarse jamás, ni siquiera entre reinicios del contenedor.
+- Los scripts fallidos se reintentan en el siguiente arranque; los exitosos quedan bloqueados.
+- El estado puede resetearse limpiando un volumen, lo que dispara un re-bootstrap completo.
+- Las imágenes derivadas añaden sus propios scripts de init dejándolos caer en un directorio.
 
-### Modular build hooks (build.d)
+### Hooks de compilación modulares (build.d)
 
-- All image build logic lives in numbered shell scripts instead of inline Dockerfile `RUN` commands.
-- Hooks are organized in `pre/on/post` phases and auto-discovered by the stage name passed to `build-stage`.
-- The reserved `always/{pre,post}` scope brackets every stage, whatever it is named, so cross-cutting setup is written once instead of per stage.
-- Inheritable hooks propagate to downstream images automatically via Docker layer overlay -- downstream gets parent’s build logic for free.
-- Non-inheritable hooks are cleaned up after execution to prevent leaking into later stages.
+- Toda la lógica de compilación de la imagen vive en scripts de shell numerados en lugar de comandos `RUN` inline en el Dockerfile.
+- Los hooks se organizan en fases `pre/on/post` y se autodescubren por el nombre de etapa pasado a `build-stage`.
+- El ámbito reservado `always/{pre,post}` enmarca cada etapa, se llame como se llame, de modo que la configuración transversal se escribe una vez en lugar de por etapa.
+- Los hooks heredables se propagan a las imágenes derivadas automáticamente vía superposición de capas de Docker: las derivadas obtienen gratis la lógica de compilación del padre.
+- Los hooks no heredables se limpian tras su ejecución para evitar que se filtren en etapas posteriores.
 
-### Automatic CPU count detection (NUMPROCS)
+### Detección automática del número de CPUs (NUMPROCS)
 
-- Available CPUs are detected automatically with Kubernetes downward API, cgroups v2, or `nproc` fallback.
-- The detected count is available as `NUMPROCS` throughout the build and runtime, used for parallel compilation, template rendering, and test execution.
-- Eliminates hardcoded job counts and ensures consistent parallelism across Docker, Kubernetes, and CI.
+- Las CPUs disponibles se detectan automáticamente con la downward API de Kubernetes, cgroups v2 o `nproc` como respaldo.
+- El recuento detectado está disponible como `NUMPROCS` durante toda la compilación y el runtime, y se usa para compilación paralela, renderizado de plantillas y ejecución de tests.
+- Elimina los recuentos de jobs hardcodeados y garantiza un paralelismo consistente entre Docker, Kubernetes y CI.
 
-### Declarative dependency management (b19-deps)
+### Gestión declarativa de dependencias (b19-deps)
 
-- External dependency metadata (URL, version, SHA-512 hash) stored as plain text files, completely separate from build scripts.
-- Supports architecture-specific downloads, multi-version series, and nested component paths.
-- Dependencies are auto-discovered at Makefile parse time -- add files to the right directory and the build picks them up without manual declarations.
-- `make fetch` pre-downloads everything for offline builds; version bumps trigger automatic re-fetch and hash updates.
+- Los metadatos de dependencias externas (URL, versión, hash SHA-512) se guardan como archivos de texto plano, completamente separados de los scripts de compilación.
+- Admite descargas específicas por arquitectura, series multiversión y rutas de componentes anidadas.
+- Las dependencias se autodescubren al parsear el Makefile: añade archivos al directorio correcto y la compilación los recoge sin declaraciones manuales.
+- `make fetch` predescarga todo para compilaciones offline; los cambios de versión disparan un re-fetch y una actualización de hashes automáticos.
 
-### Pluggable startup system (entrypoint.d)
+### Sistema de arranque conectable (entrypoint.d)
 
-- Every container startup runs through a sequence of numbered hooks: signal setup, secrets loading, CPU detection, port validation, template rendering, bootstrap, service start.
-- Ad-hoc commands (`docker run img command`) automatically bypass part of the startup chain and execute directly.
-- Individual hooks or the entire entrypoint can be skipped at runtime via environment variables, no image rebuild needed.
-- Downstream images override a single hook (slot 5000) to launch their service; everything else is inherited.
+- Cada arranque de contenedor pasa por una secuencia de hooks numerados: configuración de señales, carga de secretos, detección de CPU, validación de puertos, renderizado de plantillas, bootstrap y arranque del servicio.
+- Los comandos ad hoc (`docker run img command`) saltan automáticamente parte de la cadena de arranque y se ejecutan directamente.
+- Tanto los hooks individuales como el entrypoint completo pueden omitirse en runtime mediante variables de entorno, sin reconstruir la imagen.
+- Las imágenes derivadas sobrescriben un único hook (slot 5000) para lanzar su servicio; todo lo demás se hereda.
 
-### Feature toggles for all subsystems
+### Conmutadores de funcionalidades para todos los subsistemas
 
-- Every major subsystem (entrypoint, healthchecks, bootstrap, tests, secrets, port validation, i18n, shell hooks) can be disabled at runtime via environment variables.
-- Individual entrypoint and bootstrap hooks can be skipped by name without disabling the whole subsystem.
-- No image rebuild required -- toggles are runtime-only.
+- Cada subsistema mayor (entrypoint, healthchecks, bootstrap, tests, secrets, validación de puertos, i18n, shell hooks) puede desactivarse en runtime mediante variables de entorno.
+- Los hooks individuales del entrypoint y del bootstrap pueden omitirse por nombre sin desactivar el subsistema entero.
+- No hace falta reconstruir la imagen: los conmutadores son solo de runtime.
 
-### Built-in health monitoring (healthcheck.d)
+### Monitorización de estado integrada (healthcheck.d)
 
-- Docker-native healthcheck declared in the base image and inherited by all downstream images with no extra configuration.
-- Seven default checks: disk space on home, cache, and temp directories; HTTPS connectivity, DNS resolution, ICMP ping; and filesystem writability.
-- Network checks are fault-tolerant -- success on any target counts as pass.
-- All network checks automatically skip in offgrid mode; all checks can be disabled at runtime.
-- Downstream images add service-specific checks (HTTP endpoints, database connections, process liveness) by dropping scripts into a directory.
+- Healthcheck nativo de Docker declarado en la imagen base y heredado por todas las imágenes derivadas sin configuración extra.
+- Siete comprobaciones de estado por defecto: espacio en disco de los directorios home, caché y temporales; conectividad HTTPS, resolución DNS, ping ICMP; y escribibilidad del sistema de archivos.
+- Las comprobaciones de red son tolerantes a fallos: el éxito en cualquier objetivo cuenta como aprobado.
+- Todas las comprobaciones de red se omiten automáticamente en modo offgrid; todas pueden desactivarse en runtime.
+- Las imágenes derivadas añaden comprobaciones específicas del servicio (endpoints HTTP, conexiones a base de datos, vida del proceso) dejando caer scripts en un directorio.
 
-### Multilingual shell output (b19-i18n)
+### Salida de shell multilingüe (b19-i18n)
 
-- All user-facing log messages and script output are translatable via GNU gettext.
-- Ships with English, Spanish (`es_CL`), and Ukrainian (`uk_UA`) out of the box.
-- Downstream images inherit all parent translations automatically; only new or overridden strings need translating.
-- Translations are compiled at build time with no runtime overhead.
+- Todos los mensajes de log y la salida de scripts orientados al usuario son traducibles vía GNU gettext.
+- Trae de fábrica inglés, español (`es_CL`) y ucraniano (`uk_UA`).
+- Las imágenes derivadas heredan automáticamente todas las traducciones del padre; solo las cadenas nuevas o sobrescritas necesitan traducción.
+- Las traducciones se compilan en tiempo de compilación sin coste en runtime.
 
-### Image lineage tracking
+### Seguimiento del linaje de la imagen
 
-- Every image records its build metadata (namespace, project, version, base image) into a lineage file during build.
-- Downstream images chain lineage from their parent, producing a full base-to-current provenance chain.
-- At container startup, the full lineage chain is logged, making it easy to trace what a running container was built from.
+- Cada imagen registra sus metadatos de compilación (namespace, proyecto, versión, imagen base) en un archivo de linaje durante la compilación.
+- Las imágenes derivadas encadenan el linaje de su padre, produciendo una cadena de procedencia completa desde la base hasta la actual.
+- Toda la cadena de linaje se registra al arrancar (verbosidad debug) y puede leerse del archivo en cualquier momento, lo que facilita rastrear a partir de qué se construyó un contenedor en ejecución.
 
-### Structured, level-filtered logging (b19-log)
+### Logging estructurado con filtro por nivel (b19-log)
 
-- All container output goes through a leveled logger with four thresholds: error, warn, info, debug.
-- Messages below the configured verbosity are silently discarded, keeping production logs clean.
-- Colors auto-detect terminal support and respect `NO_COLOR=1`.
-- Pipable: command output can be routed through the logger to apply level filtering and tags.
+- Toda la salida del contenedor pasa por un logger con niveles y cuatro umbrales: error, warn, info, debug.
+- Los mensajes por debajo de la verbosidad configurada se descartan silenciosamente, manteniendo limpios los logs de producción.
+- Los colores autodetectan el soporte del terminal y respetan `NO_COLOR=1`.
+- Encauzable: la salida de comandos puede enrutarse a través del logger para aplicar filtrado por nivel y tags.
 
-### Non-root container by default
+### Contenedor sin privilegios de root por defecto
 
-- The container runs as a non-root user (`ubuntu`, UID/GID 1000) with all runtime files owned by that user.
-- A two-stage build separates root-level system installation from user-level runtime setup.
-- User identity is configurable at build time.
+- El contenedor se ejecuta como usuario sin privilegios de root (`ubuntu`, UID/GID 1000) con todos los archivos de runtime en propiedad de ese usuario.
+- Una compilación en dos etapas separa la instalación del sistema a nivel root de la configuración del runtime a nivel de usuario.
+- La identidad del usuario es configurable en tiempo de compilación.
 
-### Air-gapped / offline build and runtime support
+### Soporte de compilación y runtime aislados de internet (air-gapped/offline)
 
-- A single environment variable (`B19_OFFGRID_MODE=Y`) cuts all internet access at build time and runtime.
-- Build-time: downloads are blocked, APT updates are skipped, SSH keyscans are skipped. All artifacts must come from cache tiers.
-- Runtime: network healthchecks automatically skip with a healthy result, so containers stay green on isolated networks.
-- APT package lists can be snapshotted and injected for fully offline image builds.
-- LAN services (caching proxies, registries) remain reachable -- offgrid blocks internet, not all networking.
+- Una única variable de entorno (`B19_OFFGRID_MODE=Y`) corta todo acceso a internet en tiempo de compilación y en runtime.
+- En compilación: se bloquean las descargas, se saltan las actualizaciones de APT y se saltan los keyscans de SSH. Todos los artefactos deben provenir de los niveles de caché.
+- En runtime: las comprobaciones de estado de red se saltan automáticamente con resultado saludable, así los contenedores permanecen en verde en redes aisladas.
+- Las listas de paquetes APT pueden capturarse como snapshot e inyectarse para compilaciones de imagen totalmente offline.
+- Los servicios de LAN (proxies de caché, registros) siguen siendo accesibles: offgrid bloquea internet, no toda la red.
 
-### Runtime overlay injection
+### Inyección de overlays en runtime
 
-- Configuration or data files can be injected at container startup by setting `B19_OVERLAY` to a directory name.
-- Overlay contents are recursively copied to the container root, overwriting existing files -- no image rebuild needed.
-- Skipped in immutable mode, preventing runtime modification of production-locked images.
+- Se pueden inyectar archivos de configuración o datos al arrancar el contenedor estableciendo en `B19_OVERLAY` el nombre de un directorio.
+- El contenido del overlay se copia recursivamente a la raíz del contenedor, sobrescribiendo los archivos existentes; no hace falta reconstruir la imagen.
+- Se omite en modo inmutable, impidiendo la modificación en runtime de imágenes bloqueadas para producción.
 
-### Reproducible base image (pinned by digest)
+### Imagen base reproducible (fijada por digest)
 
-- The Ubuntu base image is pinned by SHA-256 digest, not by tag, ensuring deterministic builds.
-- Supports multiple Ubuntu series (resolute, noble, optional: jammy, questing) selectable at build time.
-- APT mirrors are configurable per architecture for LAN mirrors or air-gapped environments.
+- La imagen base de Ubuntu está fijada por digest SHA-256, no por tag, lo que garantiza compilaciones deterministas.
+- Admite varias series de Ubuntu (resolute, noble, jammy) seleccionables en tiempo de compilación.
+- Los mirrors de APT son configurables por arquitectura para mirrors de LAN o entornos aislados.
 
-### Port validation
+### Validación de puertos
 
-- All `*PORT*` environment variables are validated at startup against the WHATWG blocklist of forbidden ports and privileged ports (\<1024).
-- Catches misconfigurations like `PORT=0` or `PORT=22` early, before the service fails silently.
-- Can be disabled at runtime without rebuilding the image.
+- Todas las variables de entorno `*PORT*` se validan al arrancar contra la lista de puertos prohibidos de WHATWG y contra los puertos privilegiados (\<1024).
+- Detecta temprano configuraciones erróneas como `HTTP_PORT=22`, antes de que el servicio falle en silencio.
+- Puede desactivarse en runtime sin reconstruir la imagen.
 
-### Unified lifecycle runner family
+### Familia unificada de runners del ciclo de vida
 
-- Eight numbered-hook runners cover the full container lifecycle: startup, healthchecks, tests, bootstrap, build hooks, benchmarks, reports, and shell sessions.
-- All runners share the same pattern: drop a numbered script into a directory, it is auto-discovered and executed.
-- Scripts from different image layers merge seamlessly -- upstream and downstream hooks coexist without conflict.
-- Each runner has tailored failure semantics: abort on error (entrypoint, bootstrap), continue and count failures (healthchecks, tests), always succeed (reports).
+- Ocho runners de hooks numerados cubren el ciclo de vida completo del contenedor: arranque, healthchecks, tests, bootstrap, hooks de compilación, benchmarks, reports y sesiones de shell.
+- Todos los runners comparten el mismo patrón: deja caer un script numerado en un directorio y se autodescubre y ejecuta.
+- Los scripts de distintas capas de imagen se mezclan: los hooks upstream y los derivados coexisten sin conflicto.
+- Cada runner tiene semántica de fallo a medida: abortar ante error (entrypoint, bootstrap), continuar y contar fallos (healthchecks, tests), tener siempre éxito (reports).
 
-### Docker secrets auto-loading (secrets)
+### Autocarga de secretos de Docker (secrets)
 
-- Docker secrets files are automatically discovered and converted to environment variables at startup.
-- Dot-notation filenames map to uppercase env vars (`b19.npm.registry_host` becomes `B19_NPM_REGISTRY_HOST`).
-- Required secrets can be declared by name; the container refuses to start if any are missing.
-- Existing environment variables take precedence over secret-derived values.
-- Secrets are also available in interactive shell sessions and healthchecks.
-- Non-UTF-8/binary secrets (keys, DER blobs, gzipped tarballs) are **not** exported as env vars: Bash truncates them at the first NUL and the stray bytes panic any tool that reads the environment as UTF-8 (e.g. `minijinja --env`, used to template configs). They remain on disk at `/run/secrets/<name>` for file-based reads — which is the only correct way to consume a binary secret anyway.
+- Los archivos de secretos de Docker se autodescubren y convierten en variables de entorno al arrancar.
+- Los nombres de archivo en notación de puntos se mapean a variables de entorno en mayúsculas (`b19.npm.registry_host` se convierte en `B19_NPM_REGISTRY_HOST`).
+- Los secretos requeridos pueden declararse por nombre; el contenedor se niega a arrancar si falta alguno.
+- Las variables de entorno existentes tienen precedencia sobre los valores derivados de secretos.
+- Los secretos también están disponibles en sesiones de shell interactivas y en healthchecks.
+- Los secretos no UTF-8/binarios (claves, blobs DER, tarballs comprimidos con gzip) **no** se exportan como variables de entorno: Bash los trunca en el primer NUL y los bytes sueltos hacen fallar a cualquier herramienta que lea el entorno como UTF-8 (p. ej., `minijinja --env`, usado para plantillar configuraciones). Permanecen en disco en `/run/secrets/<name>` para lecturas basadas en archivo — que, de todos modos, es la única forma correcta de consumir un secreto binario.
 
-### Interactive shell hooks (shell.d)
+### Hooks de shell interactivo (shell.d)
 
-- `docker exec bash` sessions automatically load Docker secrets and any custom hooks added by downstream images.
-- Hooks merge via Docker layer overlay, so inherited and project-specific shell setup coexist.
+- Las sesiones `docker exec bash` cargan automáticamente los secretos de Docker y cualquier hook personalizado añadido por las imágenes derivadas.
+- Los hooks se mezclan vía superposición de capas de Docker, así que la configuración de shell heredada y la específica del proyecto coexisten.
 
-### Graceful signal handling
+### Gestión elegante de señales
 
-- PID 1 is `tini -g`, which reaps zombie processes and forwards signals to the full process group.
-- A configurable set of Unix signals (TERM, INT, HUP, USR1, USR2, etc.) is trapped and forwarded to the main service process.
-- `docker stop` cleanly terminates the service without orphan processes or signal loss.
+- El PID 1 es `tini -g`, que recoge los procesos zombi y reenvía señales a todo el grupo de procesos.
+- Un conjunto configurable de señales Unix (TERM, INT, HUP, USR1, USR2, etc.) se captura y reenvía al proceso principal del servicio.
+- `docker stop` termina limpiamente el servicio sin procesos huérfanos ni pérdida de señales.
 
-### Jinja2 configuration templates (minijinja-cli)
+### Plantillas de configuración Jinja2 (minijinja-cli)
 
-- Jinja2-compatible template rendering at both build time and container startup.
-- Drop a `.j2` file anywhere in the app directory; it is discovered at build time and rendered at every startup with all environment variables available.
-- Runtime rendering is parallel and automatic -- downstream images get it with zero configuration.
-- Immutable mode (`B19_IMMUTABLE=Y`) locks the filesystem to build-time state, skipping all runtime rendering.
+- Renderizado de plantillas compatible con Jinja2 tanto en tiempo de compilación como al arrancar el contenedor.
+- Deja caer un archivo `.j2` en cualquier parte del directorio de la aplicación; se descubre en tiempo de compilación y se renderiza en cada arranque con todas las variables de entorno disponibles.
+- El renderizado en runtime es paralelo y automático: las imágenes derivadas lo obtienen sin configuración alguna.
+- El modo inmutable (`B19_IMMUTABLE=Y`) congela el sistema de archivos en el estado de compilación, saltándose todo renderizado en runtime.
 
-### Built-in test framework (test.d)
+### Framework de tests integrado (test.d)
 
-- Tests run inside the running container via `make test` or `docker exec`.
-- Automatically waits for healthchecks to pass before executing.
-- No test framework dependency -- tests are plain shell scripts with exit codes.
-- Supports Jinja2 templates in tests, useful for asserting build-time values at runtime.
-- Continues on failure and reports the total count; never hides partial results.
+- Los tests se ejecutan dentro del contenedor en marcha vía `make test` o `docker exec`.
+- Espera automáticamente a que pasen los healthchecks antes de ejecutar.
+- Sin dependencia de ningún framework de tests: los tests son scripts de shell simples con códigos de salida.
+- Admite plantillas Jinja2 en los tests, útil para afirmar en runtime valores fijados en compilación.
+- Continúa ante fallos e informa del recuento total; nunca oculta resultados parciales.
 
-### Pre-installed utility tools
+### Herramientas de utilidad preinstaladas
 
-- `mold` as default linker for faster linking (opt-out available).
-- `fd` for fast file finding, `minijinja-cli` for template rendering.
-- `aria2c` for multi-connection downloads, `tini` as PID 1 for zombie reaping.
-- Parallel compression tools: `pbzip2`, `pigz`, `pixz`.
-- gettext tools for i18n compilation, `cURL` for network operations.
+- `mold` como enlazador por defecto (con opción de desactivarlo).
+- `fd` para búsqueda de archivos, `minijinja-cli` para renderizado de plantillas.
+- `aria2c` para descargas multiconexión, `tini` como PID 1 para recoger zombis.
+- Herramientas de compresión paralela: `pbzip2`, `pigz`, `pixz`.
+- Herramientas gettext para la compilación de i18n, `cURL` para operaciones de red.
 
-### XDG Base Directory paths
+### Rutas XDG Base Directory
 
-- Standard XDG paths (`XDG_CACHE_HOME`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_STATE_HOME`) are set under the app home directory.
-- All paths are writable by the non-root user without privilege escalation.
+- Las rutas XDG estándar (`XDG_CACHE_HOME`, `XDG_CONFIG_HOME`, `XDG_DATA_HOME`, `XDG_STATE_HOME`) se establecen bajo el directorio home de la aplicación.
+- Todas las rutas son escribibles por el usuario sin privilegios de root, sin escalada de privilegios.
 <!-- textlint-enable -->
