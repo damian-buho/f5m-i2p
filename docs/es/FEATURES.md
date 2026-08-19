@@ -34,7 +34,7 @@ SPDX-License-Identifier: MIT
 - Detección de IPv4 tras cortafuegos, IPv6 desactivado y UPnP desactivado por defecto para un recorrido de NAT predecible.
 - Memoria de la JVM limitada por defecto a un heap de 128m a 256m, configurable mediante el entorno.
 
-## Heredado de B19/Ubuntu 1.4.0
+## Heredado de B19/Ubuntu 1.4.1
 
 ### Caché APT persistente entre compilaciones
 

@@ -10,7 +10,7 @@ identity:
     en: Community-maintained distribution of I2P based on B19/Java
     es: Distribución de I2P mantenida por la comunidad, basada en B19/Java
     uk: Дистрибуція I2P з підтримкою спільноти на основі B19/Java
-  title: F5M / I2P (unofficial b19-style image)
+  title: F5M/I2P
   description:
     en: Community-maintained distribution of I2P built on B19/Java. This repository holds only the packaging — Dockerfile, build scripts, and configuration, all MIT-licensed; the upstream I2P is fetched at build time and retains its own licensing.
     es: Distribución de I2P mantenida por la comunidad, construida sobre B19/Java. Este repositorio contiene únicamente el empaquetado — Dockerfile, scripts de compilación y configuración, todo con licencia MIT; el código original de I2P se obtiene en tiempo de compilación y conserva su propia licencia.
@@ -25,9 +25,9 @@ includes:
 kind: SoftwareSourceCode
 links:
   - label:
-      en: F5M / I2P (unofficial b19-style image) on Codeberg
-      es: F5M / I2P (unofficial b19-style image) en Codeberg
-      uk: F5M / I2P (unofficial b19-style image) на Codeberg
+      en: F5M/I2P on Codeberg
+      es: F5M/I2P en Codeberg
+      uk: F5M/I2P на Codeberg
     tags:
       - public
       - badges
@@ -35,9 +35,9 @@ links:
     type: source-code
     url: https://codeberg.org/f5m/i2p
   - label:
-      en: F5M / I2P (unofficial b19-style image) on GitHub
-      es: F5M / I2P (unofficial b19-style image) en GitHub
-      uk: F5M / I2P (unofficial b19-style image) на GitHub
+      en: F5M/I2P on GitHub
+      es: F5M/I2P en GitHub
+      uk: F5M/I2P на GitHub
     tags:
       - public
       - badges
@@ -45,9 +45,9 @@ links:
     type: source-code
     url: https://github.com/damian-buho/f5m-i2p
   - label:
-      en: F5M / I2P (unofficial b19-style image) on kiota.ch
-      es: F5M / I2P (unofficial b19-style image) en kiota.ch
-      uk: F5M / I2P (unofficial b19-style image) на kiota.ch
+      en: F5M/I2P on kiota.ch
+      es: F5M/I2P en kiota.ch
+      uk: F5M/I2P на kiota.ch
     preferred: true
     type: source-code
     url: https://kiota.ch/f5m/i2p

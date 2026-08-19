@@ -24,7 +24,7 @@ Distribución de I2P mantenida por la comunidad, basada en B19/Java
 - Alojamiento de eepsites con identidad persistente
 - Router de anonimato I2P
 
-### Heredado de B19/Ubuntu 1.4.0
+### Heredado de B19/Ubuntu 1.4.1
 
 - Caché APT persistente entre compilaciones
 - Gestión de procesos de servicio con enrutado de logs (b19-exec)

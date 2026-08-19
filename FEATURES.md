@@ -32,7 +32,7 @@ SPDX-License-Identifier: MIT
 - IPv4 firewalled detection, IPv6 disabled, and UPnP disabled by default for predictable NAT traversal.
 - JVM memory constrained to 128m--256m heap by default, configurable via environment.
 
-## Inherited from B19/Ubuntu 1.4.0
+## Inherited from B19/Ubuntu 1.4.1
 
 ### Persistent APT cache across builds
 

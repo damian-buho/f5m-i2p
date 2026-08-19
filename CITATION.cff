@@ -9,7 +9,7 @@
 cff-version: 1.2.0
 message: Please cite this software using the metadata from this file.
 type: software
-title: F5M / I2P (unofficial b19-style image)
+title: F5M/I2P
 abstract: Community-maintained distribution of I2P based on B19/Java
 authors:
   - family-names: Búho
