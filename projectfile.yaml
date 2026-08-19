@@ -18,6 +18,7 @@ identity:
 includes:
   - .makefile/b19/ci.yaml
   - .makefile/b19/images/java.yaml
+  - .makefile/b19/images/python.yaml
   - .makefile/library/languages/java.yaml
   - .projectfile/vulnerabilities.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
@@ -69,10 +70,6 @@ links:
     url: https://github.com/damian-buho/f5m-i2p/issues
 org:
   projectfile:
-    build:
-      args:
-        B19_PYTHON_BASE_IMAGE: ${B19_DOCKER_REGISTRY}/b19/python-${B19_PYTHON_SERIES}:${M6E_BASE_IMAGE_DEFAULT_VERSION}
-        B19_PYTHON_SERIES: "3.14"
     ci:
       secrets:
         f5m.i2p.persona-eepsite-key:

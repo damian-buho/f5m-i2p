@@ -163,7 +163,7 @@ jobs:
       B19_JAVA_SERIES: ${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
       B19_JAVA_VERSION: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
       B19_OFFGRID_MODE: ${{ inputs.B19_OFFGRID_MODE || vars.B19_OFFGRID_MODE || 'N' }}
-      B19_PYTHON_BASE_IMAGE: ${{ vars.B19_DOCKER_REGISTRY }}/b19/python-${{ vars.B19_PYTHON_SERIES || '3.14' }}:${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
+      B19_PYTHON_BASE_IMAGE: ${{ vars.B19_PYTHON_BASE_IMAGE || format('{0}/b19/python-{1}:{2}', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch', vars.B19_PYTHON_SERIES || '3.14', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
       B19_PYTHON_SERIES: ${{ inputs.B19_PYTHON_SERIES || vars.B19_PYTHON_SERIES || '3.14' }}
       B19_VERBOSITY: ${{ inputs.B19_VERBOSITY || vars.B19_VERBOSITY || 'info' }}
       DESTINATION_DOCKER_REGISTRY: ${{ inputs.DESTINATION_DOCKER_REGISTRY || vars.DESTINATION_DOCKER_REGISTRY }}
@@ -190,7 +190,7 @@ jobs:
             B19_JAVA_SERIES=${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
             B19_JAVA_VERSION=${{ env.M6E_TAG }}
             B19_OFFGRID_MODE=${{ inputs.B19_OFFGRID_MODE || vars.B19_OFFGRID_MODE || 'N' }}
-            B19_PYTHON_BASE_IMAGE=${{ vars.B19_DOCKER_REGISTRY }}/b19/python-${{ vars.B19_PYTHON_SERIES || '3.14' }}:${{ env.M6E_TAG }}
+            B19_PYTHON_BASE_IMAGE=${{ vars.B19_PYTHON_BASE_IMAGE || format('{0}/b19/python-{1}:{2}', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch', vars.B19_PYTHON_SERIES || '3.14', env.M6E_TAG) }}
             B19_PYTHON_SERIES=${{ inputs.B19_PYTHON_SERIES || vars.B19_PYTHON_SERIES || '3.14' }}
             B19_VERBOSITY=${{ inputs.B19_VERBOSITY || vars.B19_VERBOSITY || 'info' }}
             DESTINATION_DOCKER_REGISTRY=${{ inputs.DESTINATION_DOCKER_REGISTRY || vars.DESTINATION_DOCKER_REGISTRY }}

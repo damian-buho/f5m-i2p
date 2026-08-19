@@ -16,6 +16,7 @@ I2P anonymity network router.
 - Installed via silent installer (hash-verified via `b19-fetch`)
 - Arch: amd64 only
 - Pinned version: `.container/user/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
+- Embedded python (for `extract-b32-address`): interpreter tree copied from `b19/python-3.14`; the `.makefile/b19/images/python.yaml` include composes `B19_PYTHON_BASE_IMAGE` and carries the pip-vendored (msgpack/setuptools) vulnerability suppressions the copied tree inherits
 
 ## Ports
 
