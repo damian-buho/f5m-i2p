@@ -22,7 +22,7 @@ Community-maintained distribution of I2P based on B19/Java
 - Eepsite hosting with persistent identity
 - I2P anonymity router
 
-### Inherited from B19/Ubuntu 1.4.1
+### Inherited from B19/Ubuntu
 
 - Persistent APT cache across builds
 - Service process management with log routing (b19-exec)
