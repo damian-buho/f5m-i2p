@@ -82,7 +82,13 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: image-${{ github.run_id }}
-      - run: docker load --input image-${{ github.run_id }}.tar
+      # The archive enters the runner's SHARED image store, where a sibling job's reap
+      # can delete a layer record mid-copy — podman then buries the real cause under a
+      # four-transport probe that claims the tar matches no supported format. The retry
+      # for that class lives in the pinned action, not inline (Law 2).
+      - uses: projectfile/ci-actions/container-load@v1
+        with:
+          archive: image-${{ github.run_id }}.tar
       - name: secrets-provision
         uses: projectfile/ci-actions/secrets-provision@v1
         with:
