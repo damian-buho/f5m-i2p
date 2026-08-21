@@ -16,12 +16,9 @@ services:
           memory: 4g
     networks:
       - dev-network
-      - traefik-network
     environment:
       - LANG
       - TZ
 networks:
   dev-network:
     name: ${M6E_COMPOSE_PROJECT_NAME}-network
-  traefik-network:
-    name: traefik-network
