@@ -400,7 +400,7 @@ jobs:
   publish-image:
     runs-on: ubuntu-latest
     needs: ["image-is-built", "ready-to-publish"]
-    if: startsWith(github.ref, 'refs/tags/')
+    if: (startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master') || (startsWith(github.ref, 'refs/tags/'))
     concurrency:
       group: publish-${{ github.repository }}-${{ toJSON(matrix) }}
       cancel-in-progress: false
@@ -428,6 +428,10 @@ jobs:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
           version: ${{ github.ref_name }}
+          # The branch this run is on, empty on a tag. Non-empty collapses the cascade to
+          # one `latest-<branch>` tag on the primary sink, so a branch build is testable
+          # without a tag and without moving anything a consumer floats on.
+          preview: ${{ github.ref_type == 'branch' && github.ref_name || '' }}
           # OUTPUT_REGISTRY: the forge-dependent PUSH target (kiota.ch / ghcr.io / …),
           # always threaded — empty => Docker Hub. NOT the per-namespace INPUT registries
           # (B19_DOCKER_REGISTRY & friends answer "where base images come FROM"); this
