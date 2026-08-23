@@ -9,7 +9,12 @@
 
 # >>> user-include
 .git
+.gradle/
 CITATION.cff
+LICENSE
+LICENSES
+build/
+target/
 # <<< user-include
 
 # >>> user-extra
