@@ -3,6 +3,8 @@ SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
 SPDX-License-Identifier: MIT
 -->
 
+[Español](docs/es/ROADMAP.md) · [Українська](docs/uk/ROADMAP.md)
+
 # Roadmap
 
 ## Project Roadmap
