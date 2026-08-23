@@ -24,10 +24,10 @@ name: published
         default: "Y"
       B19_JAVA_DISTRO:
         type: string
-        default: "oracle"
+        default: "temurin"
       B19_JAVA_SERIES:
         type: string
-        default: "25"
+        default: "26"
       B19_OFFGRID_MODE:
         type: string
         default: "N"
@@ -164,9 +164,9 @@ jobs:
       B19_COLOR: ${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
       B19_FETCH_DOCKER_CACHE: ${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
       B19_FETCH_LOCAL_CACHE: ${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-      B19_JAVA_BASE_IMAGE: ${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'oracle', vars.B19_JAVA_SERIES || '25', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
-      B19_JAVA_DISTRO: ${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
-      B19_JAVA_SERIES: ${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
+      B19_JAVA_BASE_IMAGE: ${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'temurin', vars.B19_JAVA_SERIES || '26', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
+      B19_JAVA_DISTRO: ${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'temurin' }}
+      B19_JAVA_SERIES: ${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '26' }}
       B19_JAVA_VERSION: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
       B19_OFFGRID_MODE: ${{ inputs.B19_OFFGRID_MODE || vars.B19_OFFGRID_MODE || 'N' }}
       B19_PYTHON_BASE_IMAGE: ${{ vars.B19_PYTHON_BASE_IMAGE || format('{0}/b19/python-{1}:{2}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_PYTHON_SERIES || '3.14', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
@@ -191,9 +191,9 @@ jobs:
             B19_COLOR=${{ inputs.B19_COLOR || vars.B19_COLOR || '1' }}
             B19_FETCH_DOCKER_CACHE=${{ inputs.B19_FETCH_DOCKER_CACHE || vars.B19_FETCH_DOCKER_CACHE || 'Y' }}
             B19_FETCH_LOCAL_CACHE=${{ inputs.B19_FETCH_LOCAL_CACHE || vars.B19_FETCH_LOCAL_CACHE || 'Y' }}
-            B19_JAVA_BASE_IMAGE=${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'oracle', vars.B19_JAVA_SERIES || '25', env.M6E_TAG) }}
-            B19_JAVA_DISTRO=${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'oracle' }}
-            B19_JAVA_SERIES=${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '25' }}
+            B19_JAVA_BASE_IMAGE=${{ vars.B19_JAVA_BASE_IMAGE || format('{0}/b19/java/{1}-{2}:{3}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_JAVA_DISTRO || 'temurin', vars.B19_JAVA_SERIES || '26', env.M6E_TAG) }}
+            B19_JAVA_DISTRO=${{ inputs.B19_JAVA_DISTRO || vars.B19_JAVA_DISTRO || 'temurin' }}
+            B19_JAVA_SERIES=${{ inputs.B19_JAVA_SERIES || vars.B19_JAVA_SERIES || '26' }}
             B19_JAVA_VERSION=${{ env.M6E_TAG }}
             B19_OFFGRID_MODE=${{ inputs.B19_OFFGRID_MODE || vars.B19_OFFGRID_MODE || 'N' }}
             B19_PYTHON_BASE_IMAGE=${{ vars.B19_PYTHON_BASE_IMAGE || format('{0}/b19/python-{1}:{2}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.B19_PYTHON_SERIES || '3.14', env.M6E_TAG) }}
@@ -283,108 +283,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
-      - name: pf-bridge-ai-policy-md-check
+      - name: pf-bridge-check
         uses: projectfile/ci-actions/run-tool@v1
         with:
           image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
-          run: pf-bridge ai-policy --check
-      - name: pf-bridge-citation-cff-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge cff CITATION.cff --check
-      - name: pf-bridge-claudeignore-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge ignore .claudeignore --check
-      - name: pf-bridge-code-of-conduct-md-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge coc --check
-      - name: pf-bridge-codeowners-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge codeowners --check
-      - name: pf-bridge-contributing-md-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge contributing --check
-      - name: pf-bridge-dockerignore-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge ignore .dockerignore --check
-      - name: pf-bridge-fragments-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge fragments --check
-      - name: pf-bridge-gitattributes-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge gitattributes --check
-      - name: pf-bridge-gitignore-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge ignore .gitignore --check
-      - name: pf-bridge-grype-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge vulnerabilities .grype.yaml --check
-      - name: pf-bridge-license-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge license --check
-      - name: pf-bridge-osv-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge vulnerabilities osv-scanner.toml --check
-      - name: pf-bridge-readme-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge readme --check
-      - name: pf-bridge-security-md-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge security --check
-      - name: pf-bridge-support-md-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge support --check
-      - name: pf-bridge-trivyignore-check
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: pf-bridge vulnerabilities .trivyignore --check
+          run: pf-bridge check
   projectfile-is-valid:
     runs-on: ubuntu-latest
     steps:
