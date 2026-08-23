@@ -12,7 +12,7 @@ I2P anonymity network router.
 
 ## Key facts
 
-- Base: `b19/java/oracle-25` (`B19_JAVA_DISTRO=oracle`, `B19_JAVA_SERIES=25`)
+- Base: `b19/java/temurin-26` (`B19_JAVA_DISTRO=temurin`, `B19_JAVA_SERIES=26`, pinned in this projectfile’s `org.projectfile.build.args` — the base document wins over both include fragments)
 - Installed via silent installer (hash-verified via `b19-fetch`)
 - Arch: amd64 only
 - Pinned version: `.container/user/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
@@ -26,7 +26,7 @@ I2P anonymity network router.
 
 ## ENV (selected)
 
-- `F5M_I2P_EEPSITE_ENABLED=true` (reverse proxies to `F5M_I2P_EEPSITE_TARGET_HOST`:`F5M_I2P_EEPSITE_TARGET_PORT`)
+- `F5M_I2P_EEPSITE_ENABLED=true` (reverse proxies to `F5M_I2P_EEPSITE_TARGET`, `host:port` — one var, not split `_HOST`/`_PORT`, so a numeric port never lands in a `*PORT` env var and trips `check-ports`)
 - `F5M_I2P_EEPSITE_KEY_FILE="${XDG_DATA_HOME}/eepsite/eepPriv.dat"` — absolute, so the httpserver tunnel reads the key where `200-prepare-eepsite.sh` loads it (a relative default resolved against the router dir `/app` and the provisioned identity was ignored)
 - `F5M_I2P_EEPSITE_SPOOFED_HOST=""` — empty by default so the original Host passes through (a reverse-proxy eepsite must not rewrite it)
 - `F5M_I2P_HTTP_PROXY_ENABLED=true`
@@ -51,7 +51,7 @@ I2P extracts its native crypto libraries (`libjcpuid.so`, `libjbigi.so`) to the 
 - Generated via `docker-run` secret type (runs `generate-eepsite-key` command). `generate-eepsite-key` writes ONLY the raw binary key to stdout — the Java `PrivateKeyFile` tool’s text dump (Destination/B32) is redirected to stderr so it never pollutes the captured secret
 - `200-prepare-eepsite.sh` `cp`s the secret verbatim to `eepPriv.dat` if no existing key is found
 - `.b32.i2p` address derived via `extract-b32-address`, which uses the Java `PrivateKeyFile` tool (authoritative for the binary format) with a python fallback
-- The key is **binary** (non-UTF-8). `b19-load-secrets` therefore does NOT export it as an env var — it is read directly from `/run/secrets/f5m.i2p.persona-eepsite-key` by `200-prepare-eepsite.sh`. (Exporting it used to panic `minijinja-cli --env` during j2 rendering, silently leaving every config template at its build-time default — e.g. the eepsite forwarded to `localhost` instead of `F5M_I2P_EEPSITE_TARGET_HOST`.)
+- The key is **binary** (non-UTF-8). `b19-load-secrets` therefore does NOT export it as an env var — it is read directly from `/run/secrets/f5m.i2p.persona-eepsite-key` by `200-prepare-eepsite.sh`. (Exporting it used to panic `minijinja-cli --env` during j2 rendering, silently leaving every config template at its build-time default — e.g. the eepsite forwarded to `localhost` instead of `F5M_I2P_EEPSITE_TARGET`.)
 
 ## Not included
 

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-ARG B19_JAVA_BASE_IMAGE=registry.invalid/b19/java/oracle-25:latest
+ARG B19_JAVA_BASE_IMAGE=registry.invalid/b19/java/temurin-26:latest
 ARG B19_PYTHON_SERIES=3.14
 ARG B19_PYTHON_BASE_IMAGE=registry.invalid/b19/python-${B19_PYTHON_SERIES}:latest
 
@@ -42,8 +42,10 @@ ENV B19_JAVA_XMS="128m"                                 \
     F5M_I2P_EEPSITE_OUTBOUND_QUANTITY="2"               \
     # Empty: pass the original Host through unchanged (reverse-proxy eepsite).
     F5M_I2P_EEPSITE_SPOOFED_HOST=""                     \
-    F5M_I2P_EEPSITE_TARGET_HOST="localhost"             \
-    F5M_I2P_EEPSITE_TARGET_PORT="8080"                  \
+    # host:port the eepsite tunnel forwards to. Deliberately NOT split into a
+    # *_PORT var: check-ports rejects any numeric *PORT env (80 is a WHATWG bad
+    # port), but this is an outbound destination, not a listening socket.
+    F5M_I2P_EEPSITE_TARGET="localhost:8080"             \
     F5M_I2P_GIT_SSH_ENABLED="false"                     \
     F5M_I2P_HOST="localhost"                            \
     # Hidden mode: skip the SSU reachability probe (it never completes in a

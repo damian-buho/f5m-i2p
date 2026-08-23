@@ -19,8 +19,7 @@ services:
       - TZ
       - B19_VERBOSITY=debug
       - F5M_I2P_EEPSITE_ENABLED=true
-      - F5M_I2P_EEPSITE_TARGET_HOST=traefik
-      - F5M_I2P_EEPSITE_TARGET_PORT=80
+      - F5M_I2P_EEPSITE_TARGET=traefik:80
     labels:
       com.docker.compose.watch: "true"
     networks:

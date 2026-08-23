@@ -70,6 +70,10 @@ links:
     url: https://github.com/damian-buho/f5m-i2p/issues
 org:
   projectfile:
+    build:
+      args:
+        B19_JAVA_DISTRO: temurin
+        B19_JAVA_SERIES: "26"
     ci:
       secrets:
         f5m.i2p.persona-eepsite-key:
