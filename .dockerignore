@@ -15,6 +15,7 @@
 .git
 .github
 .gitlab
+.gradle/
 .makefile
 .secrets
 CITATION.cff
@@ -22,11 +23,13 @@ CODEOWNERS
 LICENSE
 LICENSES
 Makefile
+build/
 docs
 lefthook.yaml
 lefthook.yml
 reports
 scaffold
+target/
 # <<< user-include
 
 # >>> user-extra
