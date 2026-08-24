@@ -30,7 +30,6 @@
 # >>> shell-exclude
 *.cjs     -shell
 *.deps    -shell
-*.j2      -shell
 *.js      -shell
 *.md      -shell
 *.mjs     -shell
