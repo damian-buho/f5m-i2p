@@ -1253,6 +1253,22 @@ Materialise every secret declared in the projectfile into .secrets/
 
 ## Security
 
+### `clamav-db-update`
+
+Refresh the shared ClamAV virus database
+
+`auto-clamav db-update`
+
+> Image: D9T_MISC_TOOLS_IMAGE
+
+### `clamav-scan-source`
+
+Scan project source for malware (clamav)
+
+`auto-clamav fs`
+
+> Image: D9T_MISC_TOOLS_IMAGE
+
 ### `gitleaks`
 
 Scan Git history for leaked secrets
