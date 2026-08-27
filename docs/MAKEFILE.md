@@ -765,14 +765,6 @@ List todo and FIXME markers across the source
 
 > Image: D9T_JS_TOOLS_IMAGE
 
-### `linkinator`
-
-Check for broken links
-
-`auto-linkinator`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
 ### `ls-lint`
 
 Enforce file and directory naming conventions
