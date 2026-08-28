@@ -39,9 +39,13 @@ name: published
         default: "info"
       DESTINATION_DOCKER_REGISTRY:
         type: string
+      LANG:
+        type: string
       M6E_APT_CACHE_HOST:
         type: string
       M6E_APT_CACHE_PORT:
+        type: string
+      M6E_BUILD_DEBUG:
         type: string
       M6E_NEAR_CACHE_HOST:
         type: string
@@ -136,13 +140,13 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
-      - name: markdownlint
+      - name: auto-markdownlint
         uses: projectfile/ci-actions/run-tool@v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-markdownlint
-      - name: textlint
+      - name: auto-textlint
         uses: projectfile/ci-actions/run-tool@v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
@@ -173,8 +177,10 @@ jobs:
       B19_PYTHON_SERIES: ${{ inputs.B19_PYTHON_SERIES || vars.B19_PYTHON_SERIES || '3.14' }}
       B19_VERBOSITY: ${{ inputs.B19_VERBOSITY || vars.B19_VERBOSITY || 'info' }}
       DESTINATION_DOCKER_REGISTRY: ${{ inputs.DESTINATION_DOCKER_REGISTRY || vars.DESTINATION_DOCKER_REGISTRY }}
+      LANG: ${{ inputs.LANG || vars.LANG }}
       M6E_APT_CACHE_HOST: ${{ inputs.M6E_APT_CACHE_HOST || vars.M6E_APT_CACHE_HOST }}
       M6E_APT_CACHE_PORT: ${{ inputs.M6E_APT_CACHE_PORT || vars.M6E_APT_CACHE_PORT }}
+      M6E_BUILD_DEBUG: ${{ inputs.M6E_BUILD_DEBUG || vars.M6E_BUILD_DEBUG }}
       M6E_NEAR_CACHE_HOST: ${{ inputs.M6E_NEAR_CACHE_HOST || vars.M6E_NEAR_CACHE_HOST }}
       M6E_NEAR_CACHE_PORT: ${{ inputs.M6E_NEAR_CACHE_PORT || vars.M6E_NEAR_CACHE_PORT }}
       SOURCE_DOCKER_REGISTRY: ${{ inputs.SOURCE_DOCKER_REGISTRY || vars.SOURCE_DOCKER_REGISTRY }}
@@ -200,8 +206,10 @@ jobs:
             B19_PYTHON_SERIES=${{ inputs.B19_PYTHON_SERIES || vars.B19_PYTHON_SERIES || '3.14' }}
             B19_VERBOSITY=${{ inputs.B19_VERBOSITY || vars.B19_VERBOSITY || 'info' }}
             DESTINATION_DOCKER_REGISTRY=${{ inputs.DESTINATION_DOCKER_REGISTRY || vars.DESTINATION_DOCKER_REGISTRY }}
+            LANG=${{ inputs.LANG || vars.LANG }}
             M6E_APT_CACHE_HOST=${{ inputs.M6E_APT_CACHE_HOST || vars.M6E_APT_CACHE_HOST }}
             M6E_APT_CACHE_PORT=${{ inputs.M6E_APT_CACHE_PORT || vars.M6E_APT_CACHE_PORT }}
+            M6E_BUILD_DEBUG=${{ inputs.M6E_BUILD_DEBUG || vars.M6E_BUILD_DEBUG }}
             M6E_NAMESPACE=f5m
             M6E_NEAR_CACHE_HOST=${{ inputs.M6E_NEAR_CACHE_HOST || vars.M6E_NEAR_CACHE_HOST }}
             M6E_NEAR_CACHE_PORT=${{ inputs.M6E_NEAR_CACHE_PORT || vars.M6E_NEAR_CACHE_PORT }}
@@ -459,12 +467,30 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
-      - name: cffr-validate
+      - name: auto-cffr-validate
         uses: projectfile/ci-actions/run-tool@v1
         with:
           image: ${{ vars.D9T_R_TOOLS_IMAGE || format('{0}/d9t/r-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-cffr-validate
+      - name: auto-jsonlint
+        uses: projectfile/ci-actions/run-tool@v1
+        with:
+          image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-jsonlint
+      - name: auto-shellcheck
+        uses: projectfile/ci-actions/run-tool@v1
+        with:
+          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-shellcheck
+      - name: auto-yamllint
+        uses: projectfile/ci-actions/run-tool@v1
+        with:
+          image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-yamllint
       - name: hadolint
         uses: projectfile/ci-actions/run-tool@v1
         with:
@@ -478,21 +504,3 @@ jobs:
           image: ${{ vars.D9T_IGNORELINT_IMAGE || format('{0}/d9t/ignorelint', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: ignorelint
-      - name: jsonlint
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: auto-jsonlint
-      - name: shellcheck
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: auto-shellcheck
-      - name: yamllint
-        uses: projectfile/ci-actions/run-tool@v1
-        with:
-          image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ env.M6E_TAG }}
-          run: auto-yamllint
