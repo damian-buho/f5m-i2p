@@ -677,13 +677,117 @@ Generate an SPDX bill of materials of the sources
 
 ## Lint
 
-### `alex`
+### `auto-alex`
 
 Flag insensitive or inconsiderate wording
 
 `auto-alex`
 
 > Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-checkov`
+
+Scan IaC for security misconfigurations
+
+`auto-checkov`
+
+> Image: D9T_PYTHON_TOOLS_IMAGE
+
+### `auto-html-validate`
+
+Validate HTML markup
+
+`auto-html-validate`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-jsonlint`
+
+Lint JSON files
+
+`auto-jsonlint`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-ls-lint`
+
+Enforce file and directory naming conventions
+
+`auto-ls-lint`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `auto-markdownlint`
+
+Lint Markdown structure and style
+
+`auto-markdownlint`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-markdownlint-fix`
+
+Autofix markdownlint findings
+
+`auto-markdownlint --fix`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-mdformat`
+
+Reformat Markdown files consistently
+
+`auto-mdformat`
+
+> Image: D9T_PYTHON_TOOLS_IMAGE
+
+### `auto-proselint`
+
+Flag common English prose style issues
+
+`auto-proselint`
+
+> Image: D9T_PYTHON_TOOLS_IMAGE
+
+### `auto-scc`
+
+Count lines of code and complexity
+
+`auto-scc`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `auto-shellcheck`
+
+Lint shell scripts for bugs and pitfalls
+
+`auto-shellcheck`
+
+> Image: D9T_MISC_TOOLS_IMAGE
+
+### `auto-textlint`
+
+Lint prose for style, grammar and correctness
+
+`auto-textlint`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-textlint-fix`
+
+Autofix textlint findings
+
+`auto-textlint --fix`
+
+> Image: D9T_JS_TOOLS_IMAGE
+
+### `auto-yamllint`
+
+Lint YAML for syntax and style
+
+`auto-yamllint`
+
+> Image: D9T_PYTHON_TOOLS_IMAGE
 
 ### `buf-lint`
 
@@ -692,14 +796,6 @@ Lint protobuf sources with buf
 `buf lint`
 
 > Image: D9T_GO_TOOLS_IMAGE
-
-### `checkov`
-
-Scan IaC for security misconfigurations
-
-`auto-checkov`
-
-> Image: D9T_PYTHON_TOOLS_IMAGE
 
 ### `commitlint`
 
@@ -725,14 +821,6 @@ Enforce folder naming conventions
 
 > Image: D9T_JS_TOOLS_IMAGE
 
-### `html-validate`
-
-Validate HTML markup
-
-`auto-html-validate`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
 ### `ignorelint-check`
 
 Check ignore files for issues
@@ -749,14 +837,6 @@ Autofix ignore-file issues
 
 > Image: D9T_IGNORELINT_IMAGE
 
-### `jsonlint`
-
-Lint JSON files
-
-`auto-jsonlint`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
 ### `leasot`
 
 List todo and FIXME markers across the source
@@ -764,46 +844,6 @@ List todo and FIXME markers across the source
 `check-leasot`
 
 > Image: D9T_JS_TOOLS_IMAGE
-
-### `ls-lint`
-
-Enforce file and directory naming conventions
-
-`auto-ls-lint`
-
-> Image: D9T_GO_TOOLS_IMAGE
-
-### `markdownlint`
-
-Lint Markdown structure and style
-
-`auto-markdownlint`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
-### `markdownlint-fix`
-
-Autofix markdownlint findings
-
-`auto-markdownlint --fix`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
-### `mdformat`
-
-Reformat Markdown files consistently
-
-`auto-mdformat`
-
-> Image: D9T_PYTHON_TOOLS_IMAGE
-
-### `proselint`
-
-Flag common English prose style issues
-
-`auto-proselint`
-
-> Image: D9T_PYTHON_TOOLS_IMAGE
 
 ### `protolint`
 
@@ -813,22 +853,6 @@ Lint protobuf sources with protolint
 
 > Image: D9T_GO_TOOLS_IMAGE
 
-### `scc`
-
-Count lines of code and complexity
-
-`auto-scc`
-
-> Image: D9T_GO_TOOLS_IMAGE
-
-### `shellcheck`
-
-Lint shell scripts for bugs and pitfalls
-
-`auto-shellcheck`
-
-> Image: D9T_MISC_TOOLS_IMAGE
-
 ### `shfmt`
 
 Format shell scripts with shfmt
@@ -836,22 +860,6 @@ Format shell scripts with shfmt
 `shfmt --write .`
 
 > Image: D9T_GO_TOOLS_IMAGE
-
-### `textlint`
-
-Lint prose for style, grammar and correctness
-
-`auto-textlint`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
-### `textlint-fix`
-
-Autofix textlint findings
-
-`auto-textlint --fix`
-
-> Image: D9T_JS_TOOLS_IMAGE
 
 ### `vacuum`
 
@@ -868,14 +876,6 @@ Format YAML files with yamlfmt
 `yamlfmt .`
 
 > Image: D9T_GO_TOOLS_IMAGE
-
-### `yamllint`
-
-Lint YAML for syntax and style
-
-`auto-yamllint`
-
-> Image: D9T_PYTHON_TOOLS_IMAGE
 
 ## Maintenance
 
@@ -905,7 +905,7 @@ Update and commit the .makefile/ submodules in one step
 
 ## Metadata
 
-### `cffr-validate`
+### `auto-cffr-validate`
 
 Validate CITATION.cff against the cffr schema
 
