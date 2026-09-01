@@ -96,6 +96,9 @@ RUN --mount=type=bind,from=fetch,source=.,target=/fetch                         
     --mount=type=tmpfs,target=${B19_TEMP_PATH}                                                      \
     build-stage user
 
+# This image cannot do its job offline, so a lost outside must read as unhealthy.
+ENV B19_HEALTH_EGRESS=true
+
 # ENTRYPOINT ["entrypoint.d"] is inherited
 # HEALTHCHECK CMD ["healthcheck.d"] is inherited
 # Don't use CMD ["sleep", "infinity"] here
