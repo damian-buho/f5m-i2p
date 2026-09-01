@@ -105,9 +105,9 @@ SPDX-License-Identifier: MIT
 ### Built-in health monitoring (healthcheck.d)
 
 - Docker-native healthcheck declared in the base image and inherited by all downstream images with no extra configuration.
-- Seven default checks: disk space on home, cache, and temp directories; HTTPS connectivity, DNS resolution, ICMP ping; and filesystem writability.
-- Network checks are fault-tolerant — success on any target counts as pass.
-- All network checks automatically skip in offgrid mode; all checks can be disabled at runtime.
+- Eight default checks ship in the base image: disk space, filesystem writability and a TCP listen probe run everywhere; HTTPS connectivity, DNS resolution and TCP reachability run only where `B19_HEALTH_EGRESS=true`, so a container that never reaches the internet carries no check a third party can fail.
+- Egress checks are fault-tolerant — success on any target counts as pass.
+- All egress checks automatically skip in offgrid mode; all checks can be disabled at runtime.
 - Downstream images add service-specific checks (HTTP endpoints, database connections, process liveness) by dropping scripts into a directory.
 
 ### Multilingual shell output (b19-i18n)
