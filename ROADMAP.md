@@ -11,9 +11,9 @@ SPDX-License-Identifier: MIT
 
 ### Reseed that works behind a firewall
 
-- **Problem.** The router config has no reseed keys, so it falls back to clearnet HTTPS reseed hosts — exactly what fails first behind a national firewall, leaving a censored-network operator with a router that never builds a network database.
-- **Under consideration.** Env-configurable reseed URLs, an option to reseed over Tor, or a bundled offline reseed bundle, so first boot reaches a working netDb in a censored environment.
-- **Rests on.** I2P’s `i2p.reseed.*` configuration keys; the sibling `f5m/tor` image a reseed-over-Tor path would egress through.
+- **Problem.** The router has no reseed information, so it falls back to clearnet HTTPS reseed hosts — exactly what fails first behind a national firewall, leaving a censored-network operator with a router that never builds a network database.
+- **Under consideration.** Configurable reseed URLs, an option to reseed over Tor, or a bundled offline reseed bundle, so first boot reaches a working netDb in a censored environment.
+- **Rests on.** The sibling `f5m/tor` image a reseed-over-Tor path would egress through.
 
 ### Configurable outproxy and SOCKS
 
