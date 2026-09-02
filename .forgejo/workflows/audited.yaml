@@ -32,7 +32,7 @@ jobs:
         with:
           submodules: true
       - name: grype-scan-registry
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -41,7 +41,7 @@ jobs:
             M6E_IMAGE_PUBLISHED=kiota.ch/f5m/i2p:latest
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:ro
       - name: trivy-scan-registry
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -71,14 +71,14 @@ jobs:
         with:
           submodules: true
       - name: grype-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:ro
       - name: osv-scanner-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -87,7 +87,7 @@ jobs:
             OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY=/app/.cache/osv
           mounts: /app/data/ci-cache/osv-db:/app/.cache/osv:ro
       - name: trivy-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}

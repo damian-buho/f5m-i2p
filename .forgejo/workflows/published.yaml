@@ -90,11 +90,11 @@ jobs:
       # can delete a layer record mid-copy — podman then buries the real cause under a
       # four-transport probe that claims the tar matches no supported format. The retry
       # for that class lives in the pinned action, not inline (Law 2).
-      - uses: projectfile/ci-actions/container-load@v1
+      - uses: projectfile/actions/container-load@v1
         with:
           archive: image-${{ github.run_id }}.tar
       - name: secrets-provision
-        uses: projectfile/ci-actions/secrets-provision@v1
+        uses: projectfile/actions/secrets-provision@v1
         with:
           declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
           dir: .secrets
@@ -105,7 +105,7 @@ jobs:
       - name: dc-up-d
         run: timeout --kill-after=10s "${M6E_COMPOSE_UP_TIMEOUT:-300}s" docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml up --detach --renew-anon-volumes --no-build </dev/null
       - name: container-test
-        uses: projectfile/ci-actions/container-exec@v1
+        uses: projectfile/actions/container-exec@v1
         with:
           container: ${{ env.M6E_CONTAINER_INSTANCE }}
           run: test.d
@@ -120,7 +120,7 @@ jobs:
       # site), so one docker-cleanup step reaps both — the imperative reaps + their
       # `inspect` guard live in the pinned action, not inline (Law 2).
       - if: ${{ always() }}
-        uses: projectfile/ci-actions/docker-cleanup@v1
+        uses: projectfile/actions/docker-cleanup@v1
         with:
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
           network: ci-f5m-i2p-${{ env.M6E_RUN_SCOPE }}-network
@@ -141,13 +141,13 @@ jobs:
         with:
           submodules: true
       - name: auto-markdownlint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-markdownlint
       - name: auto-textlint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -189,7 +189,7 @@ jobs:
         with:
           submodules: true
       - name: container-build
-        uses: projectfile/ci-actions/container-build/buildah@v1
+        uses: projectfile/actions/container-build/buildah@v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -235,7 +235,7 @@ jobs:
         with:
           name: image-${{ github.run_id }}
       - name: grype-scan-tar
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -244,7 +244,7 @@ jobs:
             M6E_IMAGE_ARCHIVE=image-${{ github.run_id }}.tar
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:ro
       - name: trivy-scan-tar
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -277,7 +277,7 @@ jobs:
         with:
           submodules: true
       - name: pf-bridge-check
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -289,7 +289,7 @@ jobs:
         with:
           submodules: true
       - name: pf-validate
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -320,7 +320,7 @@ jobs:
         # This cell's destination gate — on the STEP because a job `if:` may not read
         # the matrix context, and a forge rejects the whole file when one does.
         if: vars.CI_PUBLISH_SINKS == '' || contains(format(',{0},', vars.CI_PUBLISH_SINKS), format(',{0},', matrix.M6E_PUBLISH_SINK))
-        uses: projectfile/ci-actions/oci-push@v1
+        uses: projectfile/actions/oci-push@v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -366,13 +366,13 @@ jobs:
         with:
           submodules: true
       - name: i18n-check
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-i18n check
       - name: reuse-lint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -391,14 +391,14 @@ jobs:
         with:
           submodules: true
       - name: grype-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:ro
       - name: osv-scanner-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -407,7 +407,7 @@ jobs:
             OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY=/app/.cache/osv
           mounts: /app/data/ci-cache/osv-db:/app/.cache/osv:ro
       - name: trivy-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -432,38 +432,38 @@ jobs:
         with:
           submodules: true
       - name: auto-cffr-validate
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_R_TOOLS_IMAGE || format('{0}/d9t/r-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-cffr-validate
       - name: auto-jsonlint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-jsonlint
       - name: auto-shellcheck
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-shellcheck
       - name: auto-yamllint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-yamllint
       - name: hadolint
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.HADOLINT_IMAGE || 'hadolint/hadolint' }}
           version: v2.15.1
           pull: missing
           run: hadolint Dockerfile
       - name: ignorelint-check
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_IGNORELINT_IMAGE || format('{0}/d9t/ignorelint', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}

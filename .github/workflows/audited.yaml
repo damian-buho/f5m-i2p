@@ -39,7 +39,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-registry
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-registry
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -93,7 +93,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -107,7 +107,7 @@ jobs:
           restore-keys: |
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -123,7 +123,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-source
-        uses: projectfile/ci-actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
