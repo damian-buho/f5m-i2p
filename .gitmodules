@@ -4,13 +4,13 @@
 
 [submodule ".makefile/core"]
 	path = .makefile/core
-	url = ../../m6e/core.git
+	url = https://kiota.ch/m6e/core.git
 [submodule ".makefile/container"]
 	path = .makefile/container
-	url = ../../m6e/container.git
+	url = https://kiota.ch/m6e/container.git
 [submodule ".makefile/b19"]
 	path = .makefile/b19
-	url = ../../m6e/b19.git
+	url = https://kiota.ch/m6e/b19.git
 [submodule ".makefile/library"]
 	path = .makefile/library
-	url = ../../m6e/library.git
+	url = https://kiota.ch/m6e/library.git
