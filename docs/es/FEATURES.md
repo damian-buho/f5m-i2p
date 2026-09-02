@@ -106,11 +106,12 @@ SPDX-License-Identifier: MIT
 
 ### Monitorización de estado integrada (healthcheck.d)
 
-- Healthcheck nativo de Docker declarado en la imagen base y heredado por todas las imágenes derivadas sin configuración extra.
-- Ocho comprobaciones por defecto en la imagen base: el espacio en disco, la escribibilidad del sistema de archivos y una prueba TCP de escucha se ejecutan siempre; la conectividad HTTPS, la resolución DNS y el alcance TCP solo se ejecutan donde `B19_HEALTH_EGRESS=true`, de modo que un contenedor que nunca llega a internet no lleva ninguna comprobación que un tercero pueda hacer fallar.
-- Las comprobaciones de salida son tolerantes a fallos: el éxito en cualquier objetivo cuenta como aprobado.
-- Todas las comprobaciones de salida se omiten automáticamente en modo offgrid; todas pueden desactivarse en runtime.
-- Las imágenes derivadas añaden comprobaciones específicas del servicio (endpoints HTTP, conexiones a base de datos, vida del proceso) dejando caer scripts en un directorio.
+- Healthcheck nativo de Docker heredado por todas las imágenes derivadas sin configuración extra.
+- Las comprobaciones de salida son opcionales: un contenedor que nunca llega a internet no lleva ninguna comprobación que un tercero pueda hacer fallar, mientras que uno cuyo trabajo es internet se marca como no disponible en cuanto el exterior desaparece.
+- Funciona igual sin conexión que en línea: las comprobaciones de salida se retiran automáticamente en modo offgrid.
+- Añadir una comprobación es dejar caer un script en un directorio, no escribir configuración de Docker.
+
+Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de comprobaciones, la numeración de slots y la configuración.
 
 ### Salida de shell multilingüe (b19-i18n)
 
