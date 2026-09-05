@@ -75,3 +75,19 @@ msgstr "Адреса .b32.i2p буде доступна після запуск�
 #, fuzzy
 msgid "No command provided, will run %s"
 msgstr "Команда не виконана, буде запущено"
+
+#: .container/user/entrypoint.d/5000-start.sh:20
+msgid "Directory %s not writable (owner %s) — wrapper will fail with Permission denied"
+msgstr "Каталог %s недоступний для запису (власник %s) — wrapper завершиться з Permission denied"
+
+#: .container/user/entrypoint.d/5000-start.sh:21
+msgid "Attempting to fix permissions via chmod — if this fails, run once as root: docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
+msgstr "Спроба виправити права через chmod — якщо не вдасться, виконай як root: docker run --rm -v <том>:/vol alpine chown 1000:1000 /vol"
+
+#: .container/user/entrypoint.d/5000-start.sh:27
+msgid "Still not writable: %s — aborting, fix the volume ownership"
+msgstr "Досі недоступно для запису: %s — переривання, виправ власника тому"
+
+#: .container/user/entrypoint.d/5000-start.sh:30
+msgid "Recovered writability on %s"
+msgstr "Відновлено запис у %s"

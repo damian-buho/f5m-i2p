@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+# I2P config + netDb — the router writes here via i2prouter (PID, logs, netDb,
+# peerProfiles, etc.). Must be pre-created so a Docker named volume at this path
+# is initialised with the correct ownership (B19_UID:B19_GID); otherwise Docker
+# auto-creates the volume’s root as root:root and the wrapper fails with
+# “Permission denied” on /app/.i2p/i2p.pid (reproduced with
+# -v test-i2p-netdb:/app/.i2p). See b19/ubuntu docs/how-to/use-build.d.md#volume-directories.
+${B19_HOME}/.i2p
+# Eepsite identity key + cache — persisted separately in dev; kiota’s router
+# mounts only .i2p (eepsite disabled there), but local dev needs this too.
+${XDG_DATA_HOME}
+${XDG_CACHE_HOME}/tmp

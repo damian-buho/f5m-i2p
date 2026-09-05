@@ -75,3 +75,19 @@ msgstr "La dirección .b32.i2p estará disponible después del inicio del túnel
 #, fuzzy
 msgid "No command provided, will run %s"
 msgstr "Sin comando ejecutado, se ejecutará"
+
+#: .container/user/entrypoint.d/5000-start.sh:20
+msgid "Directory %s not writable (owner %s) — wrapper will fail with Permission denied"
+msgstr "Directorio %s no escribible (propietario %s) — wrapper fallará con Permission denied"
+
+#: .container/user/entrypoint.d/5000-start.sh:21
+msgid "Attempting to fix permissions via chmod — if this fails, run once as root: docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
+msgstr "Intentando corregir permisos via chmod — si falla, ejecuta una vez como root: docker run --rm -v <volumen>:/vol alpine chown 1000:1000 /vol"
+
+#: .container/user/entrypoint.d/5000-start.sh:27
+msgid "Still not writable: %s — aborting, fix the volume ownership"
+msgstr "Sigue sin ser escribible: %s — abortando, corrige la propiedad del volumen"
+
+#: .container/user/entrypoint.d/5000-start.sh:30
+msgid "Recovered writability on %s"
+msgstr "Se recuperó la escritura en %s"
