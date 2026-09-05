@@ -91,3 +91,7 @@ msgstr "Досі недоступно для запису: %s — перерив
 #: .container/user/entrypoint.d/5000-start.sh:30
 msgid "Recovered writability on %s"
 msgstr "Відновлено запис у %s"
+
+#: .container/user/entrypoint.d/5000-start.sh:38
+msgid "Restoring missing %s to user dir"
+msgstr "Відновлення відсутнього %s до каталогу користувача"

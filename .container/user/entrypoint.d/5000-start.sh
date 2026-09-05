@@ -34,6 +34,19 @@
     fi
     # Ensure subdirs the router will need are present with correct ownership
     mkdir -p "${XDG_DATA_HOME}/eepsite" 2>/dev/null || true
+    # I2P copies clients.config/i2ptunnel.config from base to the user dir
+    # only on first install. When the user dir already exists (existing volume)
+    # but those files are missing (observed on kiota-i2p: no
+    # /app/.i2p/clients.config or i2ptunnel.config, router logged “No client
+    # apps or router console configured — we are just a router” and healthcheck
+    # never passed), the router stays headless. Ensure they exist before start.
+    for _cfg in clients.config i2ptunnel.config; do
+      if [ ! -f "${I2P_DOT_DIR}/${_cfg}" ] && [ -f "${B19_HOME}/${_cfg}" ]; then
+        b19-log info "I2P" "$(_p "Restoring missing %s to user dir" "${_cfg}")"
+        cp "${B19_HOME}/${_cfg}" "${I2P_DOT_DIR}/${_cfg}" 2>/dev/null || true
+        chmod 0600 "${I2P_DOT_DIR}/${_cfg}" 2>/dev/null || true
+      fi
+    done
     b19-log info "I2P" "$(_p "No command provided, will run %s" "I2P console")"
     b19-exec --     \
       i2prouter console

@@ -91,3 +91,7 @@ msgstr "Sigue sin ser escribible: %s — abortando, corrige la propiedad del vol
 #: .container/user/entrypoint.d/5000-start.sh:30
 msgid "Recovered writability on %s"
 msgstr "Se recuperó la escritura en %s"
+
+#: .container/user/entrypoint.d/5000-start.sh:38
+msgid "Restoring missing %s to user dir"
+msgstr "Restaurando %s faltante al directorio de usuario"
