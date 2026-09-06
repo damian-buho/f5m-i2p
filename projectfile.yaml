@@ -23,6 +23,13 @@ includes:
   - .projectfile/vulnerabilities.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
   - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
+keywords:
+  - i2p
+  - anonymity
+  - network
+  - router
+  - censorship
+  - docker
 kind: SoftwareSourceCode
 links:
   - label:
@@ -96,13 +103,6 @@ repositories:
   - role: origin
     type: git
     url: ssh://git@kiota.ch/f5m/i2p.git
-keywords:
-  - i2p
-  - anonymity
-  - network
-  - router
-  - censorship
-  - docker
 technologies:
   - java
   - jvm
