@@ -36,9 +36,9 @@ SPDX-License-Identifier: MIT
 
 ### Persistent APT cache across builds
 
-- APT package and index caches survive across builds via BuildKit cache mounts, keyed by Ubuntu series and architecture.
-- Repeated builds reuse downloaded packages instead of re-downloading.
-- Optional LAN APT cacher proxy, enabled by setting `M6E_APT_CACHE_HOST`.
+- Package downloads and index caches persist across builds, so repeated builds skip redundant downloads.
+- Cache is keyed by Ubuntu series and architecture, avoiding cross-contamination.
+- Optional LAN APT cacher proxy can be enabled for faster local builds.
 
 ### Service process management with log routing (b19-exec)
 
@@ -47,11 +47,11 @@ SPDX-License-Identifier: MIT
 - Log levels for stdout and stderr streams are independently configurable.
 - Exit code of the service is captured and available to downstream hooks.
 
-### Cached artifact downloads with integrity verification (b19-fetch)
+### Cached artifact downloads with integrity verification
 
-- All external downloads go through a three-tier cache: local `.fetch/` directory, BuildKit persistent cache, then upstream via aria2c with up to 16 connections.
-- Optional SHA-512 verification at every tier; hash mismatch causes fallthrough to the next tier rather than failure.
-- Offgrid mode blocks all downloads entirely, failing fast with a clear error if a cache miss occurs.
+- Downloads are cached locally and in BuildKit persistent storage, so repeated fetches are served from cache.
+- SHA-512 hash verification runs at every tier; mismatches fall through to the next source rather than failing.
+- Offgrid mode blocks all downloads entirely, failing fast with a clear error on cache miss.
 - Supports a near-cache proxy for LAN-only builds that route through a caching proxy.
 
 ### Timed command execution with failure reporting (b19-run)
@@ -70,17 +70,16 @@ SPDX-License-Identifier: MIT
 
 ### Modular build hooks (build.d)
 
-- All image build logic lives in numbered shell scripts instead of inline Dockerfile `RUN` commands.
-- Hooks are organized in `pre/on/post` phases and auto-discovered by the stage name passed to `build-stage`.
-- The reserved `always/{pre,post}` scope brackets every stage, whatever it is named, so cross-cutting setup is written once instead of per stage.
-- Inheritable hooks propagate to downstream images automatically via Docker layer overlay — downstream gets parent’s build logic for free.
-- Non-inheritable hooks are cleaned up after execution to prevent leaking into later stages.
+- Build logic lives in composable hook scripts instead of inline Dockerfile commands, making it easy to read, test, and reuse.
+- Cross-cutting setup (CA trust, locale, shared installs) is written once and runs on every stage automatically.
+- Downstream images inherit parent build logic through the layer overlay — no duplication needed.
+- Non-inheritable one-off setup is cleaned up after execution to avoid leaking into later stages.
 
-### Automatic CPU count detection (NUMPROCS)
+### Automatic CPU count detection
 
-- Available CPUs are detected automatically with Kubernetes downward API, cgroups v2, or `nproc` fallback.
-- The detected count is available as `NUMPROCS` throughout the build and runtime, used for parallel compilation, template rendering, and test execution.
-- Eliminates hardcoded job counts and ensures consistent parallelism across Docker, Kubernetes, and CI.
+- CPU count is detected automatically across Docker, Kubernetes, and CI environments without manual configuration.
+- Eliminates hardcoded job counts — parallel compilation, template rendering, and tests use the right parallelism everywhere.
+- The detected count is available throughout build and runtime for any tool that needs it.
 
 ### Declarative dependency management (b19-deps)
 
@@ -91,10 +90,10 @@ SPDX-License-Identifier: MIT
 
 ### Pluggable startup system (entrypoint.d)
 
-- Every container startup runs through a sequence of numbered hooks: signal setup, secrets loading, CPU detection, port validation, template rendering, bootstrap, service start.
-- Ad-hoc commands (`docker run img command`) automatically bypass part of the startup chain and execute directly.
+- Composable hook chain handles signal setup, secrets loading, CPU detection, port validation, template rendering, bootstrap, and service start in order.
+- Ad-hoc commands bypass the startup chain automatically and execute directly.
 - Individual hooks or the entire entrypoint can be skipped at runtime via environment variables, no image rebuild needed.
-- Downstream images override a single hook (slot 5000) to launch their service; everything else is inherited.
+- Downstream images override a single hook to launch their service; everything else is inherited.
 
 ### Feature toggles for all subsystems
 
@@ -165,24 +164,23 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 
 ### Unified lifecycle runner family
 
-- Eight numbered-hook runners cover the full container lifecycle: startup, healthchecks, tests, bootstrap, build hooks, benchmarks, reports, and shell sessions.
-- All runners share the same pattern: drop a numbered script into a directory, it is auto-discovered and executed.
-- Scripts from different image layers merge — upstream and downstream hooks coexist without conflict.
-- Each runner has tailored failure semantics: abort on error (entrypoint, bootstrap), continue and count failures (healthchecks, tests), always succeed (reports).
+- Every lifecycle concern — startup, healthchecks, tests, bootstrap, build, benchmarks, reports, and shell — follows the same discoverable hook pattern.
+- Drop a numbered script into a directory and it is auto-discovered and executed, no wiring required.
+- Scripts from different image layers merge, so upstream and downstream hooks coexist without conflict.
+- Each runner has tailored failure semantics: abort on error, continue and count failures, or always succeed as appropriate.
 
-### Docker secrets auto-loading (secrets)
+### Docker secrets auto-loading
 
-- Docker secrets files are automatically discovered and converted to environment variables at startup.
-- Dot-notation filenames map to uppercase env vars (`b19.npm.registry_host` becomes `B19_NPM_REGISTRY_HOST`).
+- Docker secrets translate to environment variables automatically at container startup, requiring no code changes.
+- Dot-notation filenames map to uppercase env vars, keeping naming consistent and predictable.
 - Required secrets can be declared by name; the container refuses to start if any are missing.
-- Existing environment variables take precedence over secret-derived values.
-- Secrets are also available in interactive shell sessions and healthchecks.
-- Non-UTF-8/binary secrets (keys, DER blobs, gzipped tarballs) are **not** exported as env vars: Bash truncates them at the first NUL and the stray bytes panic any tool that reads the environment as UTF-8 (e.g. `minijinja --env`, used to template configs). They remain on disk at `/run/secrets/<name>` for file-based reads — which is the only correct way to consume a binary secret anyway.
+- Existing environment variables take precedence over secret-derived values, so overrides are straightforward.
+- Binary secrets (keys, DER blobs) stay on disk for file-based reads, avoiding Bash truncation issues.
 
-### Interactive shell hooks (shell.d)
+### Interactive shell hooks
 
-- `docker exec bash` sessions automatically load Docker secrets and any custom hooks added by downstream images.
-- Hooks merge via Docker layer overlay, so inherited and project-specific shell setup coexist.
+- Shell sessions automatically load Docker secrets and any custom hooks added by downstream images.
+- Hooks merge via Docker layer overlay, so inherited and project-specific shell setup coexist without conflict.
 
 ### Graceful signal handling
 
