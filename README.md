@@ -28,11 +28,11 @@ Related projects: [F5M/Tor](https://kiota.ch/f5m/tor) | [F5M/Tor Snowflake](http
 
 - Persistent APT cache across builds
 - Service process management with log routing (b19-exec)
-- Cached artifact downloads with integrity verification (b19-fetch)
+- Cached artifact downloads with integrity verification
 - Timed command execution with failure reporting (b19-run)
 - Run-once initialization (bootstrap.d)
 - Modular build hooks (build.d)
-- Automatic CPU count detection (NUMPROCS)
+- Automatic CPU count detection
 - Declarative dependency management (b19-deps)
 - Pluggable startup system (entrypoint.d)
 - Feature toggles for all subsystems
@@ -46,8 +46,8 @@ Related projects: [F5M/Tor](https://kiota.ch/f5m/tor) | [F5M/Tor Snowflake](http
 - Reproducible base image (pinned by digest)
 - Port validation
 - Unified lifecycle runner family
-- Docker secrets auto-loading (secrets)
-- Interactive shell hooks (shell.d)
+- Docker secrets auto-loading
+- Interactive shell hooks
 - Graceful signal handling
 - Jinja2 configuration templates (minijinja-cli)
 - Built-in test framework (test.d)
