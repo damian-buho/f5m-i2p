@@ -80,6 +80,7 @@ jobs:
   source-is-secure:
     runs-on: ubuntu-latest
     env:
+      GRYPE_DB_AUTO_UPDATE: true
       OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY: /app/.cache/osv
     steps:
       - uses: actions/checkout@v7
@@ -92,13 +93,20 @@ jobs:
           key: ci-cache-grype-db-
           restore-keys: |
             ci-cache-grype-db-
-      - name: grype-scan-source
+      - name: grype-scan-source-gha
         uses: projectfile-org/actions/run-tool@v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype
-          mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:ro
+          env: |-
+            GRYPE_DB_AUTO_UPDATE=true
+          mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
+      - name: save grype-db
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ runner.temp }}/ci-cache/grype-db
+          key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore osv-db
         uses: actions/cache/restore@v4
         with:
