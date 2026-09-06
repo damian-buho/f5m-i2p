@@ -1293,6 +1293,14 @@ Scan project source for vulnerabilities (grype)
 
 > Image: D9T_GO_TOOLS_IMAGE
 
+### `grype-scan-source-gha`
+
+Scan project source for vulnerabilities (grype), self-healing its own GHA cache
+
+`auto-grype`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
 ### `osv-scanner-db-update`
 
 Mirror the offline OSV databases for the fleet’s ecosystems
