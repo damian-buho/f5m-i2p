@@ -193,6 +193,11 @@ jobs:
         with:
           submodules: true
           persist-credentials: false
+      - name: enable containerd image store
+        # GHA-hosted docker lacks the containerd snapshotter the docker/image exporter needs; self-hosted forgejo runners ship it enabled already.
+        run: |
+          echo '{"features":{"containerd-snapshotter":true}}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
       - name: container-build
         uses: projectfile-org/actions/container-build/buildx@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
