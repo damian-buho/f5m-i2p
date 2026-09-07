@@ -93,11 +93,11 @@ jobs:
       # can delete a layer record mid-copy — podman then buries the real cause under a
       # four-transport probe that claims the tar matches no supported format. The retry
       # for that class lives in the pinned action, not inline (Law 2).
-      - uses: projectfile-org/actions/container-load@v1
+      - uses: projectfile-org/actions/container-load@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           archive: image-${{ github.run_id }}.tar
       - name: secrets-provision
-        uses: projectfile-org/actions/secrets-provision@v1
+        uses: projectfile-org/actions/secrets-provision@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
           dir: .secrets
@@ -108,7 +108,7 @@ jobs:
       - name: dc-up-d
         run: timeout --kill-after=10s "${M6E_COMPOSE_UP_TIMEOUT:-300}s" docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml up --detach --renew-anon-volumes --no-build </dev/null
       - name: container-test
-        uses: projectfile-org/actions/container-exec@v1
+        uses: projectfile-org/actions/container-exec@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           container: ${{ env.M6E_CONTAINER_INSTANCE }}
           run: test.d
@@ -123,7 +123,7 @@ jobs:
       # site), so one docker-cleanup step reaps both — the imperative reaps + their
       # `inspect` guard live in the pinned action, not inline (Law 2).
       - if: ${{ always() }}
-        uses: projectfile-org/actions/docker-cleanup@v1
+        uses: projectfile-org/actions/docker-cleanup@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
           network: ci-f5m-i2p-${{ env.M6E_RUN_SCOPE }}-network
@@ -145,13 +145,13 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: auto-markdownlint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-markdownlint
       - name: auto-textlint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -194,7 +194,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: container-build
-        uses: projectfile-org/actions/container-build/buildx@v1
+        uses: projectfile-org/actions/container-build/buildx@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -248,7 +248,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-tar
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -264,7 +264,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-tar
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -299,7 +299,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: pf-bridge-check
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -312,7 +312,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: pf-validate
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -344,7 +344,7 @@ jobs:
         # This cell's destination gate — on the STEP because a job `if:` may not read
         # the matrix context, and a forge rejects the whole file when one does.
         if: vars.CI_PUBLISH_SINKS == '' || contains(format(',{0},', vars.CI_PUBLISH_SINKS), format(',{0},', matrix.M6E_PUBLISH_SINK))
-        uses: projectfile-org/actions/oci-push@v1
+        uses: projectfile-org/actions/oci-push@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -390,13 +390,13 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: i18n-check
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-i18n check
       - name: reuse-lint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -424,7 +424,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-source-gha
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -445,7 +445,7 @@ jobs:
           restore-keys: |
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -461,7 +461,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-source
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -488,38 +488,38 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: auto-cffr-validate
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_R_TOOLS_IMAGE || format('{0}/d9t/r-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-cffr-validate
       - name: auto-jsonlint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-jsonlint
       - name: auto-shellcheck
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-shellcheck
       - name: auto-yamllint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-yamllint
       - name: hadolint
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.HADOLINT_IMAGE || 'hadolint/hadolint' }}
           version: v2.15.1
           pull: missing
           run: hadolint Dockerfile
       - name: ignorelint-check
-        uses: projectfile-org/actions/run-tool@v1
+        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
         with:
           image: ${{ vars.D9T_IGNORELINT_IMAGE || format('{0}/d9t/ignorelint', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
