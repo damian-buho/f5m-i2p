@@ -12,8 +12,6 @@ name: check-outdated
   workflow_dispatch:
   schedule:
     - cron: "0 7 * * 1"
-permissions:
-  contents: read
 env:
   M6E_TAG: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
   M6E_RUN_SCOPE: ${{ github.run_id }}-${{ github.run_attempt }}
