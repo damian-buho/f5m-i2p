@@ -789,6 +789,14 @@ Lint YAML for syntax and style
 
 > Image: D9T_PYTHON_TOOLS_IMAGE
 
+### `auto-zizmor`
+
+Audit GitHub Actions workflows for security issues
+
+`auto-zizmor`
+
+> Image: D9T_RUST_TOOLS_IMAGE
+
 ### `buf-lint`
 
 Lint protobuf sources with buf
@@ -1400,6 +1408,14 @@ Scan the live built image for vulnerabilities (trivy)
 ### `trivy-scan-source`
 
 Scan project source for vulnerabilities (trivy)
+
+`auto-trivy fs`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `trivy-scan-source-gha`
+
+Scan project source for vulnerabilities (trivy), self-healing its own GHA cache
 
 `auto-trivy fs`
 
