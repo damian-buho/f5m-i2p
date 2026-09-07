@@ -465,6 +465,12 @@ jobs:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-yamllint
+      - name: auto-zizmor
+        uses: projectfile/actions/run-tool@v1
+        with:
+          image: ${{ vars.D9T_RUST_TOOLS_IMAGE || format('{0}/d9t/rust-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-zizmor
       - name: hadolint
         uses: projectfile/actions/run-tool@v1
         with:
