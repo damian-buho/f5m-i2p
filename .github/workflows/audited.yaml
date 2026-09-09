@@ -42,7 +42,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-registry
-        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
+        uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -58,7 +58,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-registry
-        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
+        uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -99,7 +99,7 @@ jobs:
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-source-gha
-        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
+        uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -120,7 +120,7 @@ jobs:
           restore-keys: |
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
-        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
+        uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -136,7 +136,7 @@ jobs:
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-source-gha
-        uses: projectfile-org/actions/run-tool@afa4711d0aa234f2a57295baf3aa3aad3ad99ba3 # v1
+        uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
