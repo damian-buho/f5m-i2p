@@ -49,7 +49,13 @@ jobs:
           run: auto-grype image
           env: |-
             M6E_IMAGE_PUBLISHED=ghcr.io/damian-buho/f5m/i2p:latest
-          mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:ro
+            M6E_SHARED_CACHE=N
+          mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
+      - name: save grype-db
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ runner.temp }}/ci-cache/grype-db
+          key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore trivy-db
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
@@ -65,8 +71,14 @@ jobs:
           run: auto-trivy image
           env: |-
             M6E_IMAGE_PUBLISHED=ghcr.io/damian-buho/f5m/i2p:latest
+            M6E_SHARED_CACHE=N
             TRIVY_CACHE_BACKEND
-          mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:ro
+          mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
+      - name: save trivy-db
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ runner.temp }}/ci-cache/trivy-db
+          key: ci-cache-trivy-db-${{ github.run_id }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         if: ${{ always() }}
         with:
@@ -83,9 +95,7 @@ jobs:
   source-is-secure:
     runs-on: ubuntu-latest
     env:
-      GRYPE_DB_AUTO_UPDATE: true
       OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY: /app/.cache/osv
-      TRIVY_DB_AUTO_UPDATE: true
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -98,14 +108,14 @@ jobs:
           key: ci-cache-grype-db-
           restore-keys: |
             ci-cache-grype-db-
-      - name: grype-scan-source-gha
+      - name: grype-scan-source
         uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-grype
           env: |-
-            GRYPE_DB_AUTO_UPDATE=true
+            M6E_SHARED_CACHE=N
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
       - name: save grype-db
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
@@ -127,7 +137,13 @@ jobs:
           run: auto-osv-scanner --offline-vulnerabilities
           env: |-
             OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY=/app/.cache/osv
-          mounts: ${{ runner.temp }}/ci-cache/osv-db:/app/.cache/osv:ro
+            M6E_SHARED_CACHE=N
+          mounts: ${{ runner.temp }}/ci-cache/osv-db:/app/.cache/osv:rw
+      - name: save osv-db
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ runner.temp }}/ci-cache/osv-db
+          key: ci-cache-osv-db-${{ github.run_id }}
       - name: restore trivy-db
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
@@ -135,14 +151,14 @@ jobs:
           key: ci-cache-trivy-db-
           restore-keys: |
             ci-cache-trivy-db-
-      - name: trivy-scan-source-gha
+      - name: trivy-scan-source
         uses: projectfile-org/actions/run-tool@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-trivy fs
           env: |-
-            TRIVY_DB_AUTO_UPDATE=true
+            M6E_SHARED_CACHE=N
             TRIVY_CACHE_BACKEND
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
       - name: save trivy-db
