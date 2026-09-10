@@ -1301,7 +1301,7 @@ Scan project source for vulnerabilities (grype)
 
 Mirror the offline OSV databases for the fleet’s ecosystems
 
-`osv-db-mirror Go npm PyPI Packagist RubyGems crates.io Maven CRAN`
+`osv-db-mirror`
 
 > Image: D9T_GO_TOOLS_IMAGE
 
