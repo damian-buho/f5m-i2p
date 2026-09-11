@@ -306,7 +306,7 @@ jobs:
       cancel-in-progress: false
     strategy:
       matrix:
-        M6E_PUBLISH_SINK: ["kiota", "dockerhub"]
+        M6E_PUBLISH_SINK: ["kiota"]
     env:
       DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
       DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
@@ -344,7 +344,6 @@ jobs:
           # each registry wants. Credentials key on the SINK name.
           refs: |
             kiota kiota.ch/f5m/i2p:latest
-            dockerhub docker.io/damianbuho/f5m-i2p:latest
           # This CELL's destination, off the publish axis: the job runs one cell per
           # place the archive goes, so a registry refusing a push fails only its own.
           sink: ${{ matrix.M6E_PUBLISH_SINK }}

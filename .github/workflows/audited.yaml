@@ -35,7 +35,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: restore grype-db
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-
@@ -52,12 +52,12 @@ jobs:
             M6E_SHARED_CACHE=N
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
       - name: save grype-db
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore trivy-db
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-
@@ -75,7 +75,7 @@ jobs:
             TRIVY_CACHE_BACKEND
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
       - name: save trivy-db
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-${{ github.run_id }}
@@ -102,7 +102,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: restore grype-db
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-
@@ -118,12 +118,12 @@ jobs:
             M6E_SHARED_CACHE=N
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
       - name: save grype-db
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore osv-db
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/osv-db
           key: ci-cache-osv-db-
@@ -140,12 +140,12 @@ jobs:
             M6E_SHARED_CACHE=N
           mounts: ${{ runner.temp }}/ci-cache/osv-db:/app/.cache/osv:rw
       - name: save osv-db
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/osv-db
           key: ci-cache-osv-db-${{ github.run_id }}
       - name: restore trivy-db
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-
@@ -162,7 +162,7 @@ jobs:
             TRIVY_CACHE_BACKEND
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
       - name: save trivy-db
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-${{ github.run_id }}
