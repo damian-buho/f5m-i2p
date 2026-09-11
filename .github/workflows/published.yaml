@@ -337,9 +337,6 @@ jobs:
     concurrency:
       group: publish-${{ github.repository }}-${{ toJSON(matrix) }}
       cancel-in-progress: false
-    strategy:
-      matrix:
-        M6E_PUBLISH_SINK: ["ghcr"]
     env:
       DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
       DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
@@ -356,9 +353,6 @@ jobs:
         with:
           name: image-${{ github.run_id }}
       - name: oci-push
-        # This cell's destination gate — on the STEP because a job `if:` may not read
-        # the matrix context, and a forge rejects the whole file when one does.
-        if: vars.CI_PUBLISH_SINKS == '' || contains(format(',{0},', vars.CI_PUBLISH_SINKS), format(',{0},', matrix.M6E_PUBLISH_SINK))
         uses: projectfile-org/actions/oci-push@a70dd49da9c1c8cd7eb6466da17d4b1640e4116f # v1
         with:
           artifact-name: image-${{ github.run_id }}
@@ -374,14 +368,6 @@ jobs:
           # answers "where THIS project publishes TO". Set per forge (org var = default,
           # repo var = project-wise override). Ignored when `refs` below is present.
           registry: ${{ vars.OUTPUT_REGISTRY }}
-          # Every destination this forge's route declares, each reference composed by
-          # the sink that declared it — so one archive lands under whatever path grammar
-          # each registry wants. Credentials key on the SINK name.
-          refs: |
-            ghcr ghcr.io/damian-buho/f5m/i2p:latest
-          # This CELL's destination, off the publish axis: the job runs one cell per
-          # place the archive goes, so a registry refusing a push fails only its own.
-          sink: ${{ matrix.M6E_PUBLISH_SINK }}
   published:
     runs-on: ubuntu-latest
     needs: ["publish-image", "ready-to-publish"]
