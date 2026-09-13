@@ -7,21 +7,18 @@
 # customise — direct edits here are overwritten on the next generation.
 # pf-cli-managed: yes
 
-# >>> user-include
+# >>> user-patterns
 *.class
 *.iml
 *.jar
 .container/*/locale/*.mo
+.env
 .fetch
 .gradle/
 .makefile/bootstrap
+.secrets/
 /build/
 /target/
 reports/
-# <<< user-include
-
-# >>> user-extra
-.env
-.secrets/
-# <<< user-extra
+# <<< user-patterns
 
