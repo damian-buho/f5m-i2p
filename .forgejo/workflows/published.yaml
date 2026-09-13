@@ -300,7 +300,7 @@ jobs:
   publish-image:
     runs-on: docker
     needs: ["image-is-built", "ready-to-publish"]
-    if: (startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master') || (startsWith(github.ref, 'refs/tags/'))
+    if: (startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/'))
     concurrency:
       group: publish-${{ github.repository }}-${{ toJSON(matrix) }}
       cancel-in-progress: false
