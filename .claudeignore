@@ -7,18 +7,15 @@
 # customise — direct edits here are overwritten on the next generation.
 # pf-cli-managed: yes
 
-# >>> user-include
+# >>> user-patterns
+.env
 .git
 .gradle/
+.secrets/
 CITATION.cff
 LICENSE
 LICENSES
 build/
 target/
-# <<< user-include
-
-# >>> user-extra
-.env
-.secrets/
-# <<< user-extra
+# <<< user-patterns
 
