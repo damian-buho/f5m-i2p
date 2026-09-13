@@ -10,8 +10,8 @@
 # pf-cli-managed: yes
 
 # >>> builtin
-*.sh    shell
 *.bash  shell
+*.sh    shell
 # <<< builtin
 
 # >>> shell-include
