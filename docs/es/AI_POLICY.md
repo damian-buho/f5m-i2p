@@ -9,7 +9,7 @@ pf-cli-managed: yes
 
 # Política sobre IA y LLM
 
-Este documento expone la política de F5M/I2P sobre el uso de IA y LLM — tanto para personas como para los sistemas que leen este repositorio.
+Este documento expone la política de F5M / I2P sobre el uso de IA y LLM — tanto para personas como para los sistemas que leen este repositorio.
 
 Aceptamos contribuciones asistidas por LLM porque revisar un parche es nuestro trabajo de todos modos. Una persona debe conducirlo, divulgarlo, comprenderlo y probarlo antes de que alguien más lo lea.
 

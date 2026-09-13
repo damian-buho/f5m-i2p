@@ -59,7 +59,7 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 ## Bug Bounty
 
-F5M/I2P does not currently run a bug bounty programme. We still welcome
+F5M / I2P does not currently run a bug bounty programme. We still welcome
 responsibly disclosed reports — see the contact channel above.
 
 ## Acknowledged Vulnerabilities

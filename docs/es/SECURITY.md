@@ -60,7 +60,7 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 ## Programa de recompensas
 
-F5M/I2P no ofrece actualmente un programa de recompensas. Aun así
+F5M / I2P no ofrece actualmente un programa de recompensas. Aun así
 agradecemos los informes divulgados de forma responsable — consulta el canal de
 contacto anterior.
 

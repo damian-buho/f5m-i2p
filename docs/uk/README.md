@@ -8,7 +8,7 @@ pf-cli-managed: yes
 
 [English](../../README.md) · [Español](../es/README.md)
 
-# F5M/I2P
+# F5M / I2P
 
 Дистрибуція I2P з підтримкою спільноти на основі B19/Java
 

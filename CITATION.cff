@@ -9,7 +9,7 @@
 cff-version: 1.2.0
 message: Please cite this software using the metadata from this file.
 type: software
-title: F5M/I2P
+title: F5M / I2P
 abstract: Community-maintained distribution of I2P based on B19/Java
 authors:
   - family-names: Búho
@@ -32,3 +32,4 @@ keywords:
   - router
   - censorship
   - docker
+version: 1.3.3

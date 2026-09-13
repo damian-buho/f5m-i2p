@@ -11,7 +11,7 @@ pf-cli-managed: yes
 
 ## Nuestro compromiso
 
-Nos comprometemos a que la participación en [F5M/I2P](README.md) sea acogedora,
+Nos comprometemos a que la participación en [F5M / I2P](README.md) sea acogedora,
 segura y equitativa para todas las personas. Asumimos el compromiso de
 fomentar un entorno que respete y promueva la dignidad, los derechos y las
 aportaciones de todas las personas, con independencia de características como
@@ -81,7 +81,7 @@ Conducta:
 Este Código de Conducta se aplica en todos los espacios de la comunidad —
 incidencias, solicitudes de incorporación de cambios, canales de chat, listas
 de correo y eventos presenciales — y también cuando una persona
-representa oficialmente a [F5M/I2P](README.md) en espacios públicos.
+representa oficialmente a [F5M / I2P](README.md) en espacios públicos.
 
 ## Atribución
 
