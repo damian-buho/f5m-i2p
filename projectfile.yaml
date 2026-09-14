@@ -32,50 +32,6 @@ keywords:
   - censorship
   - docker
 kind: SoftwareSourceCode
-links:
-  - label:
-      en: F5M/I2P on Codeberg
-      es: F5M/I2P en Codeberg
-      uk: F5M/I2P на Codeberg
-    tags:
-      - public
-      - badges
-      - badges-gitea
-    type: source-code
-    url: https://codeberg.org/f5m/i2p
-  - label:
-      en: F5M/I2P on GitHub
-      es: F5M/I2P en GitHub
-      uk: F5M/I2P на GitHub
-    tags:
-      - public
-      - badges
-      - badges-github
-    type: source-code
-    url: https://github.com/damian-buho/f5m-i2p
-  - label:
-      en: F5M/I2P on kiota.ch
-      es: F5M/I2P en kiota.ch
-      uk: F5M/I2P на kiota.ch
-    preferred: true
-    type: source-code
-    url: https://kiota.ch/f5m/i2p
-  - label:
-      en: Issues on Codeberg
-      es: Incidencias en Codeberg
-      uk: Issues на Codeberg
-    tags:
-      - support
-    type: bugs
-    url: https://codeberg.org/f5m/i2p/issues
-  - label:
-      en: Issues on GitHub
-      es: Incidencias en GitHub
-      uk: Issues на GitHub
-    tags:
-      - support
-    type: bugs
-    url: https://github.com/damian-buho/f5m-i2p/issues
 org:
   projectfile:
     build:
@@ -93,18 +49,19 @@ org:
         parents:
           - url: ssh://git@kiota.ch/b19/ubuntu.git
     status: maintained
+technologies:
+  - java
+  - jvm
 repositories:
-  - issues: true
-    role: mirror
-    type: git
-    url: ssh://git@codeberg.org/f5m/i2p.git
-  - role: mirror
-    type: git
-    url: git@github.com:damian-buho/f5m-i2p.git
   - branch: main
     role: origin
     type: git
     url: ssh://git@kiota.ch/f5m/i2p.git
-technologies:
-  - java
-  - jvm
+links:
+  - label:
+      en: F5M / I2P on kiota.ch
+      es: F5M / I2P en kiota.ch
+      uk: F5M / I2P на kiota.ch
+    preferred: true
+    type: source-code
+    url: https://kiota.ch/f5m/i2p
