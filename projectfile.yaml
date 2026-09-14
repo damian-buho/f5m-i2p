@@ -32,6 +32,14 @@ keywords:
   - censorship
   - docker
 kind: SoftwareSourceCode
+links:
+  - label:
+      en: F5M / I2P on kiota.ch
+      es: F5M / I2P en kiota.ch
+      uk: F5M / I2P на kiota.ch
+    preferred: true
+    type: source-code
+    url: https://kiota.ch/f5m/i2p
 org:
   projectfile:
     build:
@@ -49,19 +57,11 @@ org:
         parents:
           - url: ssh://git@kiota.ch/b19/ubuntu.git
     status: maintained
-technologies:
-  - java
-  - jvm
 repositories:
   - branch: main
     role: origin
     type: git
     url: ssh://git@kiota.ch/f5m/i2p.git
-links:
-  - label:
-      en: F5M / I2P on kiota.ch
-      es: F5M / I2P en kiota.ch
-      uk: F5M / I2P на kiota.ch
-    preferred: true
-    type: source-code
-    url: https://kiota.ch/f5m/i2p
+technologies:
+  - java
+  - jvm
