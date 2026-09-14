@@ -12,13 +12,6 @@ pf-cli-managed: yes
 ¡Gracias por usar **F5M / I2P**!
 Este documento explica dónde conseguir ayuda y cómo formular buenas preguntas.
 
-## Antes de preguntar
-
-Revisa esto primero — puede que tu pregunta ya tenga respuesta:
-
-- [Incidencias en Codeberg](https://codeberg.org/f5m/i2p/issues)
-- [Incidencias en GitHub](https://github.com/damian-buho/f5m-i2p/issues)
-
 ## Dónde preguntar
 
 - **Informar de una vulnerabilidad de seguridad** — [SECURITY.md](SECURITY.md)
