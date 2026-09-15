@@ -20,8 +20,12 @@ includes:
   - .makefile/b19/ci.yaml
   - .makefile/b19/images/java.yaml
   - .makefile/b19/images/python.yaml
+  - .makefile/b19/traits/release.yaml
   - .makefile/library/languages/java.yaml
   - .projectfile/vulnerabilities.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/dockerhub.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/ghcr.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/github.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
   - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
 keywords:
@@ -34,12 +38,44 @@ keywords:
 kind: SoftwareSourceCode
 links:
   - label:
+      en: F5M / I2P on GitHub
+      es: F5M / I2P en GitHub
+      uk: F5M / I2P на GitHub
+    tags:
+      - public
+      - badges
+      - badges-github
+    type: source-code
+    url: https://github.com/damian-buho/f5m-i2p
+  - label:
+      en: Issues on GitHub
+      es: Incidencias en GitHub
+      uk: Задачі на GitHub
+    tags:
+      - support
+    type: bugs
+    url: https://github.com/damian-buho/f5m-i2p/issues
+  - label:
       en: F5M / I2P on kiota.ch
       es: F5M / I2P en kiota.ch
       uk: F5M / I2P на kiota.ch
     preferred: true
     type: source-code
     url: https://kiota.ch/f5m/i2p
+  - derived: true
+    label:
+      en: Packages on GHCR
+      es: Paquetes en GHCR
+      uk: Пакунки на GHCR
+    type: package-registry
+    url: https://github.com/damian-buho/f5m-i2p/pkgs/container/f5m%2Fi2p
+  - derived: true
+    label:
+      en: Packages on Docker Hub
+      es: Paquetes en Docker Hub
+      uk: Пакунки на Docker Hub
+    type: package-registry
+    url: https://hub.docker.com/r/damianbuho/f5m-i2p
 org:
   projectfile:
     build:
@@ -58,6 +94,9 @@ org:
           - url: ssh://git@kiota.ch/b19/ubuntu.git
     status: maintained
 repositories:
+  - role: mirror
+    type: git
+    url: git@github.com:damian-buho/f5m-i2p.git
   - branch: main
     role: origin
     type: git

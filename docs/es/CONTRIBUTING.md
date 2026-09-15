@@ -15,7 +15,7 @@ Toda forma de contribución se agradece y se valora. Consulta la Tabla de conten
 
 > Y si el proyecto te gusta pero no tienes tiempo para contribuir, no pasa nada. Hay otras formas sencillas de apoyarlo y mostrar tu agradecimiento, que también nos harían mucha ilusión:
 >
-> - Dale una estrella al proyecto
+> - Dale una estrella al proyecto en [github.com](https://github.com/damian-buho/f5m-i2p)
 > - Menciona este proyecto en el readme del tuyo
 > - Habla del proyecto en encuentros locales y cuéntaselo a tus amistades y colegas
 > - Sigue al [autor (mastodon.social/@damianbuho) en Mastodon](https://mastodon.social/@damianbuho)
@@ -50,7 +50,7 @@ Un buen informe de fallo evita que otras personas tengan que perseguirte para ob
 
 - Asegúrate de usar una [versión con soporte](SUPPORT.md).
 - Comprueba que se trata realmente de un fallo y no de un error por tu parte, por ejemplo, componentes o versiones incompatibles del entorno (asegúrate de haber leído la [documentación](/docs). Si lo que buscas es ayuda, consulta [SUPPORT.md](SUPPORT.md)).
-- Para ver si otras personas han tenido (y quizá ya resuelto) el mismo problema, comprueba que no exista ya un informe de tu fallo o error en el gestor de incidencias.
+- Para ver si otras personas han tenido (y quizá ya resuelto) el mismo problema, comprueba que no exista ya un informe de tu fallo o error en el [gestor de incidencias](https://github.com/damian-buho/f5m-i2p/issues?q=label%3Abug).
 - Si puedes, los siguientes detalles serían de ayuda:
     - Traza de la pila, si la hay
     - Sistema operativo, plataforma y versión (Windows, Linux, macOS, x86, ARM)
@@ -63,9 +63,9 @@ Un buen informe de fallo evita que otras personas tengan que perseguirte para ob
 
 > Nunca informes de problemas de seguridad, vulnerabilidades o fallos que incluyan información sensible en el gestor de incidencias ni en ningún otro lugar público. Los fallos sensibles deben enviarse por correo a <damian.buho@proton.me>.
 
-Usamos incidencias para seguir fallos y errores. Si te topas con un problema en el proyecto:
+Usamos [Issues de GitHub](https://github.com/damian-buho/f5m-i2p/issues) para seguir fallos y errores. Si te topas con un problema en el proyecto:
 
-- Abre una incidencia. (Como todavía no podemos saber si se trata de un fallo, te pedimos que no lo des por hecho ni etiquetes la incidencia.)
+- Abre una [incidencia](https://github.com/damian-buho/f5m-i2p/issues/new). (Como todavía no podemos saber si se trata de un fallo, te pedimos que no lo des por hecho ni etiquetes la incidencia.)
 - Explica el comportamiento que esperabas y el que se produjo realmente.
 - Aporta todo el contexto posible y describe los *pasos de reproducción* que otra persona pueda seguir para recrear el problema. Esto suele incluir tu código. En un buen informe conviene aislar el problema y crear un caso de prueba reducido.
 - Incluye la información que reuniste en el apartado anterior.
@@ -79,13 +79,13 @@ Esta sección te guía para enviar una propuesta de mejora para F5M / I2P, **tan
 
 - Asegúrate de usar una [versión con soporte](SUPPORT.md).
 - Comprueba si la funcionalidad ya existe, quizá mediante alguna configuración concreta — la [documentación](/docs) es un buen punto de partida.
-- Haz una búsqueda para ver si ya se ha propuesto. Si es así, comenta en la incidencia existente en lugar de abrir una nueva.
+- Haz una [búsqueda](https://github.com/damian-buho/f5m-i2p/issues) para ver si ya se ha propuesto. Si es así, comenta en la incidencia existente en lugar de abrir una nueva.
 - Valora si tu idea encaja con el alcance y los objetivos del proyecto.
 
 <!-- omit in toc -->
 ### ¿Cómo envío una buena propuesta de mejora?
 
-Las propuestas de mejora se gestionan como incidencias.
+Las propuestas de mejora se gestionan como Issues de GitHub.
 
 - Usa un **título claro y descriptivo** que identifique la propuesta.
 - Describe la mejora sugerida **paso a paso** y con el mayor detalle posible.
