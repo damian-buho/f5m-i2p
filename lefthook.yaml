@@ -12,8 +12,12 @@
 pre-commit:
   commands:
     dag:
+      env:
+        TERM: dumb # dumb keeps Charm tools from OSC-probing the terminal
       run: make pre-commit
 pre-push:
   commands:
     dag:
+      env:
+        TERM: dumb # dumb keeps Charm tools from OSC-probing the terminal
       run: make pre-push
