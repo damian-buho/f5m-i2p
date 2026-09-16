@@ -88,22 +88,26 @@ jobs:
       # can delete a layer record mid-copy — podman then buries the real cause under a
       # four-transport probe that claims the tar matches no supported format. The retry
       # for that class lives in the pinned action, not inline (Law 2).
-      - uses: projectfile-org/actions/container-load@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+      - uses: projectfile-org/actions/container-load@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           archive: image-${{ github.run_id }}.tar
       - name: secrets-provision
-        uses: projectfile-org/actions/secrets-provision@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_CONTAINER_IS_VERIFIED != 'true' && vars.CI_SKIP_SECRETS_PROVISION != 'true'
+        uses: projectfile-org/actions/secrets-provision@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           declarations: "{\"f5m.i2p.persona-eepsite-key\":{\"docker\":{\"image\":\"self\",\"run\":\"generate-eepsite-key\"}}}"
           dir: .secrets
           default-image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
       - name: dc-pull
+        if: vars.CI_SKIP_IMAGES_ARE_OK != 'true' && vars.CI_SKIP_DC_PULL != 'true'
         run: M6E_COMPOSE_FILE=.compose/pipeline.yaml .makefile/container/scripts/compose-pull.sh
       - name: dc-up-d
+        if: vars.CI_SKIP_CONTAINER_IS_OK != 'true' && vars.CI_SKIP_DC_UP_D != 'true'
         run: timeout --kill-after=10s "${M6E_COMPOSE_UP_TIMEOUT:-300}s" docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml up --detach --renew-anon-volumes --no-build </dev/null
       - name: container-test
-        uses: projectfile-org/actions/container-exec@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_CONTAINER_READY_TO_TEST != 'true' && vars.CI_SKIP_CONTAINER_TEST != 'true'
+        uses: projectfile-org/actions/container-exec@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           container: ${{ env.M6E_CONTAINER_INSTANCE }}
           run: test.d
@@ -118,7 +122,7 @@ jobs:
       # site), so one docker-cleanup step reaps both — the imperative reaps + their
       # `inspect` guard live in the pinned action, not inline (Law 2).
       - if: ${{ always() }}
-        uses: projectfile-org/actions/docker-cleanup@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        uses: projectfile-org/actions/docker-cleanup@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
           network: ci-f5m-i2p-${{ env.M6E_RUN_SCOPE }}-network
@@ -140,13 +144,15 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: auto-markdownlint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_DOCUMENTATION_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_MARKDOWNLINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-markdownlint
       - name: auto-textlint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_DOCUMENTATION_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_TEXTLINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -158,6 +164,9 @@ jobs:
   image-is-built:
     runs-on: ubuntu-latest
     needs: ["fetched", "inputs-are-ok"]
+    permissions:
+      actions: write
+      contents: read
     concurrency:
       group: build-${{ github.repository }}-${{ toJSON(matrix) }}
       cancel-in-progress: false
@@ -189,10 +198,12 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: use an isolated buildx builder
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
         # the docker driver's image exporter needs the host's containerd store; docker-container carries its own, so no host config or restart is needed on any GHA runner flavor.
         run: docker buildx create --name ci --driver docker-container --use
       - name: container-build
-        uses: projectfile-org/actions/container-build/buildx@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
+        uses: projectfile-org/actions/container-build/buildx@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -220,6 +231,8 @@ jobs:
             SOURCE_DOCKER_REGISTRY=${{ inputs.SOURCE_DOCKER_REGISTRY || vars.SOURCE_DOCKER_REGISTRY }}
           mounts: fetch=/fetch
           pf-cli-image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', env.M6E_TAG) }}
+          mount-cache-key: ci-cache-mounts-
+          mount-cache-restore-keys: ci-cache-mounts-
   image-is-ready:
     runs-on: ubuntu-latest
     needs: ["container-is-verified", "image-is-secure"]
@@ -240,6 +253,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: gh-release
+        if: vars.CI_SKIP_IMAGE_IS_RELEASED != 'true' && vars.CI_SKIP_GH_RELEASE != 'true'
         run: gh release create "$RELEASE_TAG" --verify-tag --generate-notes || gh release view "$RELEASE_TAG"
   image-is-secure:
     runs-on: ubuntu-latest
@@ -256,13 +270,15 @@ jobs:
           name: image-${{ github.run_id }}
       - name: restore grype-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_TAR != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-tar
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_TAR != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -273,18 +289,21 @@ jobs:
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
       - name: save grype-db
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_TAR != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore trivy-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_TAR != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-tar
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_TAR != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -296,6 +315,7 @@ jobs:
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
       - name: save trivy-db
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_TAR != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-${{ github.run_id }}
@@ -325,7 +345,8 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: pf-bridge-check
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_PROJECTFILE_IS_OK != 'true' && vars.CI_SKIP_PF_BRIDGE_CHECK != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.PF_BRIDGE_IMAGE || format('{0}/projectfile/bridge', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -338,7 +359,8 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: pf-validate
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_PROJECTFILE_IS_VALID != 'true' && vars.CI_SKIP_PF_VALIDATE != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -369,13 +391,13 @@ jobs:
           submodules: true
           persist-credentials: false
       - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK)))
         with:
           name: image-${{ github.run_id }}
       - name: oci-push
-        # This cell's destination gate — on the STEP because a job `if:` may not read
-        # the matrix context, and a forge rejects the whole file when one does.
-        if: vars.CI_PUBLISH_SINKS == '' || contains(format(',{0},', vars.CI_PUBLISH_SINKS), format(',{0},', matrix.M6E_PUBLISH_SINK))
-        uses: projectfile-org/actions/oci-push@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        # The cell's run-time override gate, on the STEP because a job `if:` may not read the matrix context
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_PUBLISH_IMAGE != 'true' && vars.CI_SKIP_OCI_PUSH != 'true'
+        uses: projectfile-org/actions/oci-push@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           artifact-name: image-${{ github.run_id }}
           image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
@@ -421,13 +443,15 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: i18n-check
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_IS_COMPLIANT != 'true' && vars.CI_SKIP_I18N_CHECK != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-i18n check
       - name: reuse-lint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_IS_COMPLIANT != 'true' && vars.CI_SKIP_REUSE_LINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -448,13 +472,15 @@ jobs:
           persist-credentials: false
       - name: restore grype-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-
           restore-keys: |
             ci-cache-grype-db-
       - name: grype-scan-source
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -464,18 +490,21 @@ jobs:
           mounts: ${{ runner.temp }}/ci-cache/grype-db:/app/.cache/grype:rw
       - name: save grype-db
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/grype-db
           key: ci-cache-grype-db-${{ github.run_id }}
       - name: restore osv-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/osv-db
           key: ci-cache-osv-db-
           restore-keys: |
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -486,18 +515,21 @@ jobs:
           mounts: ${{ runner.temp }}/ci-cache/osv-db:/app/.cache/osv:rw
       - name: save osv-db
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/osv-db
           key: ci-cache-osv-db-${{ github.run_id }}
       - name: restore trivy-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-
           restore-keys: |
             ci-cache-trivy-db-
       - name: trivy-scan-source
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -508,6 +540,7 @@ jobs:
           mounts: ${{ runner.temp }}/ci-cache/trivy-db:/app/.cache/trivy:rw
       - name: save trivy-db
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
         with:
           path: ${{ runner.temp }}/ci-cache/trivy-db
           key: ci-cache-trivy-db-${{ github.run_id }}
@@ -530,44 +563,51 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: auto-cffr-validate
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_CFFR_VALIDATE != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_R_TOOLS_IMAGE || format('{0}/d9t/r-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-cffr-validate
       - name: auto-jsonlint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_JSONLINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_JS_TOOLS_IMAGE || format('{0}/d9t/js-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-jsonlint
       - name: auto-shellcheck
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_SHELLCHECK != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-shellcheck
       - name: auto-yamllint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_YAMLLINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_PYTHON_TOOLS_IMAGE || format('{0}/d9t/python-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-yamllint
       - name: auto-zizmor
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_ZIZMOR != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.D9T_RUST_TOOLS_IMAGE || format('{0}/d9t/rust-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
           run: auto-zizmor
       - name: hadolint
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_HADOLINT != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.HADOLINT_IMAGE || 'hadolint/hadolint' }}
           version: v2.15.1
           pull: missing
           run: hadolint Dockerfile
       - name: ignorelint-check
-        uses: projectfile-org/actions/run-tool@b0ae2dd084cf7745613590f42475a763a676f0bb # v1
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_IGNORELINT_CHECK != 'true'
+        uses: projectfile-org/actions/run-tool@78f06c9316d295ea7b646ad1bdac87b76b7f999a # v1
         with:
           image: ${{ vars.IGNORELINT_IMAGE || format('{0}/ignorelint', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
