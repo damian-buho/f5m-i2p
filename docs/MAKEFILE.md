@@ -1477,6 +1477,6 @@ Run the pseudo-CI pipeline locally — build, test and scan, without publishing
 
 ### `syntax-is-ok`
 
-Run the fast syntax checks — source lint and the projectfile projections
+Run the fast syntax checks — source lint, documentation lint and the projectfile projections
 
 <!-- textlint-enable -->
