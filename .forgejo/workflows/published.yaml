@@ -80,6 +80,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - uses: actions/download-artifact@v3
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
         with:
           name: image-${{ github.run_id }}
       # The archive enters the runner's SHARED image store, where a sibling job's reap
@@ -254,6 +255,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - uses: actions/download-artifact@v3
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
         with:
           name: image-${{ github.run_id }}
       - name: grype-scan-tar
@@ -345,7 +347,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - uses: actions/download-artifact@v3
-        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK)))
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
         with:
           name: image-${{ github.run_id }}
       - name: oci-push
