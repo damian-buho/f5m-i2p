@@ -23,9 +23,9 @@ includes:
   - .makefile/b19/traits/release.yaml
   - .makefile/library/languages/java.yaml
   - .projectfile/vulnerabilities.yaml
-  - https://kiota.ch/damian-buho/metadata/raw/branch/main/dockerhub.yaml
-  - https://kiota.ch/damian-buho/metadata/raw/branch/main/ghcr.yaml
-  - https://kiota.ch/damian-buho/metadata/raw/branch/main/github.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/registry/dockerhub.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/registry/ghcr.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/forge/github.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
   - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
 keywords:
