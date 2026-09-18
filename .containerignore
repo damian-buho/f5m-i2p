@@ -15,7 +15,6 @@
 .forgejo
 .git
 .github
-.gitlab
 .gradle
 .makefile
 .secrets
