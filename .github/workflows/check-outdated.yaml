@@ -19,7 +19,7 @@ env:
   M6E_RUN_SCOPE: ${{ github.run_id }}-${{ github.run_attempt }}
 jobs:
   check-outdated:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     if: (github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')
     steps:
       - run: echo check-outdated
