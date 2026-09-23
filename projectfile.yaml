@@ -26,7 +26,6 @@ includes:
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/forge/github.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/registry/dockerhub.yaml
-  - https://kiota.ch/damian-buho/metadata/raw/branch/main/registry/ghcr.yaml
   - https://kiota.ch/f5m/metadata/raw/branch/main/include.yaml
 keywords:
   - i2p
