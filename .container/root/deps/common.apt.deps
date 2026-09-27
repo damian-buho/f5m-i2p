@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+
+fontconfig         # libfontconfig + fonts.conf, how the JVM enumerates fonts
+fonts-dejavu-core  # graph labels; the extra variants of fonts-dejavu are unused

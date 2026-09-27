@@ -17,6 +17,8 @@ I2P anonymity network router.
 - Arch: amd64 only
 - Pinned version: `.container/user/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
 - Embedded python (for `extract-b32-address`): interpreter tree copied from `b19/python-3.14`; the `.makefile/b19/images/python.yaml` include composes `B19_PYTHON_BASE_IMAGE` and carries the pip-vendored (msgpack/setuptools) vulnerability suppressions the copied tree inherits
+- APT packages come from `.container/root/deps/common.apt.deps` — `install-apt` runs only where the stage user is root, and it reads no other filename, so a deps file in a `user` stage (or named anything but `*.apt.deps`) installs nothing and reports nothing
+- Console graphs need a JVM font: `fontconfig` + `fonts-dejavu-core` in that file, or `viewstat.jsp` answers 500 (`Fontconfig head is null`) while every other console page stays healthy. `test.d/2300-check-console-graph.sh` is the guard
 
 ## Ports
 
