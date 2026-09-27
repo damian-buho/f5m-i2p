@@ -19,6 +19,7 @@ I2P anonymity network router.
 - Embedded python (for `extract-b32-address`): interpreter tree copied from `b19/python-3.14`; the `.makefile/b19/images/python.yaml` include composes `B19_PYTHON_BASE_IMAGE` and carries the pip-vendored (msgpack/setuptools) vulnerability suppressions the copied tree inherits
 - APT packages come from `.container/root/deps/common.apt.deps` — `install-apt` runs only where the stage user is root, and it reads no other filename, so a deps file in a `user` stage (or named anything but `*.apt.deps`) installs nothing and reports nothing
 - Console graphs need a JVM font: `fontconfig` + `fonts-dejavu-core` in that file, or `viewstat.jsp` answers 500 (`Fontconfig head is null`) while every other console page stays healthy. `test.d/2300-check-console-graph.sh` is the guard
+- Console setup wizard: the flag is `routerconsole.welcomeWizardComplete` in the router dir’s `router.config`, which the router dir loses on every recreate. `5000-start.sh` seeds it, `test.d/2200-check-console-home.sh` is the guard
 
 ## Ports
 
@@ -38,6 +39,8 @@ I2P anonymity network router.
 ## Config templates
 
 `router.config.j2`, `i2ptunnel.config.j2`, `clients.config.j2`, `wrapper.config.j2`, `vm.options.j2`
+
+The router reads the router dir (`${B19_HOME}/.i2p`) and nothing else. `5000-start.sh` copies the base `clients.config` and `i2ptunnel.config` into it when missing, so those two templates take effect. The base `router.config` rendered from `router.config.j2` is **not** read — a key placed there has no effect, and a `router.config.d` drop-in in the router dir is ignored as well. A router setting therefore has to be written into the router dir at start (the wizard flag is) or the whole file copied there, as for the two configs above.
 
 ## Volume
 

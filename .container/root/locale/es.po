@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:12+0000\n"
+"POT-Creation-Date: 2026-09-27 05:13+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Spanish\n"
@@ -75,7 +75,11 @@ msgstr "Se recuperó la escritura en %s"
 msgid "Restoring missing %s to user dir"
 msgstr "Restaurando %s faltante al directorio de usuario"
 
-#: .container/user/entrypoint.d/5000-start.sh:50
+#: .container/user/entrypoint.d/5000-start.sh:54
+msgid "Seeding %s in %s"
+msgstr "Sembrando %s en %s"
+
+#: .container/user/entrypoint.d/5000-start.sh:57
 #, fuzzy
 msgid "No command provided, will run %s"
 msgstr "Sin comando ejecutado, se ejecutará"
@@ -113,6 +117,14 @@ msgstr ""
 #: .container/user/command.d/generate-eepsite-key:49
 msgid "Failed to generate eepsite key"
 msgstr ""
+
+#: .container/user/test.d/2200-check-console-home.sh:18
+msgid "Console root opened the setup wizard (%s)"
+msgstr "La raíz de la consola abrió el asistente de configuración (%s)"
+
+#: .container/user/test.d/2200-check-console-home.sh:22
+msgid "Console root lands on %s"
+msgstr "La raíz de la consola llega a %s"
 
 #: .container/user/test.d/2300-check-console-graph.sh:19
 msgid "Console graph is not an image (content type: %s)"

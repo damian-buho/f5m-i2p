@@ -47,6 +47,13 @@
         chmod 0600 "${I2P_DOT_DIR}/${_cfg}" 2>/dev/null || true
       fi
     done
+    # Wizard completion lives in the router dir’s own router.config, which a fresh container recreates empty
+    I2P_ROUTER_CONFIG="${I2P_DOT_DIR}/router.config"
+    WIZARD_FLAG="routerconsole.welcomeWizardComplete"
+    if ! grep --quiet --line-regexp "${WIZARD_FLAG}=" "${I2P_ROUTER_CONFIG}" 2>/dev/null; then
+      b19-log info "I2P" "$(_p "Seeding %s in %s" "${WIZARD_FLAG}" "${I2P_ROUTER_CONFIG}")"
+      printf '%s=true\n' "${WIZARD_FLAG}" >> "${I2P_ROUTER_CONFIG}"
+    fi
     b19-log info "I2P" "$(_p "No command provided, will run %s" "I2P console")"
     b19-exec --     \
       i2prouter console
