@@ -42,6 +42,8 @@ I2P anonymity network router.
 
 The router reads the router dir (`${B19_HOME}/.i2p`) and nothing else, and it never reads `${B19_HOME}/router.config` on its own. `5000-start.sh` copies `clients.config`, `i2ptunnel.config` and `router.config` from the base into the router dir when the file is missing, which is what makes all three templates take effect — a `router.config.d` drop-in is not read. Without the copy the router creates its own config and runs on stock defaults: `router.hiddenMode`, `i2np.ipv4.firewalled`, the IPv6 keys, `i2np.upnp.enable` and `i2cp.tcp.bindAllInterfaces` were all no-ops until the restore was extended, and a container with the copy reports `Network: Hidden` where a default one reports `Network: Firewalled`. The wizard flag is seeded separately, after the copy, so it also lands on a router dir that already existed.
 
+A j2 tag closing with `-%}` on its own line strips the newline after itself and glues the next key onto the previous one. In `i2ptunnel.config.j2` that turned `tunnel.3.type=httpserver` into the unknown type `httpservertunnel.3.targetHost=localhost`, so the eepsite tunnel never started and the router logged the failure once at startup. `test.d/2400-check-tunnel-types.sh` asserts every type line the template declares is rendered verbatim.
+
 ## Volume
 
 `i2p-data` → `/app/data` — persists the eepsite identity key (`/app/data/eepsite/eepPriv.dat`) + router netDb across restarts. (`/app/bin/eepsite` is the installer’s stock skeleton and persists nothing.)

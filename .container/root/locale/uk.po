@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:13+0000\n"
+"POT-Creation-Date: 2026-09-27 05:14+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Ukrainian\n"
@@ -133,6 +133,14 @@ msgstr "Графік консолі не є зображенням (тип вм�
 #: .container/user/test.d/2300-check-console-graph.sh:23
 msgid "Console graph renders (%s)"
 msgstr "Графік консолі відтворюється (%s)"
+
+#: .container/user/test.d/2400-check-tunnel-types.sh:18
+msgid "Tunnel type is not rendered verbatim: %s"
+msgstr "Тип тунелю не відтворюється дослівно: %s"
+
+#: .container/user/test.d/2400-check-tunnel-types.sh:23
+msgid "Every tunnel type is rendered verbatim (%s)"
+msgstr "Усі типи тунелів відтворюються дослівно (%s)"
 
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
 #~ msgstr ""
