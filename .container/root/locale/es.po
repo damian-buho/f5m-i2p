@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
-"Report-Msgid-Bugs-To: i18n@b19.dev\n"
-"POT-Creation-Date: 2026-05-05 00:00-0300\n"
+"Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
+"POT-Creation-Date: 2026-09-27 05:12+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Spanish\n"
@@ -16,82 +16,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:14
-msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
-msgstr ""
-"Verificación de consola I2P omitida (F5M_I2P_CONSOLE_PORT no configurado)"
-
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:20
-msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
-msgstr "La consola I2P no responde (F5M_I2P_CONSOLE_PORT: %s)"
-
-#: .container/user/healthcheck.d/110-check-i2p-console-health.sh:24
-msgid "I2P console is accessible (F5M_I2P_CONSOLE_PORT: %s)"
-msgstr "La consola I2P está accesible (F5M_I2P_CONSOLE_PORT: %s)"
-
-#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:9
-msgid "I2P console not responding (port: %s)"
-msgstr "La consola I2P no responde (puerto: %s)"
-
-#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:13
-msgid "I2P router is healthy (port: %s)"
-msgstr "El router I2P está saludable (puerto: %s)"
-
-#: .container/user/build.d/user/post/500-install-i2p.sh:7
+#: .container/user/build.d/user/post/500-install-i2p.sh:11
 msgid "Preparing response file"
 msgstr "Preparando archivo de respuesta"
 
-#: .container/user/build.d/user/post/500-install-i2p.sh:10
-msgid "Install"
-msgstr "Instalar"
-
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:7
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:11
 msgid "Creating eepsite directory"
 msgstr "Creando directorio eepsite"
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:13
-#, fuzzy
-msgid "Existing eepsite identity found at %s"
-msgstr "Identidad eepsite existente encontrada"
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:20
+msgid "Loading eepsite identity from secret %s"
+msgstr "Cargando identidad eepsite desde secreto %s"
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:15
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:24
 #, fuzzy
 msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
 msgstr "Sin identidad eepsite, I2P generará en el primer inicio del túnel"
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:18
-msgid "Loading eepsite identity from secret %s"
-msgstr "Cargando identidad eepsite desde secreto %s"
-
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:30
+#, fuzzy
+msgid "Existing eepsite identity found at %s"
+msgstr "Identidad eepsite existente encontrada"
+
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:35
 msgid "Eepsite destination: %s"
 msgstr "Destino eepsite: %s"
 
-#: .container/user/entrypoint.d/200-prepare-eepsite.sh:32
+#: .container/user/entrypoint.d/200-prepare-eepsite.sh:37
 msgid "Eepsite .b32.i2p address will be available after tunnel startup"
 msgstr "La dirección .b32.i2p estará disponible después del inicio del túnel"
 
-#: .container/user/entrypoint.d/3000-start.sh:5
+#: .container/user/entrypoint.d/5000-start.sh:21
+msgid ""
+"Directory %s not writable (owner %s) — wrapper will fail with Permission "
+"denied"
+msgstr ""
+"Directorio %s no escribible (propietario %s) — wrapper fallará con "
+"Permission denied"
+
+#: .container/user/entrypoint.d/5000-start.sh:22
+msgid ""
+"Attempting to fix permissions via chmod — if this fails, run once as root: "
+"docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
+msgstr ""
+"Intentando corregir permisos via chmod — si falla, ejecuta una vez como "
+"root: docker run --rm -v <volumen>:/vol alpine chown 1000:1000 /vol"
+
+#: .container/user/entrypoint.d/5000-start.sh:30
+msgid "Still not writable: %s — aborting, fix the volume ownership"
+msgstr ""
+"Sigue sin ser escribible: %s — abortando, corrige la propiedad del volumen"
+
+#: .container/user/entrypoint.d/5000-start.sh:33
+msgid "Recovered writability on %s"
+msgstr "Se recuperó la escritura en %s"
+
+#: .container/user/entrypoint.d/5000-start.sh:45
+msgid "Restoring missing %s to user dir"
+msgstr "Restaurando %s faltante al directorio de usuario"
+
+#: .container/user/entrypoint.d/5000-start.sh:50
 #, fuzzy
 msgid "No command provided, will run %s"
 msgstr "Sin comando ejecutado, se ejecutará"
 
-#: .container/user/entrypoint.d/5000-start.sh:20
-msgid "Directory %s not writable (owner %s) — wrapper will fail with Permission denied"
-msgstr "Directorio %s no escribible (propietario %s) — wrapper fallará con Permission denied"
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:17
+#, fuzzy
+msgid "I2P console check skipped (port: %s)"
+msgstr "La consola I2P no responde (puerto: %s)"
 
-#: .container/user/entrypoint.d/5000-start.sh:21
-msgid "Attempting to fix permissions via chmod — if this fails, run once as root: docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
-msgstr "Intentando corregir permisos via chmod — si falla, ejecuta una vez como root: docker run --rm -v <volumen>:/vol alpine chown 1000:1000 /vol"
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:22
+msgid "I2P console not responding (port: %s)"
+msgstr "La consola I2P no responde (puerto: %s)"
 
-#: .container/user/entrypoint.d/5000-start.sh:27
-msgid "Still not writable: %s — aborting, fix the volume ownership"
-msgstr "Sigue sin ser escribible: %s — abortando, corrige la propiedad del volumen"
+#: .container/user/healthcheck.d/100-check-i2p-router-health.sh:26
+msgid "I2P router is healthy (port: %s)"
+msgstr "El router I2P está saludable (puerto: %s)"
 
-#: .container/user/entrypoint.d/5000-start.sh:30
-msgid "Recovered writability on %s"
-msgstr "Se recuperó la escritura en %s"
+#: .container/user/command.d/generate-eepsite-key:12
+#, fuzzy
+msgid "Generating I2P eepsite identity key"
+msgstr "Creando directorio eepsite"
 
-#: .container/user/entrypoint.d/5000-start.sh:38
-msgid "Restoring missing %s to user dir"
-msgstr "Restaurando %s faltante al directorio de usuario"
+#: .container/user/command.d/generate-eepsite-key:19
+msgid "Using i2pd for key generation"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:27
+msgid "Using I2P Java for key generation"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:47
+msgid "Eepsite key generated successfully"
+msgstr ""
+
+#: .container/user/command.d/generate-eepsite-key:49
+msgid "Failed to generate eepsite key"
+msgstr ""
+
+#: .container/user/test.d/2300-check-console-graph.sh:19
+msgid "Console graph is not an image (content type: %s)"
+msgstr "El gráfico de la consola no es una imagen (tipo de contenido: %s)"
+
+#: .container/user/test.d/2300-check-console-graph.sh:23
+msgid "Console graph renders (%s)"
+msgstr "El gráfico de la consola se renderiza (%s)"
+
+#~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
+#~ msgstr ""
+#~ "Verificación de consola I2P omitida (F5M_I2P_CONSOLE_PORT no configurado)"
+
+#~ msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
+#~ msgstr "La consola I2P no responde (F5M_I2P_CONSOLE_PORT: %s)"
+
+#~ msgid "I2P console is accessible (F5M_I2P_CONSOLE_PORT: %s)"
+#~ msgstr "La consola I2P está accesible (F5M_I2P_CONSOLE_PORT: %s)"
+
+#~ msgid "Install"
+#~ msgstr "Instalar"

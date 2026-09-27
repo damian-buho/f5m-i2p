@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: MIT
 msgid ""
 msgstr ""
-"Project-Id-Version: i2p 1.3.3\n"
-"Report-Msgid-Bugs-To: https://codeberg.org/f5m/i2p/issues\n"
-"POT-Creation-Date: 2026-09-07 03:46+0000\n"
+"Project-Id-Version: i2p 1.4.1-12-gcbee219\n"
+"Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
+"POT-Creation-Date: 2026-09-27 05:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,4 +101,12 @@ msgstr ""
 
 #: .container/user/command.d/generate-eepsite-key:49
 msgid "Failed to generate eepsite key"
+msgstr ""
+
+#: .container/user/test.d/2300-check-console-graph.sh:19
+msgid "Console graph is not an image (content type: %s)"
+msgstr ""
+
+#: .container/user/test.d/2300-check-console-graph.sh:23
+msgid "Console graph renders (%s)"
 msgstr ""
