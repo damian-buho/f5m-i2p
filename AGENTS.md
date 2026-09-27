@@ -40,7 +40,7 @@ I2P anonymity network router.
 
 `router.config.j2`, `i2ptunnel.config.j2`, `clients.config.j2`, `wrapper.config.j2`, `vm.options.j2`
 
-The router reads the router dir (`${B19_HOME}/.i2p`) and nothing else. `5000-start.sh` copies the base `clients.config` and `i2ptunnel.config` into it when missing, so those two templates take effect. The base `router.config` rendered from `router.config.j2` is **not** read — a key placed there has no effect, and a `router.config.d` drop-in in the router dir is ignored as well. A router setting therefore has to be written into the router dir at start (the wizard flag is) or the whole file copied there, as for the two configs above.
+The router reads the router dir (`${B19_HOME}/.i2p`) and nothing else, and it never reads `${B19_HOME}/router.config` on its own. `5000-start.sh` copies `clients.config`, `i2ptunnel.config` and `router.config` from the base into the router dir when the file is missing, which is what makes all three templates take effect — a `router.config.d` drop-in is not read. Without the copy the router creates its own config and runs on stock defaults: `router.hiddenMode`, `i2np.ipv4.firewalled`, the IPv6 keys, `i2np.upnp.enable` and `i2cp.tcp.bindAllInterfaces` were all no-ops until the restore was extended, and a container with the copy reports `Network: Hidden` where a default one reports `Network: Firewalled`. The wizard flag is seeded separately, after the copy, so it also lands on a router dir that already existed.
 
 ## Volume
 
