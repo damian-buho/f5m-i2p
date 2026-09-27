@@ -62,8 +62,16 @@ ENV B19_JAVA_XMS="128m"                                 \
     F5M_I2P_IRC_ENABLED="false"                         \
     F5M_I2P_JETTY_ENABLED="false"                       \
     F5M_I2P_POP3_ENABLED="false"                        \
+    F5M_I2P_RESEED_PRESET_ENABLED="true"                \
+    # host:port in one var, same reason as F5M_I2P_EEPSITE_TARGET above.
+    F5M_I2P_RESEED_PROXY=""                             \
+    F5M_I2P_RESEED_PROXY_ENABLED="false"                \
+    F5M_I2P_RESEED_PROXY_TYPE="HTTP"                    \
+    F5M_I2P_RESEED_URLS=""                              \
     F5M_I2P_SAM_ENABLED="false"                         \
     F5M_I2P_SMTP_ENABLED="false"                        \
+    F5M_I2P_SUBSCRIPTIONS_PRESET_ENABLED="true"         \
+    F5M_I2P_SUBSCRIPTIONS_URLS=""                       \
     F5M_I2P_UPNP="false"                                \
     I2P_CONFIG_DIR="${B19_HOME}"                        \
     PATH="/opt/python/bin:${B19_HOME}:${PATH}"

@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: MIT
 msgid ""
 msgstr ""
-"Project-Id-Version: i2p 1.4.1-16-g428372b\n"
+"Project-Id-Version: i2p development\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:15+0000\n"
+"POT-Creation-Date: 2026-09-27 17:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,59 @@ msgstr ""
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:37
 msgid "Eepsite .b32.i2p address will be available after tunnel startup"
+msgstr ""
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:11
+msgid "Keeping existing addressbook subscriptions at %s"
+msgstr ""
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:22
+msgid "Preset file %s unreadable, using only F5M_I2P_SUBSCRIPTIONS_URLS"
+msgstr ""
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:29
+msgid ""
+"No addressbook subscriptions configured, the router will use its own default"
+msgstr ""
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:35
+msgid "Seeded %s subscriptions into %s"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:22
+msgid "Preset file %s unreadable, using only F5M_I2P_RESEED_URLS"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:35
+msgid "Seeded reseed URL list with %s servers"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:37
+msgid "Keeping existing reseed URL list"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:40
+msgid "No reseed URLs configured, the router will use its built-in list"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:49
+msgid "Unknown reseed proxy type %s, falling back to HTTP"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:56
+msgid "Reseed proxy type INTERNAL ignores F5M_I2P_RESEED_PROXY"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:62
+msgid "Reseed proxy enabled but F5M_I2P_RESEED_PROXY is not host:port: %s"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:76
+msgid "Seeded reseed proxy %s via %s:%s"
+msgstr ""
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:78
+msgid "Keeping existing reseed proxy settings"
 msgstr ""
 
 #: .container/user/entrypoint.d/5000-start.sh:21
@@ -145,4 +198,44 @@ msgstr ""
 
 #: .container/user/test.d/2500-check-eepsite-tunnel.sh:33
 msgid "Eepsite tunnel is configured with an absolute key path (%s)"
+msgstr ""
+
+#: .container/user/test.d/2600-check-subscriptions.sh:14
+msgid "Addressbook subscriptions missing or empty: %s"
+msgstr ""
+
+#: .container/user/test.d/2600-check-subscriptions.sh:20
+msgid "Non-URL entries in %s: %s"
+msgstr ""
+
+#: .container/user/test.d/2600-check-subscriptions.sh:26
+msgid "Preset subscriptions must list the default source first, found: %s"
+msgstr ""
+
+#: .container/user/test.d/2600-check-subscriptions.sh:30
+msgid "Addressbook subscriptions are valid (%s)"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:15
+msgid "No i2p.reseedURL in %s"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:21
+msgid "Reseed URLs without trailing slash: %s"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:25
+msgid "Reseed URL list is valid with %s servers"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:35
+msgid "Reseed proxy type is %s, expected %s"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:39
+msgid "Reseed proxy enabled but router.reseedSSLProxyEnable is not true"
+msgstr ""
+
+#: .container/user/test.d/2700-check-reseed.sh:42
+msgid "Reseed proxy is configured as %s"
 msgstr ""

@@ -32,6 +32,14 @@ SPDX-License-Identifier: MIT
 - IPv4 firewalled detection, IPv6 disabled, and UPnP disabled by default for predictable NAT traversal.
 - JVM memory constrained to 128m--256m heap by default, configurable via environment.
 
+### Reseed and subscription presets for censored networks
+
+- Curated reseed server list ships in the image, so first boot finds peers without relying on the built-in defaults alone.
+- Curated addressbook subscriptions ship in the image, so eepsite names resolve from first boot.
+- Extra servers and subscriptions append via environment variables; each bundled preset can be switched off on its own.
+- Existing router data is never overwritten — console edits survive restarts.
+- Reseed-over-proxy (HTTP, SOCKS4/5, or the I2P outproxy) configurable via environment for firewalled networks.
+
 ## Inherited from B19 / Ubuntu
 
 ### Persistent APT cache across builds
@@ -134,7 +142,7 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 
 - The container runs as a non-root user (`ubuntu`, UID/GID 1000) with all runtime files owned by that user.
 - A two-stage build separates root-level system installation from user-level runtime setup.
-- User identity is configurable at build time.
+- User identity is configurable at build time, and an opt-in root start remaps it to the host user so bind mounts keep their ownership.
 
 ### Air-gapped / offline build and runtime support
 

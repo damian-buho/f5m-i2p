@@ -44,6 +44,16 @@ The router reads the router dir (`${B19_HOME}/.i2p`) and nothing else, and it ne
 
 A j2 tag closing with `-%}` on its own line strips the newline after itself and glues the next key onto the previous one. In `i2ptunnel.config.j2` that turned `tunnel.3.type=httpserver` into the unknown type `httpservertunnel.3.targetHost=localhost`, so the eepsite tunnel never started and the router logged the failure once at startup. `test.d/2400-check-tunnel-types.sh` asserts every type line the template declares is rendered verbatim, and `test.d/2500-check-eepsite-tunnel.sh` skips unless `F5M_I2P_EEPSITE_ENABLED=true`.
 
+`entrypoint.d` scripts are SOURCED by the harness under `set -euo pipefail`, not executed: fall off the end, never `exit` — an `exit 0` aborts the whole chain before `5000-start.sh`, so the router never starts and the container exits 0 with no error. (`test.d` scripts run as subprocesses, where `exit` is correct.)
+
+## Reseed and subscription presets
+
+- Preset files ship baked in: `${B19_HOME}/presets/subscriptions.txt` (one hosts.txt URL per line, trust order) and `${B19_HOME}/presets/reseeds.txt` (one directory URL per line, trailing slash) — mount over either path to customize without rebuilding
+- `F5M_I2P_SUBSCRIPTIONS_URLS` / `F5M_I2P_RESEED_URLS` (comma/whitespace separated) append to the preset, deduped, preset first; `F5M_I2P_SUBSCRIPTIONS_PRESET_ENABLED=false` / `F5M_I2P_RESEED_PRESET_ENABLED=false` disables the file so only the ENV list applies (empty both means the router falls back to its own defaults)
+- Seed-only-when-missing: `210-prepare-subscriptions.sh` writes `addressbook/subscriptions.txt` and `220-prepare-reseed.sh` appends `i2p.reseedURL` + proxy keys only where the file/key is absent, so console edits survive restarts; `test.d/2600-check-subscriptions.sh` + `2700-check-reseed.sh` are the guards
+- The merge lives in entrypoint scripts, not j2: minijinja renders from ENV only and cannot read preset files, so `router.config.j2` carries no reseed keys and the scripts seed both the base file (fresh volumes inherit via the `5000-start.sh` copy) and the router-dir file (existing volumes)
+- Reseed proxy is `router.reseedSSLProxy*` only (every bundled URL is HTTPS): `F5M_I2P_RESEED_PROXY_ENABLED`, `F5M_I2P_RESEED_PROXY_TYPE` (`HTTP`, `SOCKS4`, `SOCKS5`, `INTERNAL`), `F5M_I2P_RESEED_PROXY` as one `host:port` var — never a `*PORT` name, same `check-ports` reason as `F5M_I2P_EEPSITE_TARGET`; `INTERNAL` (I2P outproxy) leaves host/port blank and the router derives `localhost:4444` itself
+
 ## Volume
 
 `i2p-data` → `/app/data` — persists the eepsite identity key (`/app/data/eepsite/eepPriv.dat`) + router netDb across restarts. (`/app/bin/eepsite` is the installer’s stock skeleton and persists nothing.)

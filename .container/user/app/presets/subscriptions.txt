@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+# Default addressbook subscriptions, first line wins on name conflicts.
+http://i2p-projekt.i2p/hosts.txt
+http://stats.i2p/cgi-bin/newhosts.txt
+http://notbob.i2p/hosts.txt
+http://reg.i2p/export/hosts.txt

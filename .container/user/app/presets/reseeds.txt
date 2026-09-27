@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+# Default reseed servers, one directory URL per line with trailing slash.
+https://cubicchaos.net:8443/
+https://i2p.diyarciftci.xyz/
+https://i2p.novg.net/
+https://i2pseed.creativecowpat.net:8443/
+https://reseed-fr.i2pd.xyz/
+https://reseed.i2pgit.org/
+https://reseed-pl.i2pd.xyz/
+https://reseed.sahil.world/
+https://reseed.stormycloud.org/
+https://reseed2.i2p.net/
+https://spiral.likogan.dev/
+https://www2.mk16.de/

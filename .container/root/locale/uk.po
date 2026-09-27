@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:15+0000\n"
+"POT-Creation-Date: 2026-09-27 17:57+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Ukrainian\n"
@@ -46,6 +46,59 @@ msgstr "Призначення eepsite: %s"
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:37
 msgid "Eepsite .b32.i2p address will be available after tunnel startup"
 msgstr "Адреса .b32.i2p буде доступна після запуску тунелю"
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:11
+msgid "Keeping existing addressbook subscriptions at %s"
+msgstr "Зберігаю наявні підписки адресної книги в %s"
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:22
+msgid "Preset file %s unreadable, using only F5M_I2P_SUBSCRIPTIONS_URLS"
+msgstr "Файл пресету %s нечитабельний, використовую лише F5M_I2P_SUBSCRIPTIONS_URLS"
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:29
+msgid ""
+"No addressbook subscriptions configured, the router will use its own default"
+msgstr ""
+
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:35
+msgid "Seeded %s subscriptions into %s"
+msgstr "Засіяно підписок %s у %s"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:22
+msgid "Preset file %s unreadable, using only F5M_I2P_RESEED_URLS"
+msgstr "Файл пресету %s нечитабельний, використовую лише F5M_I2P_RESEED_URLS"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:35
+msgid "Seeded reseed URL list with %s servers"
+msgstr "Список URL ресиду засіяно, серверів: %s"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:37
+msgid "Keeping existing reseed URL list"
+msgstr "Зберігаю наявний список URL ресиду"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:40
+msgid "No reseed URLs configured, the router will use its built-in list"
+msgstr "URL ресиду не налаштовано, маршрутизатор використає вбудований список"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:49
+msgid "Unknown reseed proxy type %s, falling back to HTTP"
+msgstr "Невідомий тип проксі ресиду %s, повертаюся до HTTP"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:56
+msgid "Reseed proxy type INTERNAL ignores F5M_I2P_RESEED_PROXY"
+msgstr "Тип проксі ресиду INTERNAL ігнорує F5M_I2P_RESEED_PROXY"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:62
+msgid "Reseed proxy enabled but F5M_I2P_RESEED_PROXY is not host:port: %s"
+msgstr "Проксі ресиду ввімкнено, але F5M_I2P_RESEED_PROXY не host:port: %s"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:76
+msgid "Seeded reseed proxy %s via %s:%s"
+msgstr "Проксі ресиду засіяно %s через %s:%s"
+
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:78
+msgid "Keeping existing reseed proxy settings"
+msgstr "Зберігаю наявні налаштування проксі ресиду"
 
 #: .container/user/entrypoint.d/5000-start.sh:21
 msgid ""
@@ -157,6 +210,46 @@ msgstr "Файл ключа eepsite не є абсолютним: %s"
 #: .container/user/test.d/2500-check-eepsite-tunnel.sh:33
 msgid "Eepsite tunnel is configured with an absolute key path (%s)"
 msgstr "Тунель eepsite налаштовано з абсолютним шляхом до ключа (%s)"
+
+#: .container/user/test.d/2600-check-subscriptions.sh:14
+msgid "Addressbook subscriptions missing or empty: %s"
+msgstr "Підписки адресної книги відсутні або порожні: %s"
+
+#: .container/user/test.d/2600-check-subscriptions.sh:20
+msgid "Non-URL entries in %s: %s"
+msgstr "Не-URL записи у %s: %s"
+
+#: .container/user/test.d/2600-check-subscriptions.sh:26
+msgid "Preset subscriptions must list the default source first, found: %s"
+msgstr "Пресет підписок має містити типове джерело першим, знайдено: %s"
+
+#: .container/user/test.d/2600-check-subscriptions.sh:30
+msgid "Addressbook subscriptions are valid (%s)"
+msgstr "Підписки адресної книги чинні (%s)"
+
+#: .container/user/test.d/2700-check-reseed.sh:15
+msgid "No i2p.reseedURL in %s"
+msgstr "Немає i2p.reseedURL у %s"
+
+#: .container/user/test.d/2700-check-reseed.sh:21
+msgid "Reseed URLs without trailing slash: %s"
+msgstr "URL ресиду без кінцевого слеша: %s"
+
+#: .container/user/test.d/2700-check-reseed.sh:25
+msgid "Reseed URL list is valid with %s servers"
+msgstr "Список URL ресиду чинний, серверів: %s"
+
+#: .container/user/test.d/2700-check-reseed.sh:35
+msgid "Reseed proxy type is %s, expected %s"
+msgstr "Тип проксі ресиду %s, очікувано %s"
+
+#: .container/user/test.d/2700-check-reseed.sh:39
+msgid "Reseed proxy enabled but router.reseedSSLProxyEnable is not true"
+msgstr "Проксі ресиду ввімкнено, але router.reseedSSLProxyEnable не true"
+
+#: .container/user/test.d/2700-check-reseed.sh:42
+msgid "Reseed proxy is configured as %s"
+msgstr "Проксі ресиду налаштовано як %s"
 
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
 #~ msgstr ""

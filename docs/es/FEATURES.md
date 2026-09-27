@@ -34,6 +34,14 @@ SPDX-License-Identifier: MIT
 - Detección de IPv4 tras cortafuegos, IPv6 desactivado y UPnP desactivado por defecto para un recorrido de NAT predecible.
 - Memoria de la JVM limitada por defecto a un heap de 128m a 256m, configurable mediante el entorno.
 
+### Preajustes de reseed y suscripciones para redes censuradas
+
+- Lista curada de servidores reseed incluida en la imagen, para que el primer arranque encuentre pares sin depender solo de los valores integrados.
+- Suscripciones curadas a la libreta de direcciones incluidas en la imagen, para que los nombres de eepsites resuelvan desde el primer arranque.
+- Servidores y suscripciones extra se agregan con variables de entorno; cada preajuste incluido se puede desactivar por separado.
+- Los datos existentes del rúter nunca se sobrescriben — los cambios de la consola sobreviven a los reinicios.
+- Reseed mediante proxy (HTTP, SOCKS4/5 o el outproxy de I2P) configurable con variables de entorno para redes con cortafuegos.
+
 ## Heredado de B19 / Ubuntu
 
 ### Caché APT persistente entre compilaciones
@@ -137,7 +145,7 @@ Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de co
 
 - El contenedor se ejecuta como usuario sin privilegios de root (`ubuntu`, UID/GID 1000) con todos los archivos de runtime en propiedad de ese usuario.
 - Una compilación en dos etapas separa la instalación del sistema a nivel root de la configuración del runtime a nivel de usuario.
-- La identidad del usuario es configurable en tiempo de compilación.
+- La identidad del usuario es configurable en tiempo de compilación, y un arranque opcional como root la reasigna al usuario del host para que los montajes bind conserven su propietario.
 
 ### Soporte de compilación y runtime aislados de internet (air-gapped/offline)
 
