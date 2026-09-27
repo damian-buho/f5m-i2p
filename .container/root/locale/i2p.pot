@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: MIT
 msgid ""
 msgstr ""
-"Project-Id-Version: i2p 1.4.1-15-g350a04f\n"
+"Project-Id-Version: i2p 1.4.1-16-g428372b\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:14+0000\n"
+"POT-Creation-Date: 2026-09-27 05:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,4 +129,20 @@ msgstr ""
 
 #: .container/user/test.d/2400-check-tunnel-types.sh:23
 msgid "Every tunnel type is rendered verbatim (%s)"
+msgstr ""
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:14
+msgid "Eepsite disabled, skipping tunnel check"
+msgstr ""
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:22
+msgid "Eepsite tunnel not started yet, skipping (%s)"
+msgstr ""
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:29
+msgid "Eepsite key file is not absolute: %s"
+msgstr ""
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:33
+msgid "Eepsite tunnel is configured with an absolute key path (%s)"
 msgstr ""

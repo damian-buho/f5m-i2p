@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 05:14+0000\n"
+"POT-Creation-Date: 2026-09-27 05:15+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Spanish\n"
@@ -141,6 +141,22 @@ msgstr "El tipo de túnel no se renderiza literalmente: %s"
 #: .container/user/test.d/2400-check-tunnel-types.sh:23
 msgid "Every tunnel type is rendered verbatim (%s)"
 msgstr "Todos los tipos de túnel se renderizan literalmente (%s)"
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:14
+msgid "Eepsite disabled, skipping tunnel check"
+msgstr "Eepsite deshabilitado, se omite la comprobación del túnel"
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:22
+msgid "Eepsite tunnel not started yet, skipping (%s)"
+msgstr "El túnel del eepsite aún no ha arrancado, se omite (%s)"
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:29
+msgid "Eepsite key file is not absolute: %s"
+msgstr "El archivo de clave del eepsite no es absoluto: %s"
+
+#: .container/user/test.d/2500-check-eepsite-tunnel.sh:33
+msgid "Eepsite tunnel is configured with an absolute key path (%s)"
+msgstr "El túnel del eepsite está configurado con una ruta de clave absoluta (%s)"
 
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
 #~ msgstr ""
