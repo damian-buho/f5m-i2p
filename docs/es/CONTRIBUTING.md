@@ -9,6 +9,8 @@ pf-cli-managed: yes
 
 # Cómo contribuir a F5M / I2P
 
+[![Commit style](https://badges.kiota.ch/static/v1?label=commits&message=conventional%20v1.0.0&color=1877aa&style=flat-square)](https://www.conventionalcommits.org/es/v1.0.0/) ![Workflow](https://badges.kiota.ch/static/v1?label=workflow&message=git-flow&color=1877aa&style=flat-square) [![Versioning](https://badges.kiota.ch/static/v1?label=versioning&message=semantic%20v2.0.0&color=1877aa&style=flat-square)](https://semver.org/lang/es/) [![Citation](https://badges.kiota.ch/static/v1?label=citation&message=cff&color=1877aa&style=flat-square)](CITATION.cff)
+
 Ante todo, ¡gracias por dedicar tu tiempo a contribuir! ❤️
 
 Toda forma de contribución se agradece y se valora. Consulta la Tabla de contenidos para conocer las distintas maneras de ayudar y cómo las gestiona este proyecto. Lee la sección correspondiente antes de hacer tu aportación: nos facilitará mucho el trabajo a quienes mantenemos el proyecto y hará la experiencia más agradable para todo el mundo.

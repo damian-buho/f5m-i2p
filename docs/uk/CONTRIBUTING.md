@@ -9,6 +9,8 @@ pf-cli-managed: yes
 
 # Внесок у F5M / I2P
 
+[![Commit style](https://badges.kiota.ch/static/v1?label=commits&message=conventional%20v1.0.0&color=1877aa&style=flat-square)](https://www.conventionalcommits.org/uk/v1.0.0/) ![Workflow](https://badges.kiota.ch/static/v1?label=workflow&message=git-flow&color=1877aa&style=flat-square) [![Versioning](https://badges.kiota.ch/static/v1?label=versioning&message=semantic%20v2.0.0&color=1877aa&style=flat-square)](https://semver.org/lang/uk/) [![Citation](https://badges.kiota.ch/static/v1?label=citation&message=cff&color=1877aa&style=flat-square)](CITATION.cff)
+
 Насамперед — дякуємо, що знайшли час зробити внесок! ❤️
 
 Ми заохочуємо та цінуємо будь-які форми внеску. У Змісті описано різні способи допомогти й те, як проєкт їх опрацьовує. Будь ласка, прочитайте відповідний розділ, перш ніж робити внесок: це значно спростить роботу супровідникам і зробить процес приємнішим для всіх.
