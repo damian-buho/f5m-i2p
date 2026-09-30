@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 
 <!-- textlint-disable terminology,common-misspellings -->
 
-[English](../../ROADMAP.md) · [Español](../es/ROADMAP.md)
+[English](../ROADMAP.md) · [Español](../es/ROADMAP.md)
 
 # Дорожня карта
 
