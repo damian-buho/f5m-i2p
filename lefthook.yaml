@@ -10,12 +10,14 @@
 # when its membership does.
 ---
 pre-commit:
+  follow: true # stream each tool’s progress instead of a spinner
   commands:
     dag:
       env:
         TERM: dumb # dumb keeps Charm tools from OSC-probing the terminal
       run: make pre-commit
 pre-push:
+  follow: true # stream each tool’s progress instead of a spinner
   commands:
     dag:
       env:
