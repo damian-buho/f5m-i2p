@@ -15,6 +15,7 @@ permissions:
 env:
   M6E_TAG: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
   M6E_RUN_SCOPE: ${{ github.run_id }}-${{ github.run_attempt }}
+  PF_CLI_IMAGE: ${{ vars.PF_CLI_IMAGE || format('{0}/projectfile/cli:{1}', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho', vars.BASE_IMAGE_DEFAULT_VERSION || 'latest') }}
 jobs:
   analyze:
     runs-on: ubuntu-26.04
