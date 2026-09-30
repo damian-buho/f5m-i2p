@@ -115,6 +115,7 @@ SPDX-License-Identifier: MIT
 - Egress checks are opt-in: a container that never reaches the internet carries no check a third party can fail, while one whose job is the internet reports unhealthy the moment the outside is gone.
 - Works the same offline as online — egress checks stand down automatically under offgrid mode.
 - Adding a check is dropping a script in a directory, not writing Docker plumbing.
+- Heavy or rate-limited checks run hourly in the background, so a slow scan never times out the probe or burns a rate limit.
 
 See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot numbering, and configuration.
 
@@ -211,6 +212,15 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 - No test framework dependency — tests are plain shell scripts with exit codes.
 - Supports Jinja2 templates in tests, useful for asserting build-time values at runtime.
 - Continues on failure and reports the total count; never hides partial results.
+
+### Nothing hangs forever
+
+- Every startup, test and one-shot step has a time bound, so a wedged tool fails loudly instead of blocking a deploy or a CI run.
+- Stalled downloads are aborted, while slow ones of any size still complete.
+- A flaky call can be retried with backoff in one flag, without a hand-written loop.
+- An opt-in restart turns a service stuck unhealthy into a container the restart policy recovers.
+
+See [use-timeouts](../how-to/use-timeouts.md) for the options, defaults and overrides.
 
 ### Pre-installed utility tools
 
