@@ -17,6 +17,7 @@
 .gradle/
 .makefile/bootstrap
 .secrets/
+.worktrees/
 /build/
 /target/
 reports/
