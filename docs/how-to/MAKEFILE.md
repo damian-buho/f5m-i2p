@@ -213,7 +213,7 @@ Continuously refresh the compose service list (watch dc-ps)
 
 Validate the README’s example compose file
 
-`sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --quiet'`
+`sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --no-interpolate --quiet'`
 
 > Image: DOCKER_CLI_IMAGE
 
