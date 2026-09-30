@@ -5,7 +5,7 @@ SPDX-License-Identifier: MIT
 
 <!-- textlint-disable terminology,common-misspellings -->
 
-[English](../../FEATURES.md) · [Español](../es/FEATURES.md)
+[English](../FEATURES.md) · [Español](../es/FEATURES.md)
 
 # Можливості
 
