@@ -104,12 +104,18 @@ jobs:
       - name: dc-up-d
         if: vars.CI_SKIP_CONTAINER_IS_OK != 'true' && vars.CI_SKIP_DC_UP_D != 'true'
         run: timeout --kill-after=10s "${M6E_COMPOSE_UP_TIMEOUT:-300}s" docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml up --detach --renew-anon-volumes --no-build </dev/null
+      - name: configuration-check
+        if: vars.CI_SKIP_CONTAINER_READY_TO_TEST != 'true' && vars.CI_SKIP_CONFIGURATION_CHECK != 'true'
+        run: .makefile/container/scripts/configuration-capture.sh --check --default-lang= es uk
       - name: container-test
         if: vars.CI_SKIP_CONTAINER_READY_TO_TEST != 'true' && vars.CI_SKIP_CONTAINER_TEST != 'true'
         uses: projectfile/actions/container-exec@v1
         with:
           container: ${{ env.M6E_CONTAINER_INSTANCE }}
           run: test.d
+      - name: usage-check
+        if: vars.CI_SKIP_CONTAINER_READY_TO_TEST != 'true' && vars.CI_SKIP_USAGE_CHECK != 'true'
+        run: .makefile/container/scripts/usage-capture.sh --check --default-lang= es uk
       - name: dc-down
         if: ${{ always() }}
         run: docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml down --volumes </dev/null
@@ -511,6 +517,14 @@ jobs:
           image: ${{ vars.D9T_RUST_TOOLS_IMAGE || format('{0}/d9t/rust-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
           run: auto-zizmor
+      - name: compose-example-check
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_COMPOSE_EXAMPLE_CHECK != 'true'
+        uses: projectfile/actions/run-tool@v1
+        with:
+          image: ${{ vars.DOCKER_CLI_IMAGE || 'docker' }}
+          version: 29.8.1-cli
+          pull: missing
+          run: sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --quiet'
       - name: hadolint
         if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_HADOLINT != 'true'
         uses: projectfile/actions/run-tool@v1
