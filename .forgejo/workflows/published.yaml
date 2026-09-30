@@ -524,7 +524,7 @@ jobs:
           image: ${{ vars.DOCKER_CLI_IMAGE || 'docker' }}
           version: 29.8.1-cli
           pull: missing
-          run: sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --quiet'
+          run: sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --no-interpolate --quiet'
       - name: hadolint
         if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_HADOLINT != 'true'
         uses: projectfile/actions/run-tool@v1
