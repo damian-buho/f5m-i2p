@@ -14,6 +14,9 @@ name: audited
     - cron: "0 6 * * *"
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.sha }}
+  cancel-in-progress: false
 env:
   M6E_TAG: ${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}
   M6E_RUN_SCOPE: ${{ github.run_id }}-${{ github.run_attempt }}
@@ -46,7 +49,7 @@ jobs:
             ci-cache-grype-db-
       - name: grype-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_GRYPE_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@c3575dd4a3b40e5de7a2f7a91bb5f58d04e17945 # v1
+        uses: projectfile-org/actions/run-tool@9a9cd29c5f8bc069109db84d6da233028c4cac0f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -72,7 +75,7 @@ jobs:
             ci-cache-trivy-db-
       - name: trivy-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_TRIVY_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@c3575dd4a3b40e5de7a2f7a91bb5f58d04e17945 # v1
+        uses: projectfile-org/actions/run-tool@9a9cd29c5f8bc069109db84d6da233028c4cac0f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -122,7 +125,7 @@ jobs:
             ci-cache-grype-db-
       - name: grype-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@c3575dd4a3b40e5de7a2f7a91bb5f58d04e17945 # v1
+        uses: projectfile-org/actions/run-tool@9a9cd29c5f8bc069109db84d6da233028c4cac0f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -147,7 +150,7 @@ jobs:
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@c3575dd4a3b40e5de7a2f7a91bb5f58d04e17945 # v1
+        uses: projectfile-org/actions/run-tool@9a9cd29c5f8bc069109db84d6da233028c4cac0f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -173,7 +176,7 @@ jobs:
             ci-cache-trivy-db-
       - name: trivy-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@c3575dd4a3b40e5de7a2f7a91bb5f58d04e17945 # v1
+        uses: projectfile-org/actions/run-tool@9a9cd29c5f8bc069109db84d6da233028c4cac0f # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
