@@ -32,4 +32,5 @@ keywords:
   - router
   - censorship
   - docker
-version: 0.6.1
+version: 0.6.2
+date-released: "2026-10-01"
