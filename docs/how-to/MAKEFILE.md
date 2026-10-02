@@ -153,7 +153,7 @@ Print the fully resolved compose configuration
 
 ### `dc-diagnose`
 
-Post-mortem for a hung or failed up — image presence, container state, health, last logs
+Post-mortem of every stack container — image, state, health, last logs
 
 ### `dc-down`
 
