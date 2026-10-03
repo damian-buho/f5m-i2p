@@ -4,7 +4,7 @@
 
 ARG B19_JAVA_BASE_IMAGE=registry.invalid/b19/java:temurin-26
 ARG B19_PYTHON_SERIES=3.14
-ARG B19_PYTHON_BASE_IMAGE=registry.invalid/b19/python:${B19_PYTHON_SERIES}
+ARG B19_PYTHON_BASE_IMAGE=registry.invalid/b19/python:py${B19_PYTHON_SERIES}
 
 # Standalone python (for extract-b32-address) — copied as static binaries, same
 # pattern as b19/node. Avoids a runtime apt dependency for one helper script.
