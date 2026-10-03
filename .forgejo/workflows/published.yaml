@@ -66,6 +66,11 @@ jobs:
     needs: ["image-is-ready", "inputs-are-ok"]
     steps:
       - run: echo artifacts-are-ok
+  container-is-diagnosed:
+    runs-on: docker
+    needs: ["container-ready-to-test"]
+    steps:
+      - run: echo container-is-diagnosed
   container-is-ok:
     runs-on: docker
     needs: ["images-are-ok"]
@@ -73,7 +78,7 @@ jobs:
       - run: echo container-is-ok
   container-is-verified:
     runs-on: docker
-    needs: ["container-ready-to-test"]
+    needs: ["container-is-diagnosed"]
     env:
       M6E_IMAGE_FULLNAME: f5m/i2p:${{ vars.BASE_IMAGE_DEFAULT_VERSION || 'latest' }}-${{ github.run_id }}
       M6E_COMPOSE_PROJECT_NAME: ci-f5m-i2p-${{ github.run_id }}-${{ github.run_attempt }}
@@ -120,6 +125,9 @@ jobs:
       - name: usage-check
         if: vars.CI_SKIP_CONTAINER_READY_TO_TEST != 'true' && vars.CI_SKIP_USAGE_CHECK != 'true'
         run: .makefile/container/scripts/usage-capture.sh --check --default-lang= es uk
+      - name: dc-diagnose
+        if: ${{ always() }}
+        run: .makefile/container/scripts/compose-diagnose.sh
       - name: dc-down
         if: ${{ always() }}
         run: docker compose --project-name "$M6E_COMPOSE_PROJECT_NAME" --file .compose/pipeline.yaml down --volumes </dev/null
