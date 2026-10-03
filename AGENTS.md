@@ -16,7 +16,7 @@ I2P anonymity network router.
 - Installed via silent installer (hash-verified via `b19-fetch`)
 - Arch: amd64 only
 - Pinned version: `.container/user/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
-- Embedded python (for `extract-b32-address`): interpreter tree copied from `b19/python:3.14`; the `.makefile/b19/images/python.yaml` include composes `B19_PYTHON_BASE_IMAGE` and carries the pip-vendored (msgpack/setuptools) vulnerability suppressions the copied tree inherits
+- Embedded python (for `extract-b32-address`): interpreter tree copied from `b19/python:py3.14`; the `.makefile/b19/images/python.yaml` include composes `B19_PYTHON_BASE_IMAGE` and carries the pip-vendored (msgpack/setuptools) vulnerability suppressions the copied tree inherits
 - APT packages come from `.container/root/deps/common.apt.deps` — `install-apt` runs only where the stage user is root, and it reads no other filename, so a deps file in a `user` stage (or named anything but `*.apt.deps`) installs nothing and reports nothing
 - Console graphs need a JVM font: `fontconfig` + `fonts-dejavu-core` in that file, or `viewstat.jsp` answers 500 (`Fontconfig head is null`) while every other console page stays healthy. `test.d/2300-check-console-graph.sh` is the guard
 - Console setup wizard: the flag is `routerconsole.welcomeWizardComplete` in the router dir’s `router.config`, which the router dir loses on every recreate. `5000-start.sh` seeds it, `test.d/2200-check-console-home.sh` is the guard
