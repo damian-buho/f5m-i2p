@@ -212,7 +212,7 @@ Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de co
 
 - Los tests se ejecutan dentro del contenedor en marcha vía `make test` o `docker exec`.
 - Espera automáticamente a que pasen los healthchecks antes de ejecutar.
-- Sin dependencia de ningún framework de tests: los tests son scripts de shell simples con códigos de salida.
+- Sin dependencia de ningún framework de tests: los tests son scripts de shell simples con códigos de salida, y una comprobación fallida indica qué esperaba y qué encontró.
 - Admite plantillas Jinja2 en los tests, útil para afirmar en runtime valores fijados en compilación.
 - Continúa ante fallos e informa del recuento total; nunca oculta resultados parciales.
 

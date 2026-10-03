@@ -209,7 +209,7 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 
 - Tests run inside the running container via `make test` or `docker exec`.
 - Automatically waits for healthchecks to pass before executing.
-- No test framework dependency — tests are plain shell scripts with exit codes.
+- No test framework dependency — tests are plain shell scripts with exit codes, and a failed check names what it expected and what it found.
 - Supports Jinja2 templates in tests, useful for asserting build-time values at runtime.
 - Continues on failure and reports the total count; never hides partial results.
 
