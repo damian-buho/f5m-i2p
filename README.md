@@ -14,7 +14,7 @@ Community-maintained distribution of I2P built on B19/Java. This repository hold
 
 ![Project status](https://badges.kiota.ch/static/v1?label=status&message=maintained&color=1d63ed&style=flat-square) [![Last commit on GitHub](https://badges.kiota.ch/github/last-commit/damian-buho/f5m-i2p?label=last%20commit%20on%20GitHub&style=flat-square)](https://github.com/damian-buho/f5m-i2p) [![Last commit on kiota.ch](https://badges.kiota.ch/gitea/last-commit/f5m/i2p?gitea_url=https://kiota.ch&label=last%20commit%20on%20kiota.ch&style=flat-square)](https://kiota.ch/f5m/i2p)
 
-[![Publish pipeline on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/published.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Vulnerability audit on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/audited.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Dependency freshness on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Analysis sweep on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/analyze.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions)
+[![Publish pipeline on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/published.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Vulnerability audit on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/audited.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Dependency freshness on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions) [![Analysis sweep on GitHub](https://github.com/damian-buho/f5m-i2p/actions/workflows/analyzed.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/f5m-i2p/actions)
 
 [![Publish pipeline on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/published.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Vulnerability audit on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/audited.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Dependency freshness on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Analysis sweep on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/analyze.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions)
 
@@ -80,7 +80,7 @@ For the local dev loop, `make dev-container` brings up the dev-container.
 
 Pipeline entry points:
 
-- `make analyze` — Run the heavy analysis sweep (mutation testing, benchmarks)
+- `make analyzed` — Run the heavy analysis sweep (mutation testing, benchmarks)
 - `make audited` — Re-scan the pinned dependencies and published artifacts for new vulnerabilities
 - `make check-outdated` — Report every pinned dependency that lags upstream
 - `make ready-to-publish` — Run the pseudo-CI pipeline locally — build, test and scan, without publishing
