@@ -30,13 +30,13 @@ jobs:
     env:
       M6E_IMAGE_PUBLISHED: kiota.ch/f5m/i2p:latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           submodules: true
           persist-credentials: false
       - name: dive-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_ANALYZED != 'true' && vars.CI_SKIP_DIVE_SCAN_REGISTRY != 'true'
-        uses: projectfile/actions/run-tool@v1
+        uses: projectfile/actions/run-tool@3e3cc4774b3bdd20b645a535fa13cd638d2c1d92 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
