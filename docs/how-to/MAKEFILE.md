@@ -821,11 +821,19 @@ Lint YAML for syntax and style
 
 > Image: D9T_PYTHON_TOOLS_IMAGE
 
-### `auto-zizmor`
+### `auto-zizmor-forgejo`
+
+Audit Forgejo Actions workflows for security issues
+
+`auto-zizmor --forge forgejo`
+
+> Image: D9T_RUST_TOOLS_IMAGE
+
+### `auto-zizmor-github`
 
 Audit GitHub Actions workflows for security issues
 
-`auto-zizmor`
+`auto-zizmor --forge github`
 
 > Image: D9T_RUST_TOOLS_IMAGE
 
@@ -1211,7 +1219,7 @@ Release the next candidate of the version the commits imply, X.Y.Z-rc.N
 
 ### `release`
 
-Stamp the version the commits imply into every derived file, commit and tag it signed — `make --dry-run release` prints the plan
+Stamp the version the commits imply into every derived file, commit and tag it signed, titled NOTE with NOTE_FILE as body — `make --dry-run release` prints the plan
 
 ### `release-major`
 
@@ -1220,6 +1228,10 @@ Release the next major — the only way past 0.x
 ### `release-minor`
 
 Release the next minor, whatever the commits imply
+
+### `release-notes`
+
+Print the notes of everything committed since the last final release, changing nothing
 
 ### `release-patch`
 
