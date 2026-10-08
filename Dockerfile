@@ -27,7 +27,6 @@ ARG M6E_NAMESPACE
 ARG M6E_PROJECT
 # Stage-scoped: a global ARG must be re-declared here for the COPY path below.
 ARG B19_PYTHON_SERIES=3.14
-ARG M6E_VERSION
 ARG TARGETARCH
 
 ENV B19_JAVA_XMS="128m"                                 \
@@ -99,6 +98,7 @@ USER ${B19_UID}
 
 COPY --chown=${B19_UID}:${B19_GID} .container/user/ /
 
+ARG M6E_VERSION
 RUN --mount=type=bind,from=fetch,source=.,target=/fetch                                             \
     --mount=type=cache,target=${B19_DOWNLOAD_PATH},sharing=shared,uid=${B19_UID},gid=${B19_GID}     \
     --mount=type=tmpfs,target=${B19_TEMP_PATH}                                                      \
