@@ -38,7 +38,7 @@ jobs:
           persist-credentials: false
       - name: dive-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_ANALYZED != 'true' && vars.CI_SKIP_DIVE_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile-org/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}

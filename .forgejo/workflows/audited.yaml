@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
       - name: grype-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_GRYPE_SCAN_REGISTRY != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -51,7 +51,7 @@ jobs:
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:rw
       - name: trivy-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_TRIVY_SCAN_REGISTRY != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -86,7 +86,7 @@ jobs:
           persist-credentials: false
       - name: clamav-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_SOURCE != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -96,7 +96,7 @@ jobs:
           mounts: /app/data/ci-cache/clamav-db:/app/.cache/clamav:rw
       - name: grype-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -107,7 +107,7 @@ jobs:
           mounts: /app/data/ci-cache/grype-db:/app/.cache/grype:rw
       - name: osv-scanner-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
@@ -119,7 +119,7 @@ jobs:
           mounts: /app/data/ci-cache/osv-db:/app/.cache/osv:rw
       - name: trivy-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        uses: projectfile/actions/run-tool@643052a02d1358d0f5a078a7f434166011d36d64 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
