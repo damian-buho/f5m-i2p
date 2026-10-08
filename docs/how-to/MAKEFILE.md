@@ -1211,6 +1211,40 @@ Validate the projectfile document
 
 > Image: PF_CLI_IMAGE
 
+## Publish
+
+### `cosign-preflight`
+
+Prove the cosign signing key signs and verifies before anything is pushed
+
+`auto-cosign preflight`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `cosign-sbom-attest`
+
+Attest the SBOM to the published image with cosign
+
+`auto-cosign attest`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `cosign-sign`
+
+Sign the published image with cosign
+
+`auto-cosign sign`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
+### `syft-sbom-image`
+
+Generate an SBOM of the live built image (syft)
+
+`auto-syft image $(M6E_IMAGE_FULLNAME)`
+
+> Image: D9T_GO_TOOLS_IMAGE
+
 ## Release
 
 ### `pre-release`
