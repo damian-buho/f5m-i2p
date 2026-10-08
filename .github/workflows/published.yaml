@@ -414,6 +414,31 @@ jobs:
         if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
         with:
           name: image-${{ github.run_id }}
+      - name: restore clamav-db
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_TAR != 'true'
+        with:
+          path: ${{ runner.temp }}/ci-cache/clamav-db
+          key: ci-cache-clamav-db-
+          restore-keys: |
+            ci-cache-clamav-db-
+      - name: clamav-scan-tar
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_TAR != 'true'
+        uses: projectfile-org/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-clamav tar
+          env: |-
+            M6E_IMAGE_ARCHIVE=image-${{ github.run_id }}.tar
+            M6E_SHARED_CACHE=N
+          mounts: ${{ runner.temp }}/ci-cache/clamav-db:/app/.cache/clamav:rw
+      - name: save clamav-db
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_TAR != 'true'
+        with:
+          path: ${{ runner.temp }}/ci-cache/clamav-db
+          key: ci-cache-clamav-db-${{ github.run_id }}
       - name: restore grype-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         if: vars.CI_SKIP_IMAGE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_TAR != 'true'
@@ -631,6 +656,30 @@ jobs:
         with:
           submodules: true
           persist-credentials: false
+      - name: restore clamav-db
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_SOURCE != 'true'
+        with:
+          path: ${{ runner.temp }}/ci-cache/clamav-db
+          key: ci-cache-clamav-db-
+          restore-keys: |
+            ci-cache-clamav-db-
+      - name: clamav-scan-source
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_SOURCE != 'true'
+        uses: projectfile-org/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-clamav fs
+          env: |-
+            M6E_SHARED_CACHE=N
+          mounts: ${{ runner.temp }}/ci-cache/clamav-db:/app/.cache/clamav:rw
+      - name: save clamav-db
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5
+        if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_SOURCE != 'true'
+        with:
+          path: ${{ runner.temp }}/ci-cache/clamav-db
+          key: ci-cache-clamav-db-${{ github.run_id }}
       - name: restore grype-db
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
