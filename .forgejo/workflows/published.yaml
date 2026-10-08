@@ -178,6 +178,120 @@ jobs:
     runs-on: docker
     steps:
       - run: echo fetched
+  image-has-sbom:
+    runs-on: docker
+    needs: ["image-is-built"]
+    if: startsWith(github.ref, 'refs/tags/')
+    env:
+      M6E_IMAGE_ARCHIVE: image-${{ github.run_id }}.tar
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
+        with:
+          name: image-${{ github.run_id }}
+      - name: syft-sbom-tar
+        if: vars.CI_SKIP_IMAGE_HAS_SBOM != 'true' && vars.CI_SKIP_SYFT_SBOM_TAR != 'true'
+        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-syft image
+          env: |-
+            M6E_IMAGE_ARCHIVE=image-${{ github.run_id }}.tar
+      - uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3
+        if: vars.CI_SKIP_IMAGE_HAS_SBOM != 'true' && vars.CI_SKIP_SYFT_SBOM_TAR != 'true'
+        with:
+          name: syft-sbom-tar-${{ github.run_id }}
+          path: reports
+  image-is-attested:
+    runs-on: docker
+    needs: ["image-has-sbom", "publish-image"]
+    if: (startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/'))
+    strategy:
+      matrix:
+        M6E_PUBLISH_SINK: ["kiota", "dockerhub"]
+    env:
+      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+      DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
+      DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
+        with:
+          name: image-${{ github.run_id }}
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_HAS_SBOM != 'true' && vars.CI_SKIP_SYFT_SBOM_TAR != 'true'
+        with:
+          name: syft-sbom-tar-${{ github.run_id }}
+          path: reports
+      - name: oci-push
+        # The cell's run-time override gate, on the STEP because a job `if:` may not read the matrix context
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_PUBLISH_IMAGE != 'true' && vars.CI_SKIP_OCI_PUSH != 'true'
+        uses: projectfile/actions/oci-push@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          artifact-name: image-${{ github.run_id }}
+          image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
+          version: ${{ github.ref_name }}
+          # The branch this run is on, empty on a tag. Non-empty collapses the cascade to
+          # one `latest-<branch>` tag on the primary sink, so a branch build is testable
+          # without a tag and without moving anything a consumer floats on.
+          preview: ${{ github.ref_type == 'branch' && github.ref_name || '' }}
+          # Head templates per build kind, as org.projectfile.image.heads declares them
+          heads: |
+            release ${version} ${major}.${minor} ${major} latest
+            prerelease ${version}
+            trunk edge
+            branch latest-${branch}
+          # OUTPUT_REGISTRY: the forge-dependent PUSH target (kiota.ch / ghcr.io / …),
+          # always threaded — empty => Docker Hub. NOT the per-namespace INPUT registries
+          # (B19_DOCKER_REGISTRY & friends answer "where base images come FROM"); this
+          # answers "where THIS project publishes TO". Set per forge (org var = default,
+          # repo var = project-wise override). Ignored when `refs` below is present.
+          registry: ${{ vars.OUTPUT_REGISTRY }}
+          # Every destination this forge's route declares, each reference composed by
+          # the sink that declared it — so one archive lands under whatever path grammar
+          # each registry wants. Credentials key on the SINK name.
+          refs: |
+            kiota kiota.ch/f5m/i2p:latest
+            dockerhub docker.io/damianbuho/f5m-i2p:latest
+          # This CELL's destination, off the publish axis: the job runs one cell per
+          # place the archive goes, so a registry refusing a push fails only its own.
+          sink: ${{ matrix.M6E_PUBLISH_SINK }}
+      - name: cosign-key-file-attest
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_ATTESTED != 'true' && vars.CI_SKIP_COSIGN_KEY_FILE_ATTEST != 'true'
+        run: .makefile/b19/scripts/cosign-key-file.sh
+      - name: cosign-key-file-sign
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_SIGNED != 'true' && vars.CI_SKIP_COSIGN_KEY_FILE_SIGN != 'true'
+        run: .makefile/b19/scripts/cosign-key-file.sh
+      - name: cosign-sbom-attest
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_ATTESTED != 'true' && vars.CI_SKIP_COSIGN_SBOM_ATTEST != 'true'
+        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-cosign attest
+          env: |-
+            COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
+      - name: cosign-sign
+        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_SIGNED != 'true' && vars.CI_SKIP_COSIGN_SIGN != 'true'
+        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-cosign sign
+          env: |-
+            COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
   image-is-built:
     runs-on: docker
     needs: ["fetched", "inputs-are-ok"]
@@ -311,71 +425,9 @@ jobs:
   image-is-signed:
     runs-on: docker
     needs: ["publish-image"]
-    if: (startsWith(github.ref, 'refs/heads/') && github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/'))
-    strategy:
-      matrix:
-        M6E_PUBLISH_SINK: ["kiota", "dockerhub"]
-    env:
-      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-      COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
-      DOCKERHUB_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_REGISTRY_PASSWORD }}
-      DOCKERHUB_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_REGISTRY_USERNAME }}
-      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          submodules: true
-          persist-credentials: false
-      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
-        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
-        with:
-          name: image-${{ github.run_id }}
-      - name: oci-push
-        # The cell's run-time override gate, on the STEP because a job `if:` may not read the matrix context
-        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_PUBLISH_IMAGE != 'true' && vars.CI_SKIP_OCI_PUSH != 'true'
-        uses: projectfile/actions/oci-push@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
-        with:
-          artifact-name: image-${{ github.run_id }}
-          image: f5m/i2p:${{ env.M6E_TAG }}-${{ github.run_id }}
-          version: ${{ github.ref_name }}
-          # The branch this run is on, empty on a tag. Non-empty collapses the cascade to
-          # one `latest-<branch>` tag on the primary sink, so a branch build is testable
-          # without a tag and without moving anything a consumer floats on.
-          preview: ${{ github.ref_type == 'branch' && github.ref_name || '' }}
-          # Head templates per build kind, as org.projectfile.image.heads declares them
-          heads: |
-            release ${version} ${major}.${minor} ${major} latest
-            prerelease ${version}
-            trunk edge
-            branch latest-${branch}
-          # OUTPUT_REGISTRY: the forge-dependent PUSH target (kiota.ch / ghcr.io / …),
-          # always threaded — empty => Docker Hub. NOT the per-namespace INPUT registries
-          # (B19_DOCKER_REGISTRY & friends answer "where base images come FROM"); this
-          # answers "where THIS project publishes TO". Set per forge (org var = default,
-          # repo var = project-wise override). Ignored when `refs` below is present.
-          registry: ${{ vars.OUTPUT_REGISTRY }}
-          # Every destination this forge's route declares, each reference composed by
-          # the sink that declared it — so one archive lands under whatever path grammar
-          # each registry wants. Credentials key on the SINK name.
-          refs: |
-            kiota kiota.ch/f5m/i2p:latest
-            dockerhub docker.io/damianbuho/f5m-i2p:latest
-          # This CELL's destination, off the publish axis: the job runs one cell per
-          # place the archive goes, so a registry refusing a push fails only its own.
-          sink: ${{ matrix.M6E_PUBLISH_SINK }}
-      - name: cosign-key-file-sign
-        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_SIGNED != 'true' && vars.CI_SKIP_COSIGN_KEY_FILE_SIGN != 'true'
-        run: .makefile/b19/scripts/cosign-key-file.sh
-      - name: cosign-sign
-        if: (vars.CI_ONLY_M6E_PUBLISH_SINK == '' || contains(format(',{0},', vars.CI_ONLY_M6E_PUBLISH_SINK), format(',{0},', matrix.M6E_PUBLISH_SINK))) && vars.CI_SKIP_IMAGE_IS_SIGNED != 'true' && vars.CI_SKIP_COSIGN_SIGN != 'true'
-        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
-        with:
-          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
-          version: ${{ env.M6E_TAG }}
-          run: auto-cosign sign
-          env: |-
-            COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
+      - run: echo image-is-signed
   images-are-ok:
     runs-on: docker
     needs: ["image-is-built", "secrets-ready"]
@@ -423,7 +475,7 @@ jobs:
       - run: echo publish-image
   published:
     runs-on: docker
-    needs: ["image-is-released", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
+    needs: ["image-has-sbom", "image-is-attested", "image-is-released", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
     steps:
       - run: echo published
   ready-to-publish:
