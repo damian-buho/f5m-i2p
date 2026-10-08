@@ -362,7 +362,7 @@ jobs:
       - run: echo image-is-ready
   image-is-released:
     runs-on: docker
-    needs: ["publish-image"]
+    needs: ["image-is-seeded", "publish-image"]
     if: startsWith(github.ref, 'refs/tags/')
     env:
       FORGEJO_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
@@ -371,6 +371,11 @@ jobs:
         with:
           submodules: true
           persist-credentials: false
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        if: vars.CI_SKIP_IMAGE_IS_SEEDED != 'true' && vars.CI_SKIP_TORRENT_CREATE != 'true'
+        with:
+          name: torrent-create-${{ github.run_id }}
+          path: torrents
       - name: forgejo-release
         if: vars.CI_SKIP_IMAGE_IS_RELEASED != 'true' && vars.CI_SKIP_FORGEJO_RELEASE != 'true'
         uses: projectfile/actions/forgejo-release@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
@@ -422,6 +427,52 @@ jobs:
           name: reports-image-is-secure-${{ github.run_id }}
           path: reports/
           if-no-files-found: warn
+  image-is-seeded:
+    runs-on: docker
+    needs: ["image-is-built"]
+    if: startsWith(github.ref, 'refs/tags/')
+    env:
+      M6E_TORRENT_TRACKERS: https://tracker.kiota.ch/announce udp://tracker.kiota.ch:6969 wss://tracker.kiota.ch
+      M6E_IMAGE_ARCHIVE: image-${{ github.run_id }}.tar
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # v3
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
+        with:
+          name: image-${{ github.run_id }}
+      - name: torrent-create
+        if: vars.CI_SKIP_IMAGE_IS_SEEDED != 'true' && vars.CI_SKIP_TORRENT_CREATE != 'true'
+        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.R8E_RQBIT_IMAGE || format('{0}/r8e/rqbit', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: .makefile/core/scripts/torrent.sh create
+          env: |-
+            M6E_TORRENT_TRACKERS=https://tracker.kiota.ch/announce udp://tracker.kiota.ch:6969 wss://tracker.kiota.ch
+            M6E_IMAGE_ARCHIVE=image-${{ github.run_id }}.tar
+            GITHUB_REF_NAME
+            GITHUB_REPOSITORY
+            GITHUB_SERVER_URL
+      - uses: actions/upload-artifact@ff15f0306b3f739f7b6fd43fb5d26cd321bd4de5 # v3
+        if: vars.CI_SKIP_IMAGE_IS_SEEDED != 'true' && vars.CI_SKIP_TORRENT_CREATE != 'true'
+        with:
+          name: torrent-create-${{ github.run_id }}
+          path: torrents
+      - name: torrent-seed
+        if: vars.CI_SKIP_IMAGE_IS_SEEDED != 'true' && vars.CI_SKIP_TORRENT_SEED != 'true'
+        uses: projectfile/actions/run-tool@a6b99b0a61942c764e9c40e6c7089737675eda8e # v1
+        with:
+          image: ${{ vars.R8E_RQBIT_IMAGE || format('{0}/r8e/rqbit', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: .makefile/core/scripts/torrent.sh seed
+          env: |-
+            M6E_IMAGE_ARCHIVE=image-${{ github.run_id }}.tar
+            GITHUB_REF_NAME
+            GITHUB_REPOSITORY
+          mounts: /app/data/ci-cache/rqbit-seed:/seed:rw
   image-is-signed:
     runs-on: docker
     needs: ["publish-image"]
@@ -475,7 +526,7 @@ jobs:
       - run: echo publish-image
   published:
     runs-on: docker
-    needs: ["image-has-sbom", "image-is-attested", "image-is-released", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
+    needs: ["image-has-sbom", "image-is-attested", "image-is-released", "image-is-seeded", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
     steps:
       - run: echo published
   ready-to-publish:

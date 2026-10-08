@@ -378,19 +378,24 @@ jobs:
       - run: echo image-is-ready
   image-is-released:
     runs-on: ubuntu-26.04
-    needs: ["publish-image"]
+    needs: ["image-is-seeded", "publish-image"]
     permissions:
       contents: write
     if: startsWith(github.ref, 'refs/tags/')
     env:
       RELEASE_TAG: ${{ github.ref_name }}
       RELEASE_URL: ${{ github.server_url }}/${{ github.repository }}/blob/${{ github.ref_name }}
+      M6E_IMAGE_ARCHIVE: image-${{ github.run_id }}.tar
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           submodules: true
           persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        if: vars.CI_SKIP_IMAGE_IS_BUILT != 'true' && vars.CI_SKIP_CONTAINER_BUILD != 'true'
+        with:
+          name: image-${{ github.run_id }}
       - name: gh-release
         if: vars.CI_SKIP_IMAGE_IS_RELEASED != 'true' && vars.CI_SKIP_GH_RELEASE != 'true'
         run: .makefile/core/scripts/gh-release.sh "$RELEASE_TAG"
@@ -469,6 +474,12 @@ jobs:
           path: reports/
           if-no-files-found: warn
           overwrite: true
+  image-is-seeded:
+    runs-on: ubuntu-26.04
+    needs: ["image-is-built"]
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - run: echo image-is-seeded
   image-is-signed:
     runs-on: ubuntu-26.04
     needs: ["publish-image"]
@@ -522,7 +533,7 @@ jobs:
       - run: echo publish-image
   published:
     runs-on: ubuntu-26.04
-    needs: ["image-has-sbom", "image-is-attested", "image-is-released", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
+    needs: ["image-has-sbom", "image-is-attested", "image-is-released", "image-is-seeded", "image-is-signed", "publish-image", "ready-to-publish", "release-notes-are-published"]
     steps:
       - run: echo published
   ready-to-publish:
