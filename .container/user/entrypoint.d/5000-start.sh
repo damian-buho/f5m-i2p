@@ -40,7 +40,7 @@
     # “No client apps or router console configured — we are just a router” and
     # healthcheck never passed), the router stays headless or ignores the template
     # settings. Ensure they exist before start.
-    for _cfg in clients.config i2ptunnel.config router.config; do
+    for _cfg in clients.config hosts.txt i2ptunnel.config router.config; do
       if [ ! -f "${I2P_DOT_DIR}/${_cfg}" ] && [ -f "${B19_HOME}/${_cfg}" ]; then
         b19-log info "I2P" "$(_p "Restoring missing %s to user dir" "${_cfg}")"
         cp "${B19_HOME}/${_cfg}" "${I2P_DOT_DIR}/${_cfg}" 2>/dev/null || true

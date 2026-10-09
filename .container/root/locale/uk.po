@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-10-09 18:09+0000\n"
+"POT-Creation-Date: 2026-10-09 21:28+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Ukrainian\n"
@@ -14,7 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
 #: .container/compile-java/build.d/compile-java/post/500-install-i2p.sh:11
 msgid "Preparing response file"
@@ -35,7 +36,9 @@ msgstr "Завантаження ідентифікації eepsite з секр�
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:24
 msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
-msgstr "Ідентичності eepsite в %s немає, I2P згенерує її під час першого запуску тунелю"
+msgstr ""
+"Ідентичності eepsite в %s немає, I2P згенерує її під час першого запуску "
+"тунелю"
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:30
 msgid "Existing eepsite identity found at %s"
@@ -55,11 +58,14 @@ msgstr "Зберігаю наявні підписки адресної книг
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:22
 msgid "Preset file %s unreadable, using only F5M_I2P_SUBSCRIPTIONS_URLS"
-msgstr "Файл пресету %s нечитабельний, використовую лише F5M_I2P_SUBSCRIPTIONS_URLS"
+msgstr ""
+"Файл пресету %s нечитабельний, використовую лише F5M_I2P_SUBSCRIPTIONS_URLS"
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:29
-msgid "No addressbook subscriptions configured, the router will use its own default"
-msgstr "Підписки адресної книги не налаштовано, роутер використає власні типові"
+msgid ""
+"No addressbook subscriptions configured, the router will use its own default"
+msgstr ""
+"Підписки адресної книги не налаштовано, роутер використає власні типові"
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:34
 msgid "Seeded %s subscriptions into %s"
@@ -102,12 +108,20 @@ msgid "Keeping existing reseed proxy settings"
 msgstr "Зберігаю наявні налаштування проксі ресиду"
 
 #: .container/user/entrypoint.d/5000-start.sh:21
-msgid "Directory %s not writable (owner %s) — wrapper will fail with Permission denied"
-msgstr "Каталог %s недоступний для запису (власник %s) — wrapper завершиться з Permission denied"
+msgid ""
+"Directory %s not writable (owner %s) — wrapper will fail with Permission "
+"denied"
+msgstr ""
+"Каталог %s недоступний для запису (власник %s) — wrapper завершиться з "
+"Permission denied"
 
 #: .container/user/entrypoint.d/5000-start.sh:22
-msgid "Attempting to fix permissions via chmod — if this fails, run once as root: docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
-msgstr "Спроба виправити права через chmod — якщо не вдасться, виконай як root: docker run --rm -v <том>:/vol alpine chown 1000:1000 /vol"
+msgid ""
+"Attempting to fix permissions via chmod — if this fails, run once as root: "
+"docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
+msgstr ""
+"Спроба виправити права через chmod — якщо не вдасться, виконай як root: "
+"docker run --rm -v <том>:/vol alpine chown 1000:1000 /vol"
 
 #: .container/user/entrypoint.d/5000-start.sh:30
 msgid "Still not writable: %s — aborting, fix the volume ownership"
@@ -241,8 +255,17 @@ msgstr "Проксі ресиду ввімкнено, але router.reseedSSLPro
 msgid "Reseed proxy is configured as %s"
 msgstr "Проксі ресиду налаштовано як %s"
 
+#: .container/user/test.d/2800-check-hosts.sh:15
+msgid "Bundled hosts missing from the router dir: %s"
+msgstr "Вбудованих хостів немає в каталозі маршрутизатора: %s"
+
+#: .container/user/test.d/2800-check-hosts.sh:18
+msgid "Bundled hosts are in the router dir (%s)"
+msgstr "Вбудовані хости є в каталозі маршрутизатора (%s)"
+
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
-#~ msgstr "Перевірку консолі I2P пропущено (F5M_I2P_CONSOLE_PORT не налаштовано)"
+#~ msgstr ""
+#~ "Перевірку консолі I2P пропущено (F5M_I2P_CONSOLE_PORT не налаштовано)"
 
 #~ msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
 #~ msgstr "Консоль I2P не відповідає (F5M_I2P_CONSOLE_PORT: %s)"

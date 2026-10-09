@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: MIT
 msgid ""
 msgstr ""
-"Project-Id-Version: i2p development\n"
+"Project-Id-Version: i2p 0.8.0\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-10-09 18:09+0000\n"
+"POT-Creation-Date: 2026-10-09 21:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -243,4 +243,12 @@ msgstr ""
 
 #: .container/user/test.d/2700-check-reseed.sh:42
 msgid "Reseed proxy is configured as %s"
+msgstr ""
+
+#: .container/user/test.d/2800-check-hosts.sh:15
+msgid "Bundled hosts missing from the router dir: %s"
+msgstr ""
+
+#: .container/user/test.d/2800-check-hosts.sh:18
+msgid "Bundled hosts are in the router dir (%s)"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-10-09 18:09+0000\n"
+"POT-Creation-Date: 2026-10-09 21:28+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Spanish\n"
@@ -35,7 +35,9 @@ msgstr "Cargando identidad eepsite desde secreto %s"
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:24
 msgid "No eepsite identity at %s, I2P will generate on first tunnel start"
-msgstr "No hay identidad del eepsite en %s, I2P la generará en el primer inicio del túnel"
+msgstr ""
+"No hay identidad del eepsite en %s, I2P la generará en el primer inicio del "
+"túnel"
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:30
 msgid "Existing eepsite identity found at %s"
@@ -55,11 +57,15 @@ msgstr "Manteniendo las suscripciones existentes en %s"
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:22
 msgid "Preset file %s unreadable, using only F5M_I2P_SUBSCRIPTIONS_URLS"
-msgstr "Archivo de preajuste %s ilegible, usando solo F5M_I2P_SUBSCRIPTIONS_URLS"
+msgstr ""
+"Archivo de preajuste %s ilegible, usando solo F5M_I2P_SUBSCRIPTIONS_URLS"
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:29
-msgid "No addressbook subscriptions configured, the router will use its own default"
-msgstr "No hay suscripciones de libreta de direcciones configuradas, el router usará su valor predeterminado"
+msgid ""
+"No addressbook subscriptions configured, the router will use its own default"
+msgstr ""
+"No hay suscripciones de libreta de direcciones configuradas, el router usará "
+"su valor predeterminado"
 
 #: .container/user/entrypoint.d/210-prepare-subscriptions.sh:34
 msgid "Seeded %s subscriptions into %s"
@@ -91,7 +97,8 @@ msgstr "El tipo de proxy de reseed INTERNAL ignora F5M_I2P_RESEED_PROXY"
 
 #: .container/user/entrypoint.d/220-prepare-reseed.sh:62
 msgid "Reseed proxy enabled but F5M_I2P_RESEED_PROXY is not host:port: %s"
-msgstr "Proxy de reseed activado pero F5M_I2P_RESEED_PROXY no es host:puerto: %s"
+msgstr ""
+"Proxy de reseed activado pero F5M_I2P_RESEED_PROXY no es host:puerto: %s"
 
 #: .container/user/entrypoint.d/220-prepare-reseed.sh:78
 msgid "Seeded reseed proxy %s via %s:%s"
@@ -102,16 +109,25 @@ msgid "Keeping existing reseed proxy settings"
 msgstr "Manteniendo la configuración existente del proxy de reseed"
 
 #: .container/user/entrypoint.d/5000-start.sh:21
-msgid "Directory %s not writable (owner %s) — wrapper will fail with Permission denied"
-msgstr "Directorio %s no escribible (propietario %s) — wrapper fallará con Permission denied"
+msgid ""
+"Directory %s not writable (owner %s) — wrapper will fail with Permission "
+"denied"
+msgstr ""
+"Directorio %s no escribible (propietario %s) — wrapper fallará con "
+"Permission denied"
 
 #: .container/user/entrypoint.d/5000-start.sh:22
-msgid "Attempting to fix permissions via chmod — if this fails, run once as root: docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
-msgstr "Intentando corregir permisos via chmod — si falla, ejecuta una vez como root: docker run --rm -v <volumen>:/vol alpine chown 1000:1000 /vol"
+msgid ""
+"Attempting to fix permissions via chmod — if this fails, run once as root: "
+"docker run --rm -v <volume>:/vol alpine chown 1000:1000 /vol"
+msgstr ""
+"Intentando corregir permisos via chmod — si falla, ejecuta una vez como "
+"root: docker run --rm -v <volumen>:/vol alpine chown 1000:1000 /vol"
 
 #: .container/user/entrypoint.d/5000-start.sh:30
 msgid "Still not writable: %s — aborting, fix the volume ownership"
-msgstr "Sigue sin ser escribible: %s — abortando, corrige la propiedad del volumen"
+msgstr ""
+"Sigue sin ser escribible: %s — abortando, corrige la propiedad del volumen"
 
 #: .container/user/entrypoint.d/5000-start.sh:33
 msgid "Recovered writability on %s"
@@ -199,7 +215,8 @@ msgstr "El archivo de clave del eepsite no es absoluto: %s"
 
 #: .container/user/test.d/2500-check-eepsite-tunnel.sh:33
 msgid "Eepsite tunnel is configured with an absolute key path (%s)"
-msgstr "El túnel del eepsite está configurado con una ruta de clave absoluta (%s)"
+msgstr ""
+"El túnel del eepsite está configurado con una ruta de clave absoluta (%s)"
 
 #: .container/user/test.d/2600-check-subscriptions.sh:14
 msgid "Addressbook subscriptions missing or empty: %s"
@@ -211,7 +228,9 @@ msgstr "Entradas no URL en %s: %s"
 
 #: .container/user/test.d/2600-check-subscriptions.sh:26
 msgid "Preset subscriptions must list the default source first, found: %s"
-msgstr "Las suscripciones del preajuste deben listar primero la fuente por defecto, encontrado: %s"
+msgstr ""
+"Las suscripciones del preajuste deben listar primero la fuente por defecto, "
+"encontrado: %s"
 
 #: .container/user/test.d/2600-check-subscriptions.sh:30
 msgid "Addressbook subscriptions are valid (%s)"
@@ -241,8 +260,17 @@ msgstr "Proxy de reseed activado pero router.reseedSSLProxyEnable no es true"
 msgid "Reseed proxy is configured as %s"
 msgstr "Proxy de reseed configurado como %s"
 
+#: .container/user/test.d/2800-check-hosts.sh:15
+msgid "Bundled hosts missing from the router dir: %s"
+msgstr "Faltan los hosts incluidos en el directorio del router: %s"
+
+#: .container/user/test.d/2800-check-hosts.sh:18
+msgid "Bundled hosts are in the router dir (%s)"
+msgstr "Los hosts incluidos están en el directorio del router (%s)"
+
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
-#~ msgstr "Verificación de consola I2P omitida (F5M_I2P_CONSOLE_PORT no configurado)"
+#~ msgstr ""
+#~ "Verificación de consola I2P omitida (F5M_I2P_CONSOLE_PORT no configurado)"
 
 #~ msgid "I2P console not responding (F5M_I2P_CONSOLE_PORT: %s)"
 #~ msgstr "La consola I2P no responde (F5M_I2P_CONSOLE_PORT: %s)"
