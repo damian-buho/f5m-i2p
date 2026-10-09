@@ -20,7 +20,6 @@ identity:
 includes:
   - .makefile/b19/ci.yaml
   - .makefile/b19/images/java.yaml
-  - .makefile/b19/images/python.yaml
   - .makefile/b19/traits/attested-images.yaml
   - .makefile/b19/traits/signed-images.yaml
   - .makefile/b19/traits/torrent-image.yaml

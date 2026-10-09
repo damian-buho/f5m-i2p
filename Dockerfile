@@ -3,12 +3,6 @@
 # SPDX-License-Identifier: MIT
 
 ARG B19_JAVA_BASE_IMAGE=registry.invalid/b19/java:temurin-26
-ARG B19_PYTHON_SERIES=3.14
-ARG B19_PYTHON_BASE_IMAGE=registry.invalid/b19/python:py${B19_PYTHON_SERIES}
-
-# Standalone python (for extract-b32-address) — copied as static binaries, same
-# pattern as b19/node. Avoids a runtime apt dependency for one helper script.
-FROM ${B19_PYTHON_BASE_IMAGE} AS b19-python-source
 
 FROM ${B19_JAVA_BASE_IMAGE} AS b19-proxy-i2p
 
@@ -25,8 +19,6 @@ ARG M6E_BUILD_DEBUG=""
 ARG M6E_NEAR_CACHE_HOST=""
 ARG M6E_NAMESPACE
 ARG M6E_PROJECT
-# Stage-scoped: a global ARG must be re-declared here for the COPY path below.
-ARG B19_PYTHON_SERIES=3.14
 ARG TARGETARCH
 
 ENV B19_JAVA_XMS="128m"                                 \
@@ -73,16 +65,11 @@ ENV B19_JAVA_XMS="128m"                                 \
     F5M_I2P_SUBSCRIPTIONS_URLS=""                       \
     F5M_I2P_UPNP="false"                                \
     I2P_CONFIG_DIR="${B19_HOME}"                        \
-    PATH="/opt/python/bin:${B19_HOME}:${PATH}"
+    PATH="${B19_HOME}:${PATH}"
 
 USER 0
 
 WORKDIR ${B19_HOME}
-
-# Python for extract-b32-address (eepsite .b32.i2p derivation). Copied, not
-# installed — same approach as b19/node.
-COPY --from=b19-python-source /usr/local/bin/python3*                              /opt/python/bin/
-COPY --from=b19-python-source /usr/local/lib/python${B19_PYTHON_SERIES}/           /opt/python/lib/python${B19_PYTHON_SERIES}/
 
 COPY --chown=${B19_UID}:${B19_GID} .container/root/ /
 
