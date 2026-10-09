@@ -2,9 +2,47 @@
 #
 # SPDX-License-Identifier: MIT
 
-ARG B19_JAVA_BASE_IMAGE=registry.invalid/b19/java:temurin-26
+ARG B19_JAVA_IMAGE=registry.invalid/b19/java:temurin-26
+ARG B19_UBUNTU_BASE_IMAGE=registry.invalid/b19/ubuntu:resolute
 
-FROM ${B19_JAVA_BASE_IMAGE} AS b19-proxy-i2p
+FROM ${B19_JAVA_IMAGE} AS f5m-i2p-compile-java
+
+ARG B19_COLOR
+ARG B19_FETCH_DOCKER_CACHE
+ARG B19_FETCH_LOCAL_CACHE
+ARG B19_OFFGRID_MODE
+ARG B19_VERBOSITY
+ARG LANG=""
+ARG M6E_AI=N
+ARG M6E_APT_CACHE_HOST=""
+ARG M6E_APT_CACHE_PORT=""
+ARG M6E_BUILD_DEBUG=""
+ARG M6E_NEAR_CACHE_HOST=""
+ARG M6E_NAMESPACE
+ARG M6E_PROJECT
+ARG TARGETARCH
+
+COPY --chown=${B19_UID}:${B19_GID} .container/compile-java/ /
+
+# hadolint ignore=DL3066 # B19_UID comes from the root
+USER ${B19_UID}
+
+WORKDIR ${B19_HOME}
+
+RUN --mount=type=bind,from=fetch,source=.,target=/fetch                                             \
+    --mount=type=cache,target=${B19_DOWNLOAD_PATH},sharing=shared,uid=${B19_UID},gid=${B19_GID}     \
+    --mount=type=tmpfs,target=${B19_TEMP_PATH}                                                      \
+    build-stage compile-java
+
+USER 0
+
+RUN --mount=type=tmpfs,target=${B19_TEMP_PATH}                                                      \
+    build-stage export
+
+# hadolint ignore=DL3066 # B19_UID comes from the root
+USER ${B19_UID}
+
+FROM ${B19_UBUNTU_BASE_IMAGE} AS b19-proxy-i2p
 
 ARG B19_COLOR
 ARG B19_FETCH_DOCKER_CACHE
@@ -71,6 +109,7 @@ USER 0
 
 WORKDIR ${B19_HOME}
 
+COPY --from=f5m-i2p-compile-java /export/ /
 COPY --chown=${B19_UID}:${B19_GID} .container/root/ /
 
 RUN --mount=type=bind,from=fetch,source=.,target=/fetch                                           \

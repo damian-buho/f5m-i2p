@@ -6,6 +6,5 @@
 
   set -o pipefail
 
-  cd "${TMPDIR}" || exit 1
-  jar --file "${B19_HOME}/lib/router.jar"  --extract META-INF/MANIFEST.MF
-  grep "Implementation-Version" META-INF/MANIFEST.MF | grep -oP "\d+.\d+.\d+"
+  # I2P’s own version class: the slim runtime has no jar tool to read the manifest
+  java -cp "${B19_HOME}/lib/router.jar:${B19_HOME}/lib/i2p.jar" net.i2p.router.RouterVersion | grep '^I2P Core version' | grep -oP '\d+\.\d+\.\d+'

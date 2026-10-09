@@ -6,16 +6,19 @@ SPDX-License-Identifier: MIT
 
 # f5m/i2p
 
-Docker image built on [b19/Java](../../b19/java/AGENTS.md)
+Docker image built on [b19/Ubuntu](../../b19/ubuntu/AGENTS.md), with a slim Java runtime from [b19/Java](../../b19/java/AGENTS.md)
 
 I2P anonymity network router.
 
 ## Key facts
 
-- Base: `b19/java:temurin-26` (`B19_JAVA_DISTRO=temurin`, `B19_JAVA_SERIES=26`, pinned in this projectfile’s `org.projectfile.build.args` — the base document wins over both include fragments)
+- Stages: `compile-java` (`FROM b19/java:temurin-26`) runs the silent installer as uid 1000, then `build-stage export` as root; the final stage is `FROM b19/ubuntu` and copies `/export`. `B19_JAVA_DISTRO=temurin`, `B19_JAVA_SERIES=26` are pinned in this projectfile’s `org.projectfile.build.args`
+- `B19_JAVA_IMAGE` (no `_BASE_`: a copy edge, since the final image carries no `b19/java` layer) is declared in this projectfile’s `org.projectfile.images`; it belongs in `m6e/b19/images/java.yaml` once a second project exports from `b19/java`
+- The runtime has no `jar` or `javac`: `get-i2p-version` asks I2P’s own `net.i2p.router.RouterVersion`. `java.desktop` (console graphs) and `jdk.localedata` are most of its 90 MB of modules
+- `500-export-i2p.sh` copies every top-level entry of `${B19_HOME}` except `.i2p`, `jmx-exporter` and the installer’s `response.txt*`, plus `/deps/i2p/version.deps`
 - Installed via silent installer (hash-verified via `b19-fetch`)
 - Arch: amd64 only
-- Pinned version: `.container/user/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
+- Pinned version: `.container/compile-java/deps/i2p/version.deps` (hash-verified via `b19-fetch`)
 - No python: `extract-b32-address` uses I2P’s own `PrivateKeyFile` only. The copied interpreter tree was 263 MB (161 MB of it `test/` archive fixtures) and its nested archives tripped ClamAV `MaxRecursion` on the image tar — do not re-add one
 - APT packages come from `.container/root/deps/common.apt.deps` — `install-apt` runs only where the stage user is root, and it reads no other filename, so a deps file in a `user` stage (or named anything but `*.apt.deps`) installs nothing and reports nothing
 - Console graphs need a JVM font: `fontconfig` + `fonts-dejavu-core` in that file, or `viewstat.jsp` answers 500 (`Fontconfig head is null`) while every other console page stays healthy. `test.d/2300-check-console-graph.sh` is the guard

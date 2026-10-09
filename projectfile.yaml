@@ -19,7 +19,7 @@ identity:
   released: "2026-10-08"
 includes:
   - .makefile/b19/ci.yaml
-  - .makefile/b19/images/java.yaml
+  - .makefile/b19/images/ubuntu.yaml
   - .makefile/b19/traits/attested-images.yaml
   - .makefile/b19/traits/signed-images.yaml
   - .makefile/b19/traits/torrent-image.yaml
@@ -84,6 +84,7 @@ org:
     build:
       args:
         B19_JAVA_DISTRO: temurin
+        B19_JAVA_IMAGE: ""
         B19_JAVA_SERIES: "26"
     ci:
       secrets:
@@ -91,6 +92,17 @@ org:
           docker:
             image: self
             run: generate-eepsite-key
+    images:
+      B19_JAVA_IMAGE:
+        org: b19
+        name: java
+        distro: $${B19_JAVA_DISTRO}
+        series: $${B19_JAVA_SERIES}
+        path: ${org}/${name}
+        flatpath: ${org}-${name}
+        tag: $${M6E_BASE_IMAGE_VARIANT_PREFIX}${distro}-${series}
+        registry: B19_DOCKER_REGISTRY
+        ref: $${B19_DOCKER_REGISTRY}/${path}:${tag}
     conventions:
       fragments:
         parents:
