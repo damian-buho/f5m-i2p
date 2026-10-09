@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: f5m-i2p\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-10-09 21:28+0000\n"
+"POT-Creation-Date: 2026-10-09 21:40+0000\n"
 "PO-Revision-Date: 2026-02-18 00:00+0000\n"
 "Last-Translator: b19 team\n"
 "Language-Team: Ukrainian\n"
@@ -262,6 +262,14 @@ msgstr "Вбудованих хостів немає в каталозі мар�
 #: .container/user/test.d/2800-check-hosts.sh:18
 msgid "Bundled hosts are in the router dir (%s)"
 msgstr "Вбудовані хости є в каталозі маршрутизатора (%s)"
+
+#: .container/user/test.d/2900-check-reseed-signer.sh:15
+msgid "Reseed signer certificate missing: %s"
+msgstr "Немає сертифіката підписувача ресиду: %s"
+
+#: .container/user/test.d/2900-check-reseed-signer.sh:18
+msgid "Reseed signer certificate ships (%s)"
+msgstr "Сертифікат підписувача ресиду постачається (%s)"
 
 #~ msgid "I2P console check skipped (F5M_I2P_CONSOLE_PORT not configured)"
 #~ msgstr ""
