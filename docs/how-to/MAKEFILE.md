@@ -653,6 +653,10 @@ List local Docker images matching this project
 
 Remove the locally built Docker image
 
+### `image-warm`
+
+Pre-pull the base, tool and frontend images the projectfile names, so a later build runs offline
+
 ### `usage-check`
 
 Verify the committed --help captures in docs/usage.d match the built image
