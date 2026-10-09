@@ -2,10 +2,10 @@
 #
 # SPDX-License-Identifier: MIT
 
-ARG B19_JAVA_IMAGE=registry.invalid/b19/java:temurin-26
+ARG B19_JAVA_BUILD_IMAGE=registry.invalid/b19/java:temurin-26
 ARG B19_UBUNTU_BASE_IMAGE=registry.invalid/b19/ubuntu:resolute
 
-FROM ${B19_JAVA_IMAGE} AS f5m-i2p-compile-java
+FROM ${B19_JAVA_BUILD_IMAGE} AS f5m-i2p-compile-java
 
 ARG B19_COLOR
 ARG B19_FETCH_DOCKER_CACHE
