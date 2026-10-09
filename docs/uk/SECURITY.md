@@ -71,6 +71,7 @@ F5M / I2P наразі не має програми винагород за вр
 | ID | Причина |
 | --- | --- |
 | CVE-2026-10050 | unfixable upstream dependency; fixable only via upstream release |
+| GHSA-2fvj-hgj9-j2gr | unfixable upstream dependency; fixable only via upstream release |
 | CVE-2026-1605 | unfixable upstream dependency; fixable only via upstream release |
 | CVE-2026-2332 | unfixable upstream dependency; fixable only via upstream release |
 | GHSA-355h-qmc2-wpwf | unfixable upstream dependency; fixable only via upstream release |
