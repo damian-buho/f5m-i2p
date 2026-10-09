@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: i2p development\n"
 "Report-Msgid-Bugs-To: https://github.com/damian-buho/f5m-i2p/issues\n"
-"POT-Creation-Date: 2026-09-27 17:57+0000\n"
+"POT-Creation-Date: 2026-10-09 18:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .container/user/build.d/user/post/500-install-i2p.sh:11
+#: .container/compile-java/build.d/compile-java/post/500-install-i2p.sh:11
 msgid "Preparing response file"
+msgstr ""
+
+#: .container/compile-java/build.d/export/post/500-export-i2p.sh:9
+#: .container/compile-java/build.d/export/post/500-export-i2p.sh:12
+msgid "Export %s"
 msgstr ""
 
 #: .container/user/entrypoint.d/200-prepare-eepsite.sh:11
@@ -43,7 +48,7 @@ msgstr ""
 msgid "Eepsite .b32.i2p address will be available after tunnel startup"
 msgstr ""
 
-#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:11
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:12
 msgid "Keeping existing addressbook subscriptions at %s"
 msgstr ""
 
@@ -56,27 +61,27 @@ msgid ""
 "No addressbook subscriptions configured, the router will use its own default"
 msgstr ""
 
-#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:35
+#: .container/user/entrypoint.d/210-prepare-subscriptions.sh:34
 msgid "Seeded %s subscriptions into %s"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:22
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:23
 msgid "Preset file %s unreadable, using only F5M_I2P_RESEED_URLS"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:35
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:36
 msgid "Seeded reseed URL list with %s servers"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:37
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:38
 msgid "Keeping existing reseed URL list"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:40
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:41
 msgid "No reseed URLs configured, the router will use its built-in list"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:49
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:48
 msgid "Unknown reseed proxy type %s, falling back to HTTP"
 msgstr ""
 
@@ -88,11 +93,11 @@ msgstr ""
 msgid "Reseed proxy enabled but F5M_I2P_RESEED_PROXY is not host:port: %s"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:76
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:78
 msgid "Seeded reseed proxy %s via %s:%s"
 msgstr ""
 
-#: .container/user/entrypoint.d/220-prepare-reseed.sh:78
+#: .container/user/entrypoint.d/220-prepare-reseed.sh:80
 msgid "Keeping existing reseed proxy settings"
 msgstr ""
 
