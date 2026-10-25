@@ -9,6 +9,8 @@
 ---
 name: audited
 "on":
+  push:
+    branches: ["**"]
   workflow_dispatch:
   schedule:
     - cron: "0 6 * * *"
@@ -22,7 +24,7 @@ env:
 jobs:
   audited:
     runs-on: docker
-    needs: ["image-is-audited", "source-is-secure"]
+    needs: ["image-is-audited", "runner-is-ready", "signing-is-ready", "source-is-secure"]
     if: ${{ always() && ((github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')) }}
     steps:
       - name: audited verdict
@@ -30,6 +32,8 @@ jobs:
           passed=0 skipped=0 failed=0
           for pair in \
             "image-is-audited=${{ needs.image-is-audited.result }}" \
+            "runner-is-ready=${{ needs.runner-is-ready.result }}" \
+            "signing-is-ready=${{ needs.signing-is-ready.result }}" \
             "source-is-secure=${{ needs.source-is-secure.result }}"; do
             echo "verdict need=${pair%%=*} result=${pair#*=}"
             case "${pair#*=}" in
@@ -89,8 +93,65 @@ jobs:
           path: reports/
           if-no-files-found: warn
           overwrite: true
+  runner-is-ready:
+    runs-on: docker
+    env:
+      PREFLIGHT_MIN_FREE_GIB: 10
+      PREFLIGHT_HOSTS: ${{ vars.M6E_APT_CACHE_HOST }}:${{ vars.M6E_APT_CACHE_PORT }}:3142 ${{ vars.M6E_NEAR_CACHE_HOST }}:${{ vars.M6E_NEAR_CACHE_PORT }}:443
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+          persist-credentials: false
+      - name: disk-preflight
+        if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_DISK_PREFLIGHT != 'true'
+        uses: projectfile/actions/preflight@7585a2fefdfeb15c12d1cdcc2944aaf3dea6f6e9 # v1
+        with:
+          check: disk
+          env: |-
+            PREFLIGHT_MIN_FREE_GIB=10
+      - name: hosts-preflight
+        if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_HOSTS_PREFLIGHT != 'true'
+        uses: projectfile/actions/preflight@7585a2fefdfeb15c12d1cdcc2944aaf3dea6f6e9 # v1
+        with:
+          check: hosts
+          env: |-
+            PREFLIGHT_HOSTS=${{ vars.M6E_APT_CACHE_HOST }}:${{ vars.M6E_APT_CACHE_PORT }}:3142 ${{ vars.M6E_NEAR_CACHE_HOST }}:${{ vars.M6E_NEAR_CACHE_PORT }}:443
+      - name: images-preflight
+        if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_IMAGES_PREFLIGHT != 'true'
+        uses: projectfile/actions/preflight@7585a2fefdfeb15c12d1cdcc2944aaf3dea6f6e9 # v1
+        with:
+          check: images
+          images: |-
+            ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }} ${{ env.M6E_TAG }} auto-cosign,auto-grype,auto-osv-scanner,auto-trivy -
+            ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }} ${{ env.M6E_TAG }} auto-clamav -
+  signing-is-ready:
+    runs-on: docker
+    if: (startsWith(github.ref, 'refs/heads/')) || (startsWith(github.ref, 'refs/tags/'))
+    env:
+      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: true
+          persist-credentials: false
+      - name: cosign-key-file-preflight
+        if: vars.CI_SKIP_SIGNING_IS_READY != 'true' && vars.CI_SKIP_COSIGN_KEY_FILE_PREFLIGHT != 'true'
+        run: .makefile/b19/scripts/cosign-key-file.sh
+      - name: cosign-preflight
+        if: vars.CI_SKIP_SIGNING_IS_READY != 'true' && vars.CI_SKIP_COSIGN_PREFLIGHT != 'true'
+        uses: projectfile/actions/run-tool@7585a2fefdfeb15c12d1cdcc2944aaf3dea6f6e9 # v1
+        with:
+          image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
+          version: ${{ env.M6E_TAG }}
+          run: auto-cosign preflight
+          env: |-
+            COSIGN_PASSWORD=${{ secrets.COSIGN_PASSWORD }}
   source-is-secure:
     runs-on: docker
+    needs: ["runner-is-ready", "signing-is-ready"]
+    if: ${{ !cancelled() && needs.runner-is-ready.result == 'success' && (needs.signing-is-ready.result == 'success' || (needs.signing-is-ready.result == 'skipped' && !((startsWith(github.ref, 'refs/heads/')) || (startsWith(github.ref, 'refs/tags/'))))) }}
     env:
       OSV_SCANNER_LOCAL_DB_CACHE_DIRECTORY: /app/.cache/osv
       CI_IGNORE_VULNERABILITIES: ${{ vars.CI_IGNORE_VULNERABILITIES }}
