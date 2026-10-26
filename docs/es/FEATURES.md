@@ -56,9 +56,9 @@ SPDX-License-Identifier: MIT
 ### Gestión de procesos de servicio con enrutado de logs (b19-exec)
 
 - Los procesos de larga duración (demonios, servidores) tienen stdout y stderr enrutados automáticamente a través del logger estructurado.
-- Se hace seguimiento del PID del servicio para el reenvío de señales: Docker stop termina de forma elegante el proceso principal.
+- Cada señal llega al servicio exactamente una vez, así `docker stop` lo termina de forma elegante y se conservan sus últimas líneas de log.
 - Los niveles de log de los flujos stdout y stderr se configuran de forma independiente.
-- El código de salida del servicio se captura y queda disponible para los hooks posteriores.
+- Varios demonios comparten un contenedor: cada línea lleva la etiqueta de su demonio, se detienen en orden inverso al de arranque y un demonio obligatorio que falla detiene el contenedor para que actúe la política de reinicio.
 - El modo passthrough entrega el log propio del servicio al recolector byte a byte, así los parsers hechos para ese demonio siguen coincidiendo.
 
 ### Descargas de artefactos con caché y verificación de integridad (b19-fetch)
@@ -210,7 +210,7 @@ Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de co
 ### Gestión elegante de señales
 
 - El PID 1 es `tini -g`, que recoge los procesos zombi y reenvía señales a todo el grupo de procesos.
-- Un conjunto configurable de señales Unix (TERM, INT, HUP, USR1, USR2, etc.) se captura y reenvía al proceso principal del servicio.
+- Un conjunto configurable de señales Unix (TERM, INT, HUP, USR1, USR2, etc.) se captura y reenvía a cada proceso de servicio, que se detienen en orden inverso al de arranque.
 - `docker stop` termina limpiamente el servicio sin procesos huérfanos ni pérdida de señales.
 
 ### Plantillas de configuración Jinja2 (minijinja-cli)

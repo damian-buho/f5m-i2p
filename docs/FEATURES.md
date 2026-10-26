@@ -54,9 +54,9 @@ SPDX-License-Identifier: MIT
 ### Service process management with log routing (b19-exec)
 
 - Long-running processes (daemons, servers) have stdout and stderr automatically routed through the structured logger.
-- The service PID is tracked for signal forwarding — Docker stop gracefully terminates the main process.
+- Every signal reaches the service exactly once, so `docker stop` ends it gracefully and its last log lines are kept.
 - Log levels for stdout and stderr streams are independently configurable.
-- Exit code of the service is captured and available to downstream hooks.
+- Several daemons share one container: each line is tagged with its daemon, they stop in reverse start order, and a crashed required daemon stops the container so the restart policy acts.
 - Passthrough mode hands a service’s own log to the collector byte for byte, so parsers built for that daemon still match.
 
 ### Cached artifact downloads with integrity verification
@@ -206,7 +206,7 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 ### Graceful signal handling
 
 - PID 1 is `tini -g`, which reaps zombie processes and forwards signals to the full process group.
-- A configurable set of Unix signals (TERM, INT, HUP, USR1, USR2, etc.) is trapped and forwarded to the main service process.
+- A configurable set of Unix signals (TERM, INT, HUP, USR1, USR2, etc.) is trapped and forwarded to every service process, which stop in reverse start order.
 - `docker stop` cleanly terminates the service without orphan processes or signal loss.
 
 ### Jinja2 configuration templates (minijinja-cli)
