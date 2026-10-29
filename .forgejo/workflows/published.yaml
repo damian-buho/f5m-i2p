@@ -52,6 +52,8 @@ name: published
         type: string
       M6E_NEAR_CACHE_PORT:
         type: string
+      M6E_NEAR_CACHE_SCHEME:
+        type: string
       SOURCE_DOCKER_REGISTRY:
         type: string
 concurrency:
@@ -211,6 +213,7 @@ jobs:
       M6E_BUILD_DEBUG: ${{ inputs.M6E_BUILD_DEBUG || vars.M6E_BUILD_DEBUG }}
       M6E_NEAR_CACHE_HOST: ${{ inputs.M6E_NEAR_CACHE_HOST || vars.M6E_NEAR_CACHE_HOST }}
       M6E_NEAR_CACHE_PORT: ${{ inputs.M6E_NEAR_CACHE_PORT || vars.M6E_NEAR_CACHE_PORT }}
+      M6E_NEAR_CACHE_SCHEME: ${{ inputs.M6E_NEAR_CACHE_SCHEME || vars.M6E_NEAR_CACHE_SCHEME }}
       SOURCE_DOCKER_REGISTRY: ${{ inputs.SOURCE_DOCKER_REGISTRY || vars.SOURCE_DOCKER_REGISTRY }}
       M6E_VERSION: ${{ needs.release-tag.outputs.tag }}
     steps:
@@ -244,6 +247,7 @@ jobs:
             M6E_NAMESPACE=f5m
             M6E_NEAR_CACHE_HOST=${{ inputs.M6E_NEAR_CACHE_HOST || vars.M6E_NEAR_CACHE_HOST }}
             M6E_NEAR_CACHE_PORT=${{ inputs.M6E_NEAR_CACHE_PORT || vars.M6E_NEAR_CACHE_PORT }}
+            M6E_NEAR_CACHE_SCHEME=${{ inputs.M6E_NEAR_CACHE_SCHEME || vars.M6E_NEAR_CACHE_SCHEME }}
             M6E_PROJECT=i2p
             M6E_VERSION=${{ needs.release-tag.outputs.tag }}
             SOURCE_DOCKER_REGISTRY=${{ inputs.SOURCE_DOCKER_REGISTRY || vars.SOURCE_DOCKER_REGISTRY }}
