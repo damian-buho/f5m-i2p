@@ -123,6 +123,9 @@ technologies:
   - java
   - jvm
 upstream:
-  - authors: The I2P Project
+  - authors:
+      en: zzz (lead developer) and the I2P contributors
+      es: zzz (desarrollador principal) y los colaboradores de I2P
+      uk: zzz (провідний розробник) та учасники I2P
     name: I2P
     url: https://geti2p.net

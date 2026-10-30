@@ -20,6 +20,11 @@ pf-cli-managed: yes
 
 [![Publish pipeline on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/published.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Vulnerability audit on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/audited.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Dependency freshness on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Analysis sweep on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/analyzed.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions)
 
+## Першоджерело
+
+Цей проєкт пакує [I2P](https://geti2p.net) (власна ліцензія).
+Дякуємо: zzz (провідний розробник) та учасники I2P
+
 ## Можливості
 
 - Конфігурація I2P, відтворена з Jinja2
@@ -108,11 +113,6 @@ make container-build
 - [Специфікація Projectfile](https://projectfile.org)
 
 Пов’язані проєкти: [F5M / I2P Reseed](https://kiota.ch/f5m/i2p-reseed)
-
-## Першоджерело
-
-Цей проєкт пакує [I2P](https://geti2p.net) (власна ліцензія).
-Дякуємо: The I2P Project
 
 ## Ліцензія
 

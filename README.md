@@ -18,6 +18,11 @@ I2P anonymous-network router with console, HTTP proxy and eepsite hosting, plus 
 
 [![Publish pipeline on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/published.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Vulnerability audit on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/audited.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Dependency freshness on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions) [![Analysis sweep on kiota.ch](https://kiota.ch/f5m/i2p/badges/workflows/analyzed.yaml/badge.svg?style=flat-square)](https://kiota.ch/f5m/i2p/actions)
 
+## Upstream
+
+This project packages [I2P](https://geti2p.net) (its own license).
+Thanks to: zzz (lead developer) and the I2P contributors
+
 ## Features
 
 - Jinja2-rendered I2P configuration
@@ -106,11 +111,6 @@ See the [Roadmap](docs/ROADMAP.md) for what is planned next.
 - [Projectfile Specification](https://projectfile.org)
 
 Related projects: [F5M / I2P Reseed](https://kiota.ch/f5m/i2p-reseed)
-
-## Upstream
-
-This project packages [I2P](https://geti2p.net) (its own license).
-Thanks to: The I2P Project
 
 ## License
 
