@@ -105,8 +105,13 @@ See the [Roadmap](docs/ROADMAP.md) for what is planned next.
 
 - [Projectfile Specification](https://projectfile.org)
 
-Related projects: [F5M/Tor](https://kiota.ch/f5m/tor) | [F5M/Tor Snowflake](https://kiota.ch/f5m/tor-snowflake) | [F5M/OONI Probe](https://kiota.ch/f5m/ooni) | [F5M/Knot](https://kiota.ch/f5m/knot) | [F5M/Radicle](https://kiota.ch/f5m/radicle) | [F5M/Solid](https://kiota.ch/f5m/solid) | [F5M/SSH](https://kiota.ch/f5m/ssh)
+Related projects: [F5M / I2P Reseed](https://kiota.ch/f5m/i2p-reseed)
+
+## Upstream
+
+This project packages [I2P](https://geti2p.net) (its own license).
+Thanks to: The I2P Project
 
 ## License
 
-This project is licensed under MIT — see the [LICENSE](LICENSE) file for details.
+The packaging in this repository is licensed under MIT — see the [LICENSE](LICENSE) file for details.

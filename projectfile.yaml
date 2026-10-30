@@ -122,3 +122,7 @@ repositories:
 technologies:
   - java
   - jvm
+upstream:
+  - authors: The I2P Project
+    name: I2P
+    url: https://geti2p.net

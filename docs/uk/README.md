@@ -107,10 +107,15 @@ make container-build
 
 - [Специфікація Projectfile](https://projectfile.org)
 
-Пов’язані проєкти: [F5M/Tor](https://kiota.ch/f5m/tor) | [F5M/Tor Snowflake](https://kiota.ch/f5m/tor-snowflake) | [F5M/OONI Probe](https://kiota.ch/f5m/ooni) | [F5M/Knot](https://kiota.ch/f5m/knot) | [F5M/Radicle](https://kiota.ch/f5m/radicle) | [F5M/Solid](https://kiota.ch/f5m/solid) | [F5M/SSH](https://kiota.ch/f5m/ssh)
+Пов’язані проєкти: [F5M / I2P Reseed](https://kiota.ch/f5m/i2p-reseed)
+
+## Першоджерело
+
+Цей проєкт пакує [I2P](https://geti2p.net) (власна ліцензія).
+Дякуємо: The I2P Project
 
 ## Ліцензія
 
-Цей проєкт ліцензовано на умовах MIT — див. файл [LICENSE](LICENSE) для подробиць.
+Пакування в цьому репозиторії ліцензовано на умовах MIT — див. файл [LICENSE](LICENSE) для подробиць.
 
 <!-- textlint-enable -->
