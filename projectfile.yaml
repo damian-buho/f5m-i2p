@@ -15,8 +15,8 @@ identity:
     en: I2P anonymous-network router with console, HTTP proxy and eepsite hosting, plus baked-in reseed and subscription presets for bootstrapping.
     es: Router de la red anónima I2P con consola, proxy HTTP y hosting de eepsites, más presets de reseed y suscripciones para el arranque.
     uk: Маршрутизатор анонімної мережі I2P з консоллю, HTTP-проксі й хостингом eepsite, плюс вбудовані пресети reseed і підписок для старту.
-  version: 0.10.2
-  released: "2026-10-29"
+  version: 0.10.3
+  released: "2026-10-30"
   visibility: public
 includes:
   - .makefile/b19/ci.yaml
