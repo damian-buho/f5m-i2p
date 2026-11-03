@@ -209,7 +209,7 @@ Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de co
 
 ### Gestión elegante de señales
 
-- El PID 1 es `tini -g`, que recoge los procesos zombi y reenvía señales a todo el grupo de procesos.
+- El PID 1 es `catatonit -g`, que recoge los procesos zombi y reenvía señales a todo el grupo de procesos.
 - Un conjunto configurable de señales Unix (TERM, INT, HUP, USR1, USR2, etc.) se captura y reenvía a cada proceso de servicio, que se detienen en orden inverso al de arranque.
 - `docker stop` termina limpiamente el servicio sin procesos huérfanos ni pérdida de señales.
 
@@ -241,7 +241,7 @@ Consulta [use-timeouts](../how-to/use-timeouts.md) para las opciones, los valore
 
 - `mold` como enlazador por defecto (con opción de desactivarlo).
 - `fd` para búsqueda de archivos, `minijinja-cli` para renderizado de plantillas.
-- `aria2c` para descargas multiconexión, `tini` como PID 1 para recoger zombis.
+- `aria2c` para descargas multiconexión, `catatonit` como PID 1 para recoger zombis.
 - Herramientas de compresión paralela: `pbzip2`, `pigz`, `pixz`.
 - Herramientas gettext para la compilación de i18n, `cURL` para operaciones de red.
 

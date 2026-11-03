@@ -205,7 +205,7 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 
 ### Graceful signal handling
 
-- PID 1 is `tini -g`, which reaps zombie processes and forwards signals to the full process group.
+- PID 1 is `catatonit -g`, which reaps zombie processes and forwards signals to the full process group.
 - A configurable set of Unix signals (TERM, INT, HUP, USR1, USR2, etc.) is trapped and forwarded to every service process, which stop in reverse start order.
 - `docker stop` cleanly terminates the service without orphan processes or signal loss.
 
@@ -238,7 +238,7 @@ See [use-timeouts](../how-to/use-timeouts.md) for the options, defaults and over
 
 - `mold` as default linker (opt-out available).
 - `fd` for file finding, `minijinja-cli` for template rendering.
-- `aria2c` for multi-connection downloads, `tini` as PID 1 for zombie reaping.
+- `aria2c` for multi-connection downloads, `catatonit` as PID 1 for zombie reaping.
 - Parallel compression tools: `pbzip2`, `pigz`, `pixz`.
 - gettext tools for i18n compilation, `cURL` for network operations.
 
