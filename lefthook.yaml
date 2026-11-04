@@ -15,7 +15,7 @@ pre-commit:
     dag:
       env:
         TERM: dumb # dumb keeps Charm tools from OSC-probing the terminal
-      run: make pre-commit
+      run: M6E_SCOPE="${M6E_SCOPE:-staged}" make pre-commit
 pre-push:
   follow: true # stream each tool’s progress instead of a spinner
   commands:
