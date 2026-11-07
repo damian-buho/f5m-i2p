@@ -152,7 +152,7 @@ Consulte [use-healthcheck.d](../how-to/use-healthcheck.d.md) para la lista de co
 - Los mensajes por debajo de la verbosidad configurada se descartan silenciosamente, manteniendo limpios los logs de producción.
 - Los colores autodetectan el soporte del terminal y respetan `NO_COLOR=1`.
 - Encauzable: la salida de comandos puede enrutarse a través del logger para aplicar filtrado por nivel y tags.
-- `B19_LOG_FORMAT=json` convierte cada línea en un objeto JSON que una canalización de logs lee sin parser; las líneas JSON propias del servicio pasan intactas.
+- `B19_LOG_FORMAT=json` convierte cada línea en un objeto JSON que una canalización de logs lee sin parser; las líneas propias del servicio también se convierten en campos, y la línea original se conserva junto a ellos.
 
 ### Contenedor sin privilegios de root por defecto
 
