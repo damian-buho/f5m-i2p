@@ -253,6 +253,10 @@ Print the image lineage (ancestry) recorded in the running container
 
 Print the running container’s current health status
 
+### `container-read-only-probe`
+
+Restart the compose stack with the image on a read-only root and assert it turns healthy
+
 ### `container-report`
 
 Run report.d in the container and save its output to a report file
