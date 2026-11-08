@@ -10,9 +10,21 @@
 # pf-cli-managed: yes
 
 ignore:
-  - vulnerability: CVE-2026-10050  # unfixable upstream dependency; fixable only via upstream release
+  # In Eclipse Jetty, versions 12.0.0-12.0.31 and 12.1.0-12.0.5, class GzipHandler exposes a vulnerability when a compresse…
+  # https://nvd.nist.gov/vuln/detail/CVE-2026-1605
   - vulnerability: CVE-2026-1605  # unfixable upstream dependency; fixable only via upstream release
+  # HTTP Request Smuggling via Chunked Extension Quoted-String Parsing
+  # https://nvd.nist.gov/vuln/detail/CVE-2026-2332
   - vulnerability: CVE-2026-2332  # unfixable upstream dependency; fixable only via upstream release
+  # Digest authentication lossy encoding
+  # https://nvd.nist.gov/vuln/detail/CVE-2026-10050
+  - vulnerability: CVE-2026-10050  # unfixable upstream dependency; fixable only via upstream release
+  # Eclipse Jetty Digest Authentication: ISO-8859-1 lossy encoding allows authentication bypass via character substitution
+  # https://github.com/advisories/GHSA-2fvj-hgj9-j2gr
   - vulnerability: GHSA-2fvj-hgj9-j2gr  # unfixable upstream dependency; fixable only via upstream release
+  # Jetty has HTTP Request Smuggling via Chunked Extension Quoted-String Parsing
+  # https://github.com/advisories/GHSA-355h-qmc2-wpwf
   - vulnerability: GHSA-355h-qmc2-wpwf  # unfixable upstream dependency; fixable only via upstream release
+  # The Eclipse Jetty Server Artifact has a Gzip request memory leak
+  # https://github.com/advisories/GHSA-xxh7-fcf3-rj7f
   - vulnerability: GHSA-xxh7-fcf3-rj7f  # unfixable upstream dependency; fixable only via upstream release

@@ -69,9 +69,9 @@ depends on an upstream release, or the advisory does not apply to this project):
 
 | ID | Reason |
 | --- | --- |
-| CVE-2026-10050 | unfixable upstream dependency; fixable only via upstream release |
-| GHSA-2fvj-hgj9-j2gr | unfixable upstream dependency; fixable only via upstream release |
-| CVE-2026-1605 | unfixable upstream dependency; fixable only via upstream release |
-| CVE-2026-2332 | unfixable upstream dependency; fixable only via upstream release |
-| GHSA-355h-qmc2-wpwf | unfixable upstream dependency; fixable only via upstream release |
-| GHSA-xxh7-fcf3-rj7f | unfixable upstream dependency; fixable only via upstream release |
+| [CVE-2026-1605](https://nvd.nist.gov/vuln/detail/CVE-2026-1605) | unfixable upstream dependency; fixable only via upstream release |
+| [CVE-2026-2332](https://nvd.nist.gov/vuln/detail/CVE-2026-2332) | unfixable upstream dependency; fixable only via upstream release |
+| [CVE-2026-10050](https://nvd.nist.gov/vuln/detail/CVE-2026-10050) | unfixable upstream dependency; fixable only via upstream release |
+| [GHSA-2fvj-hgj9-j2gr](https://github.com/advisories/GHSA-2fvj-hgj9-j2gr) | unfixable upstream dependency; fixable only via upstream release |
+| [GHSA-355h-qmc2-wpwf](https://github.com/advisories/GHSA-355h-qmc2-wpwf) | unfixable upstream dependency; fixable only via upstream release |
+| [GHSA-xxh7-fcf3-rj7f](https://github.com/advisories/GHSA-xxh7-fcf3-rj7f) | unfixable upstream dependency; fixable only via upstream release |
