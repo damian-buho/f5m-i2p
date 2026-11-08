@@ -27,21 +27,7 @@ jobs:
     if: ${{ always() && ((github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')) }}
     steps:
       - name: check-outdated verdict
-        run: |
-          passed=0 skipped=0 failed=0
-          for pair in; do
-            echo "verdict need=${pair%%=*} result=${pair#*=}"
-            case "${pair#*=}" in
-              success) passed=$((passed + 1)) ;;
-              skipped) skipped=$((skipped + 1)) ;;
-              *) failed=$((failed + 1)) ;;
-            esac
-          done
-          status=success; event=goal.succeeded
-          if [ "${failed}" -gt 0 ]; then
-            status=failure; event=goal.failed
-          elif [ "${passed}" -eq 0 ]; then
-            status=skipped; event=goal.skipped
-          fi
-          echo "verdict goal=check-outdated status=${status} passed=${passed} skipped=${skipped} failed=${failed}"
-          [ "${failed}" -eq 0 ]
+        uses: projectfile-org/actions/event@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        with:
+          goal: check-outdated
+          needs: |-

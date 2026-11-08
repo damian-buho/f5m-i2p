@@ -24,25 +24,11 @@ jobs:
     if: ${{ always() && (github.event_name == 'workflow_dispatch') }}
     steps:
       - name: analyzed verdict
-        run: |
-          passed=0 skipped=0 failed=0
-          for pair in \
-            "image-is-analyzed=${{ needs.image-is-analyzed.result }}"; do
-            echo "verdict need=${pair%%=*} result=${pair#*=}"
-            case "${pair#*=}" in
-              success) passed=$((passed + 1)) ;;
-              skipped) skipped=$((skipped + 1)) ;;
-              *) failed=$((failed + 1)) ;;
-            esac
-          done
-          status=success; event=goal.succeeded
-          if [ "${failed}" -gt 0 ]; then
-            status=failure; event=goal.failed
-          elif [ "${passed}" -eq 0 ]; then
-            status=skipped; event=goal.skipped
-          fi
-          echo "verdict goal=analyzed status=${status} passed=${passed} skipped=${skipped} failed=${failed}"
-          [ "${failed}" -eq 0 ]
+        uses: projectfile/actions/event@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        with:
+          goal: analyzed
+          needs: |-
+            image-is-analyzed=${{ needs.image-is-analyzed.result }}
   image-is-analyzed:
     runs-on: docker
     if: github.event_name == 'workflow_dispatch'
@@ -55,7 +41,7 @@ jobs:
           persist-credentials: false
       - name: dive-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_ANALYZED != 'true' && vars.CI_SKIP_DIVE_SCAN_REGISTRY != 'true'
-        uses: projectfile/actions/run-tool@d0a2148397d660e2e3573a7a52480fe617f6f986 # v1
+        uses: projectfile/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
           version: ${{ env.M6E_TAG }}
