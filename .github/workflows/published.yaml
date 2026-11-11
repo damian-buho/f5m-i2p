@@ -883,6 +883,9 @@ jobs:
           version: 29.8.1-cli
           pull: missing
           run: sh -c 'test ! -f .compose/example.yaml || docker compose --file .compose/example.yaml config --no-interpolate --quiet'
+      - name: configuration-names-check
+        if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_CONFIGURATION_NAMES_CHECK != 'true'
+        run: .makefile/container/scripts/configuration-capture.sh --names --default-lang= es uk
       - name: dockerfile-parse-buildah
         if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_DOCKERFILE_PARSE_BUILDAH != 'true'
         run: .makefile/container/scripts/dockerfile-parse.sh buildah
