@@ -233,6 +233,14 @@ Table every environment variable the image sets into docs/configuration.d
 
 > Image: host runner
 
+### `configuration-names-check`
+
+Verify every environment table names the variables the Dockerfile sets, without the image
+
+`.makefile/container/scripts/configuration-capture.sh --names --default-lang=${org.projectfile.i18n.default-language} ${org.projectfile.i18n.languages[]}`
+
+> Image: host runner
+
 ### `container-exec`
 
 Open a shell in the running Docker container
