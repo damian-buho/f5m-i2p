@@ -115,7 +115,7 @@ Build the container image with the configured backend
 
 ### `act`
 
-Replay the generated GHA workflows locally via act (one goal: make act-<goal>)
+Replay the generated GHA workflows locally via act (one goal: make act-&lt;goal>)
 
 ### `ci-check`
 
@@ -300,6 +300,14 @@ Lint the Dockerfile for best practices
 `hadolint Dockerfile`
 
 > Image: HADOLINT_IMAGE
+
+### `pages-capture`
+
+Capture each declared page collection catalog into docs/&lt;name>.yaml
+
+`.makefile/container/scripts/pages-capture.sh --default-lang=${org.projectfile.i18n.default-language} ${org.projectfile.i18n.languages[]}`
+
+> Image: host runner
 
 ### `pf-bridge-containerignore-check`
 
@@ -712,6 +720,10 @@ Remove the locally built Docker image
 ### `image-warm`
 
 Pre-pull the base, tool and frontend images the projectfile names, so a later build runs offline
+
+### `pages-check`
+
+Verify the committed page catalogs match the declared executable, else the built image, and every extras page names a catalog ID
 
 ### `usage-check`
 
