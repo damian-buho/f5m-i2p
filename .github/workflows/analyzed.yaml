@@ -26,7 +26,7 @@ jobs:
     if: ${{ always() && (github.event_name == 'workflow_dispatch') }}
     steps:
       - name: analyzed verdict
-        uses: projectfile-org/actions/event@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/event@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           goal: analyzed
           needs: |-
@@ -43,7 +43,7 @@ jobs:
           persist-credentials: false
       - name: dive-scan-registry
         if: vars.CI_SKIP_IMAGE_IS_ANALYZED != 'true' && vars.CI_SKIP_DIVE_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}

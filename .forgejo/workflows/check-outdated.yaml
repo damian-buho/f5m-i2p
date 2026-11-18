@@ -25,7 +25,7 @@ jobs:
     if: ${{ always() && ((github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')) }}
     steps:
       - name: check-outdated verdict
-        uses: projectfile/actions/event@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile/actions/event@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           goal: check-outdated
           needs: |-

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-ARG B19_JAVA_BUILD_IMAGE=registry.invalid/b19/java:temurin-27
+ARG B19_JAVA_BUILD_IMAGE=registry.invalid/b19/java:oracle-27
 ARG B19_UBUNTU_BASE_IMAGE=registry.invalid/b19/ubuntu:resolute
 
 FROM ${B19_JAVA_BUILD_IMAGE} AS f5m-i2p-compile-java

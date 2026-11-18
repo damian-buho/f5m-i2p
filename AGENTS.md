@@ -12,7 +12,7 @@ I2P anonymity network router.
 
 ## Key facts
 
-- Stages: `compile-java` (`FROM b19/java:temurin-27`) runs the silent installer as uid 1000, then `build-stage export` as root; the final stage is `FROM b19/ubuntu` and copies `/export`. `B19_JAVA_DISTRO=temurin` is pinned in this projectfile’s `org.projectfile.build.args`; the series comes from the `m6e/library` language fragment
+- Stages: `compile-java` (`FROM b19/java:oracle-27`) runs the silent installer as uid 1000, then `build-stage export` as root; the final stage is `FROM b19/ubuntu` and copies `/export`. `B19_JAVA_DISTRO=temurin` is pinned in this projectfile’s `org.projectfile.build.args`; the series comes from the `m6e/library` language fragment
 - `B19_JAVA_BUILD_IMAGE` (no `_BASE_`: a copy edge, since the final image carries no `b19/java` layer) is declared in this projectfile’s `org.projectfile.images`; it belongs in `m6e/b19/images/java.yaml` once a second project exports from `b19/java`
 - The runtime has no `jar` or `javac`: `get-i2p-version` asks I2P’s own `net.i2p.router.RouterVersion`. `java.desktop` (console graphs) and `jdk.localedata` are most of its 90 MB of modules
 - `500-export-i2p.sh` copies every top-level entry of `${B19_HOME}` except `.i2p`, `jmx-exporter` and the installer’s `response.txt*`, plus `/deps/i2p/version.deps`

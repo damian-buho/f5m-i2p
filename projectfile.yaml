@@ -87,7 +87,7 @@ org:
   projectfile:
     build:
       args:
-        B19_JAVA_DISTRO: temurin
+        B19_JAVA_DISTRO: oracle
         B19_JAVA_BUILD_IMAGE: ""
     ci:
       secrets:

@@ -28,7 +28,7 @@ jobs:
     if: ${{ always() && ((github.event_name == 'workflow_dispatch') || (github.event_name == 'schedule')) }}
     steps:
       - name: audited verdict
-        uses: projectfile-org/actions/event@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/event@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           goal: audited
           needs: |-
@@ -62,7 +62,7 @@ jobs:
             ci-cache-grype-db-
       - name: grype-scan-registry
         if: (!cancelled()) && vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_GRYPE_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -93,7 +93,7 @@ jobs:
             ci-cache-trivy-db-
       - name: trivy-scan-registry
         if: (!cancelled()) && vars.CI_SKIP_IMAGE_IS_AUDITED != 'true' && vars.CI_SKIP_TRIVY_SCAN_REGISTRY != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -129,21 +129,21 @@ jobs:
           persist-credentials: false
       - name: disk-preflight
         if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_DISK_PREFLIGHT != 'true'
-        uses: projectfile-org/actions/preflight@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/preflight@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           check: disk
           env: |-
             PREFLIGHT_MIN_FREE_GIB=10
       - name: hosts-preflight
         if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_HOSTS_PREFLIGHT != 'true'
-        uses: projectfile-org/actions/preflight@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/preflight@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           check: hosts
           env: |-
             PREFLIGHT_HOSTS=${{ vars.M6E_APT_CACHE_HOST }}:${{ vars.M6E_APT_CACHE_PORT }}:3142 ${{ vars.M6E_NEAR_CACHE_HOST }}:${{ vars.M6E_NEAR_CACHE_PORT }}:443
       - name: images-preflight
         if: vars.CI_SKIP_RUNNER_IS_READY != 'true' && vars.CI_SKIP_IMAGES_PREFLIGHT != 'true'
-        uses: projectfile-org/actions/preflight@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/preflight@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           check: images
           images: |-
@@ -165,7 +165,7 @@ jobs:
         run: .makefile/b19/scripts/cosign-key-file.sh
       - name: cosign-preflight
         if: vars.CI_SKIP_SIGNING_IS_READY != 'true' && vars.CI_SKIP_COSIGN_PREFLIGHT != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -199,7 +199,7 @@ jobs:
             ci-cache-clamav-db-
       - name: clamav-scan-source
         if: vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_CLAMAV_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_MISC_TOOLS_IMAGE || format('{0}/d9t/misc-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -228,7 +228,7 @@ jobs:
             ci-cache-grype-db-
       - name: grype-scan-source
         if: (!cancelled()) && vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_GRYPE_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -258,7 +258,7 @@ jobs:
             ci-cache-osv-db-
       - name: osv-scanner-scan-source
         if: (!cancelled()) && vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_OSV_SCANNER_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
@@ -289,7 +289,7 @@ jobs:
             ci-cache-trivy-db-
       - name: trivy-scan-source
         if: (!cancelled()) && vars.CI_SKIP_SOURCE_IS_SECURE != 'true' && vars.CI_SKIP_TRIVY_SCAN_SOURCE != 'true'
-        uses: projectfile-org/actions/run-tool@b0da59497e5cc94a601334e6b4d9e376000012b7 # v1
+        uses: projectfile-org/actions/run-tool@e66aa32ef07dc2e4a8e18dfdc92fa49e0f71baea # v1
         with:
           image: ${{ vars.D9T_GO_TOOLS_IMAGE || format('{0}/d9t/go-tools', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
           version: ${{ env.M6E_TAG }}
