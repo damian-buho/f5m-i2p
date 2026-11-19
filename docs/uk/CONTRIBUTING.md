@@ -9,7 +9,7 @@ pf-cli-managed: yes
 
 # Внесок у F5M / I2P
 
-[![Commit style](https://badges.kiota.ch/static/v1?label=commits&message=conventional%20v1.0.0&color=1877aa&style=flat-square)](https://www.conventionalcommits.org/uk/v1.0.0/) ![Workflow](https://badges.kiota.ch/static/v1?label=workflow&message=git-flow&color=1877aa&style=flat-square) [![Versioning](https://badges.kiota.ch/static/v1?label=versioning&message=semantic%20v2.0.0&color=1877aa&style=flat-square)](https://semver.org/lang/uk/) [![Citation](https://badges.kiota.ch/static/v1?label=citation&message=cff&color=1877aa&style=flat-square)](CITATION.cff)
+[![Commit style](https://badges.kiota.ch/static/v1?label=commits&message=conventional%20v1.0.0&color=1877aa&style=flat-square)](https://www.conventionalcommits.org/uk/v1.0.0/) ![Workflow](https://badges.kiota.ch/static/v1?label=workflow&message=git-flow&color=1877aa&style=flat-square) [![Versioning](https://badges.kiota.ch/static/v1?label=versioning&message=semantic%20v2.0.0&color=1877aa&style=flat-square)](https://semver.org/lang/uk/) [![Citation](https://badges.kiota.ch/static/v1?label=citation&message=cff&color=1877aa&style=flat-square)](../../CITATION.cff)
 
 Насамперед — дякуємо, що знайшли час зробити внесок! ❤️
 
@@ -51,7 +51,7 @@ pf-cli-managed: yes
 Гарний звіт про ваду позбавляє інших потреби випитувати у вас подробиці. Тому просимо ретельно дослідити проблему, зібрати відомості та детально описати її у звіті. Виконайте наведені кроки заздалегідь — це допоможе нам виправити можливу ваду якнайшвидше.
 
 - Переконайтеся, що використовуєте [підтримувану версію](SUPPORT.md).
-- Визначте, чи це справді вада, а не помилка з вашого боку (наприклад, несумісні компоненти чи версії середовища). Переконайтеся, що прочитали [документацію](/docs). Якщо вам потрібна підтримка, перегляньте [SUPPORT.md](SUPPORT.md).
+- Визначте, чи це справді вада, а не помилка з вашого боку (наприклад, несумісні компоненти чи версії середовища). Переконайтеся, що прочитали [документацію](..). Якщо вам потрібна підтримка, перегляньте [SUPPORT.md](SUPPORT.md).
 - Щоб дізнатися, чи стикалися інші (і чи вже розв’язали) з тією самою проблемою, перевірте, чи немає звіту про вашу ваду в [трекері](https://github.com/damian-buho/f5m-i2p/issues?q=label%3Abug).
 - Якщо можете, такі відомості стануть у пригоді:
     - Трасування стека, якщо воно є
@@ -80,7 +80,7 @@ pf-cli-managed: yes
 ### Перш ніж надсилати пропозицію
 
 - Переконайтеся, що використовуєте [підтримувану версію](SUPPORT.md).
-- Перевірте, чи потрібна можливість уже реалізовано — можливо, через окреме налаштування. [Документація](/docs) — одне з місць, де можна пошукати.
+- Перевірте, чи потрібна можливість уже реалізовано — можливо, через окреме налаштування. [Документація](..) — одне з місць, де можна пошукати.
 - Виконайте [пошук](https://github.com/damian-buho/f5m-i2p/issues), щоб перевірити, чи таку пропозицію вже подавали. Якщо так, додайте коментар до наявного тікета замість створювати новий.
 - Оцініть, чи вписується ваша ідея в межі та цілі проєкту.
 
@@ -103,7 +103,7 @@ pf-cli-managed: yes
 
 ## Покращення документації
 
-Документація розміщена за адресою [/docs](/docs). Виправлення, покращення та нові розділи вітаються — відкрийте запит на злиття до джерел документації.
+Документація розміщена за адресою [docs/](..). Виправлення, покращення та нові розділи вітаються — відкрийте запит на злиття до джерел документації.
 
 ## See also
 
