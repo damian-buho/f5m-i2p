@@ -92,7 +92,7 @@ SPDX-License-Identifier: MIT
 - Certificates listed by SHA-256 fingerprint are removed from the system trust store at build time, before the distribution ships its own fix.
 - One list serves the whole image lineage, and `b19-ca-distrust bundle` cuts any vendored PEM bundle from it too.
 - Ships distrusting the eMudhra intermediates whose private keys can be recovered (October 2026), together with their cross-signs and roots.
-- Downstream images add fingerprints with one variable or one file, and `B19_CA_DISTRUST_ENABLED=false` turns the cut off. [How-to](how-to/use-ca-distrust.md)
+- Downstream images add fingerprints with one variable or one file, and `B19_CA_DISTRUST_ENABLED=false` turns the cut off. [How-to](https://codeberg.org/b19/ubuntu/src/branch/main/docs/how-to/use-ca-distrust.md)
 
 ### Automatic CPU count detection
 
@@ -128,7 +128,7 @@ SPDX-License-Identifier: MIT
 - Adding a check is dropping a script in a directory, not writing Docker plumbing.
 - Heavy or rate-limited checks run hourly in the background, so a slow scan never times out the probe or burns a rate limit.
 
-See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot numbering, and configuration.
+See [use-healthcheck.d](https://codeberg.org/b19/ubuntu/src/branch/main/docs/how-to/use-healthcheck.d.md) for the check list, slot numbering, and configuration.
 
 ### Multilingual shell output (b19-i18n)
 
@@ -232,7 +232,7 @@ See [use-healthcheck.d](../how-to/use-healthcheck.d.md) for the check list, slot
 - A flaky call can be retried with backoff in one flag, without a hand-written loop.
 - An opt-in restart turns a service stuck unhealthy into a container the restart policy recovers.
 
-See [use-timeouts](../how-to/use-timeouts.md) for the options, defaults and overrides.
+See [use-timeouts](https://codeberg.org/b19/ubuntu/src/branch/main/docs/how-to/use-timeouts.md) for the options, defaults and overrides.
 
 ### Pre-installed utility tools
 
